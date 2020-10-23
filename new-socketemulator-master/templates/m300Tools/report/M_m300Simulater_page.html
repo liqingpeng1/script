@@ -1,0 +1,741 @@
+{% extends "m300Tools/index.html" %}
+{% block title %}m300Simulater{% endblock %}
+{% block content_01 %}
+<script src="../../static/js/m300Tools/m300simulater.js"></script>
+<style>
+    .nav-pills li {
+        margin-bottom:5px;
+    }
+    .form-control {
+        display:inline;
+        width:160px;
+    }
+    .protocol_content:after{
+        clear:both;
+        display:block;
+        content:" ";
+    }
+
+    .protocol_content li {
+        width:250px;
+        _background:yellow;
+        list-style:none;
+        margin-top:5px;
+        float:left;
+    }
+    .protocol_content label{
+        width:90px;
+        text-align:right;
+    }
+</style>
+<div id="container2" style="width:83%;min-height:750px;float:left;_background:grey;margin-top:50px;">
+    {% block content_02 %}
+    <ul class="nav nav-pills" style="font-size:14px;">
+        <li role="presentation"><a id="m300_setting_tab" {% if arg.path[2]=="M_m300Setting_page" %} class="link-tab" {% endif %} onclick="m300SimulaterTab(this)">设置</b></a></li>
+        <li role="presentation"><a id="m300simulater_tab" {% if arg.path[2]=="M_m300Simulater_page" %} class="link-tab" {% endif %} onclick="m300SimulaterTab(this)">模拟器</b></a></li>
+    </ul>
+    {% endblock %}
+    {% block content_1 %}
+    <div id="container3" style="width:100%;min-height:750px;float:left;_background:green;margin-top:10px;_border-top: 1px solid #eee;">
+        <div style="width:100%;padding-bottom:10px;border-bottom: 1px solid #eee;">
+            <span><label>车机Id：</label><input id="carId" type="text" class="form-control" value="M202003060518"></span>
+            <span><label>上报间隔（秒）：</label><input id="durTime" style="width:60px;" type="text" class="form-control" value="5"></span>
+            <span><label>设置超时时间：</label><input style="width:80px;" id="timeout" type="text" class="form-control" value="36000"></span>
+        </div>
+        <div style="display: block; width: 100%; border-width: 1px; border-style: solid; border-color: darkgray; border-radius: 10px; padding: 2px; margin-top: 5px;">
+            <h5><b>多人在线状态面板：</b></h5>
+            <span><label>我的id：</label><input disabled=disabled type="text" id="curSession" class="form-control" style="display:inline;width:200px;" value=""/></span>
+            <span><label>在线人数：</label><input disabled=disabled type="text" id="totalSessionNums" class="form-control" style="display:inline;width:80px;" value="0"/></span>
+            <button id="sessionRefresh" type="button" class="btn btn-primary" onclick="getAllUsers(this)">刷新</button><label style="font-size:10px;width:100px;">刷新后，可在控制台查看在线用户详细信息</label>
+        </div>
+        <div style="width:100%;_padding-bottom:10px;border-bottom: 1px solid #eee;">
+<!--            <h4>点击登录按钮发送报文：</h4>-->
+            <div style="display: block; width: 100%; border-width: 1px; border-style: solid; border-color: darkgray; border-radius: 10px; padding: 2px; margin-top: 5px;">
+                <h5><b>登录报文数据：</b>
+                    <span style="border-width:1px;border-style:solid;border-color:darkgray;border-radius:10px;padding:1px 10px;">
+                        <label><input name="login" type="radio" value="0" checked="checked" onclick="isShowLoginArea(this)"/>隐藏</label>
+                        <label style="margin-left:10px;"><input name="login" type="radio" value="1" onclick="isShowLoginArea(this)"/>显示</label>
+                    </span>
+                </h5>
+                <div id="login_area" style="display:none;">
+                    <ul class="protocol_content" style="padding:0px;">
+                        <li><label>软件版本号：</label><input id="SWVersion" type="text" class="form-control" value="VSTA000GV100"></li>
+                        <li><label>软件日期：</label><input id="SWDate" type="text" class="form-control" value="2020-03-30"></li>
+                        <li><label>硬件版本：</label><input id="HWVersion" type="text" class="form-control" value="M1.0"></li>
+                        <li><label>GSM 型号：</label><input id="GSMType" type="text" class="form-control" value="GSM_type_123456"></li>
+                        <li><label>车系车型ID：</label><input id="carType" type="text" class="form-control" value="150"></li>
+                        <li><label style="word-break:break-all;font-size:10px;">发动机编码类别：</label><input id="engineCode" type="text" class="form-control" value="1"></li>
+                        <li style="width:350px;"><label style="word-break:break-all;font-size:10px;">汽车VIN码或发动机ECU编码：</label><input style="width:250px;" id="VINCode" type="text" class="form-control" value="VIN_CODE_01234567890"></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div style="display: block; width: 100%; border-width: 1px; border-style: solid; border-color: darkgray; border-radius: 10px; padding: 2px; margin-top: 5px;">
+            <h5><b>GPS行驶轨迹设置：</b></h5>
+            <div class="input-group" style="width:380px;padding-bottom:10px;margin-left:10px;display:inline;">
+                <form id="form" enctype="multipart/form-data">
+                    <input type="file" id="fileAttach" name="file" class="form-control" style="display:inline;width:250px;"/>
+                    <input type="button" onclick="uploadFile()" value="上传" class="form-control" style="display:inline;width:80px;font-weight: bolder;"/>
+                </form>
+            </div>
+            <span style="margin-left:10px;"><label>选择轨迹：</label><select id="selectGPSLine" class="form-control" style="width:250px;">
+                {% for key,value in arg["gpsLines"].items() %}
+                <option value="{{ key }}">{{ value }}</option>
+                {% endfor %}
+            </select></span>
+            <a style="margin-left:10px;font-weight:bold;" onclick="download_sample()">下载示例轨迹</a>
+            <button id="del_gps_but" type="button" class="btn btn-primary" onclick="del_gpsLine()" style="margin-left:10px;">删除选中轨迹</button>
+        </div>
+        <div style="display: block; width: 100%; border-width: 1px; border-style: solid; border-color: darkgray; border-radius: 10px; padding: 2px; margin-top: 5px;">
+            <h5><b>行驶参数设置：</b></h5>
+            <span><label>速度(Km/h)：</label><input type="text" id="carSpeed" class="form-control" style="display:inline;width:80px;" value="60"/></span>
+            <span><label>油耗(Km/L)：</label><input type="text" id="oilExpend" class="form-control" style="display:inline;width:80px;" value="10"/></span>
+            <span><label>是否循环行驶：</label><select style="width:80px;" id="travelLoop" class="form-control">
+                <option value="0">否</option>
+                <option value="1">是</option></select><label style="font-size:9px;width: 100px;">开启后会在所选择的轨迹上来回行驶</label></span>
+        </div>
+        <div style="width:100%;padding-bottom:10px;border-bottom: 1px solid #eee;">
+            <h3>操作：</h3>
+            <button id="connect_B" type="button" class="btn btn-primary" onclick="connect()">1、连网</button>
+            <button id="fire_B" type="button" class="btn btn-primary" onclick="login()">2、登录</button>
+            <button id="login_B" type="button" class="btn btn-primary" onclick="fire()">3、点火</button>
+            <button id="run_B" type="button" class="btn btn-primary" onclick="startTravel()">4、行驶</button>
+            <button id="stopRun_B" type="button" class="btn btn-primary" onclick="stopTravel()">5、停止行驶</button>
+            <button id="unFire_B" type="button" class="btn btn-primary" onclick="unFire()">6、熄火</button>
+            <button id="unConnect_B" type="button" class="btn btn-primary" onclick="stopConnect()">7、断网</button>
+            <button id="unConnectAll_B" type="button" class="btn btn-danger" onclick="reset()">复位</button>
+            <button id="clear_B" type="button" class="btn btn-warning" onclick="clearlog()">清空日志</button>
+            <span style="margin-left:20px;"><label>当前状态：</label><input id="curStatus" value="断网" disabled="disabled" class="form-control" style="font-weight: bold;width:85px;color:red;border-width: 1px; border-style: solid; border-color: darkgray; border-radius: 10px;"></span>
+            <span style="width:80px;padding-left:10px;"><label style="width:70px"><input type="checkbox" id="ignition" onclick="isLogShow(this)"/>隐藏日志</label> </span>
+        </div>
+        <div style="display: block; width: 100%; border-width: 1px; border-style: solid; border-color: darkgray; border-radius: 10px; padding: 2px; margin-top: 5px;">
+            <h5><b>事件发送：</b>
+                <span style="border-width:1px;border-style:solid;border-color:darkgray;border-radius:10px;padding:1px 10px;">
+                    <label><input name="eventshow" type="radio" value="0" checked="checked" onclick="isShowEventArea(this)"/>隐藏</label>
+                    <label style="margin-left:10px;"><input name="eventshow" type="radio" value="1" onclick="isShowEventArea(this)"/>显示</label>
+                </span>
+            </h5>
+            <div id="event_area" style="display:none;">
+                <div style="margin-top:10px;width:100%;border-width:1px;border-style:solid;border-color:darkgray;border-radius:10px;padding:2px;background:skyblue;">
+                    <label style="padding: 0px 10px;"><input type="checkbox" id="rapidlyAccelerateEvent_check" onclick="eventSelect(this)" checked />急加速 </label>
+                    <label style="padding: 0px 10px;"><input type="checkbox" id="sharpSlowdownEvent_check" onclick="eventSelect(this)" checked />急减速 </label>
+                    <label style="padding: 0px 10px;"><input type="checkbox" id="sharpTurnEvent_check" onclick="eventSelect(this)" checked />急转弯 </label>
+                </div>
+                <div style="padding:10px;">
+                    <span id="rapidlyAccelerateEvent_button" style="display:inline;"><button type="button" class="btn btn-primary" onclick="sendRapidlyAccelerateEvent(this)">急加速</button></label></span>
+                    <span id="sharpSlowdownEvent_button" style="display:inline;"><button type="button" class="btn btn-primary" onclick="sendSharpSlowdownEvent(this)">急减速</button></label></span>
+                    <span id="sharpTurnEvent_button" style="display:inline;"><button type="button" class="btn btn-primary" onclick="sendSharpTurnEvent(this)">急转弯</button></label></span>
+                </div>
+            </div>
+        </div>
+        <div style="display: block; width: 100%; border-width: 1px; border-style: solid; border-color: darkgray; border-radius: 10px; padding: 2px; margin-top: 5px;">
+            <h5><b>实时控制：</b>
+                <span style="border-width:1px;border-style:solid;border-color:darkgray;border-radius:10px;padding:1px 10px;">
+                    <label><input name="realtime" type="radio" value="0" checked="checked" onclick="isShowRealTimeCtrArea(this)"/>隐藏</label>
+                    <label style="margin-left:10px;"><input name="realtime" type="radio" value="1" onclick="isShowRealTimeCtrArea(this)"/>显示</label>
+                </span>
+            </h5>
+            <div id="realTimeCtl_area" style="display:none;">
+                <div style="padding:10px;">
+                    <span style="margin-left:10px"><label>车速度（Km/h）：</label><input style="width:80px;margin-right:5px;" id="change_speed" type="text" class="form-control" value="60"><button type="button" class="btn btn-primary" onclick="changeSpeed()">改变车速</button></span>
+                    <span style="margin-left:10px"><label>油耗（Km/L）：</label><input style="width:80px;margin-right:5px;" id="change_oilExpend" type="text" class="form-control" value="10"><button type="button" class="btn btn-primary" onclick="changeOilExpend()">改变油耗</button></span>
+                    <span style="margin-left:10px"><label>上报间隔（秒）：</label><input style="width:80px;margin-right:5px;" id="change_durTime" type="text" class="form-control" value="5"><button type="button" class="btn btn-primary" onclick="changeDurTime()">改变上报间隔</button></span>
+                </div>
+            </div>
+        </div>
+        <div style="width:100%;padding-bottom:60px;border-bottom: 1px solid #eee;">
+            <h3>日志：</h3>
+            <textarea id="showFeedback" style="width:100%;padding:5px;padding-bottom:60px;" rows="10"></textarea>
+        </div>
+        <div style="width:100%;padding-bottom:10px;border-bottom: 1px solid #eee;">
+        <h4>查询今日车机行驶数据</h4>
+        <span>
+            <button id="searchCarData" type="button" class="btn btn-primary">查询</button>
+        </span>
+    </div>
+    <H3 style="border-bottom: 1px solid #eee;">返回信息：</H3>
+    <div style="width:100%;padding:5px;margin-top:10px;">
+        <textarea id="searchCardataShow" style="width:100%;padding:5px;" rows="8"></textarea>
+    </div>
+    </div>
+<script>
+//通过函数获取页面参数
+function getPageData(){
+    var data = {};
+    var carId = $("#carId").val()
+    var durTime = $("#durTime").val()
+    var timeout = $("#timeout").val()
+    data["carId"] = carId
+    data["durTime"] = durTime
+    data["timeout"] = timeout
+    //会话session数据
+    data["session"] = {}
+    var sessionId = $("#curSession").val()
+    data["session"]["sessionId"] = sessionId
+    //登录数据
+    data["login"] = {}
+    //版本数据
+    data["version"] = getVersionData()
+    //GPS轨迹数据
+    var gpsLine = $("#selectGPSLine").val()
+    data["gpsLine"] = gpsLine
+    //行驶参数数据
+    data["travelData"] = getTravelData()
+    return data;
+}
+//连接
+function connect(){
+    var data = getPageData()
+    var host = window.location.host;
+    $.ajax({
+        url:"http://" + host + "/m300Tools/M_m300Simulater_process/porcessConnect",
+        type:"post",
+        data:JSON.stringify(data),
+        contentType:"application/json",
+        dataType:"json",
+        success:function(data){
+            if(data.status == 200){
+                var curTime = getCurTime();
+                var txt = $("#showFeedback").val()
+                txt = txt + "[" + curTime + "] " + data.message + "\n"
+                $("#showFeedback").val(txt)
+                WebSocketTest()
+                $("#curStatus").val("连网")
+                var userNums = parseInt($("#totalSessionNums").val()) + 1
+                $("#totalSessionNums").val(userNums)
+            }else{
+                var curTime = getCurTime();
+                var txt = $("#showFeedback").val()
+                txt = txt + "[" + curTime + "] " + data.message + "\n"
+                $("#showFeedback").val(txt)
+                alert(data.message);
+            }
+        }
+    });
+}
+//登录
+function login(){
+    var data = getPageData()
+     $("#curStatus").val("登录")
+    url = "/m300Tools/M_m300Simulater_process/porcessLogin",
+    sendjson(data,url);
+}
+//点火
+function fire(){
+    var data = getPageData()
+    url = "/m300Tools/M_m300Simulater_process/porcessFireOn",
+    sendjson(data,url);
+     $("#curStatus").val("点火")
+}
+//行驶
+function startTravel(){
+    var data = getPageData()
+    url = "/m300Tools/M_m300Simulater_process/porcessStartTravel",
+    sendjson(data,url);
+    $("#curStatus").val("行驶")
+}
+//停止行驶
+function stopTravel(){
+    var data = getPageData();
+    url = "/m300Tools/M_m300Simulater_process/porcessStopTravel",
+    sendjson(data,url);
+    $("#curStatus").val("点火")
+}
+//熄火
+function unFire(){
+    var data = getPageData()
+    url = "/m300Tools/M_m300Simulater_process/porcessFireOff",
+    sendjson(data,url);
+     $("#curStatus").val("熄火")
+}
+//断开连接
+function stopConnect(){
+    var data = getPageData();
+    var host = window.location.host;
+    $.ajax({
+        url:"http://" + host + "/m300Tools/M_m300Simulater_process/porcessDisconnect",
+        type:"post",
+        data:JSON.stringify(data),
+        contentType:"application/json",
+        dataType:"json",
+        success:function(data){
+            if(data.status == 200){
+                var curTime = getCurTime();
+                var txt = $("#showFeedback").val()
+                txt = txt + "[" + curTime + "] " + data.message + "\n"
+                $("#showFeedback").val(txt)
+                //endService()
+                 $("#curStatus").val("断网")
+                var userNums = parseInt($("#totalSessionNums").val()) - 1
+                $("#totalSessionNums").val(userNums)
+                ws.close();
+            }else{
+                var curTime = getCurTime();
+                var txt = $("#showFeedback").val()
+                txt = txt + "[" + curTime + "] " + data.message + "\n"
+                $("#showFeedback").val(txt)
+                alert(data.message);
+            }
+        }
+    });
+}
+//复位
+function reset(){
+    var res;
+	res=confirm("复位后会影响其他在线用户的使用，你确定复位吗?");
+	if(res == true){
+	    var data =  getPageData();
+        url = "/m300Tools/M_m300Simulater_process/reset",
+        sendjson(data,url);
+        $("#showFeedback").val("")
+        //endService()
+         $("#curStatus").val("断网")
+         $("#totalSessionNums").val(0)
+         ws.close();
+	}
+}
+//清空日志
+function clearlog(){
+    $("#showFeedback").val("")
+}
+//获取版本数据
+function getVersionData(){
+    var SWVersion = $("#SWVersion").val();
+    var SWDate = $("#SWDate").val();
+    var HWVersion = $("#HWVersion").val();
+    var GSMType = $("#GSMType").val();
+    var carType = $("#carType").val();
+    var engineCode = $("#engineCode").val();
+    var VINCode = $("#VINCode").val();
+    var data = {};
+    data["SWVersion"] = SWVersion;
+    data["SWDate"] = SWDate;
+    data["HWVersion"] = HWVersion;
+    data["GSMType"] = GSMType;
+    data["carType"] = carType;
+    data["engineCode"] = engineCode;
+    data["VINCode"] = VINCode;
+    return data
+}
+//获取行驶参数数据
+function getTravelData(){
+    var data = {}
+    var carSpeed = $("#carSpeed").val()
+    var oilExpend = $("#oilExpend").val()
+    var travelLoop = $("#travelLoop").val()
+    data["carSpeed"] = carSpeed
+    data["oilExpend"] = oilExpend
+    data["travelLoop"] = travelLoop
+    return data
+}
+//非json方式发送数据
+function send(data,url){
+    var host = window.location.host;
+    $.ajax({
+        url:"http://" + host + url,
+        type:"post",
+        data:data,
+        dataType:"json",
+        success:function(data){
+            if(data.status == 200){
+                //window.location.reload()
+                var curTime = getCurTime();
+                var txt = $("#showFeedback").val()
+                txt = txt + "[" + curTime + "] " + data.message + "\n"
+                $("#showFeedback").val(txt)
+            }else{
+            var curTime = getCurTime();
+                var txt = $("#showFeedback").val()
+                txt = txt + "[" + curTime + "] " + data.message + "\n"
+                $("#showFeedback").val(txt)
+                alert(data.message);
+            }
+        }
+    });
+}
+//json方式发送数据
+function sendjson(data,url){
+    var host = window.location.host;
+    $.ajax({
+        url:"http://" + host + url,
+        type:"post",
+        data:JSON.stringify(data),
+        contentType:"application/json",
+        dataType:"json",
+        success:function(data){
+            if(data.status == 200){
+                //window.location.reload()
+                var curTime = getCurTime();
+                var txt = $("#showFeedback").val()
+                txt = txt + "[" + curTime + "] " + data.message + "\n"
+                $("#showFeedback").val(txt)
+            }else{
+                var curTime = getCurTime();
+                var txt = $("#showFeedback").val()
+                txt = txt + "[" + curTime + "] " + data.message + "\n"
+                $("#showFeedback").val(txt)
+                alert(data.message);
+            }
+        }
+    });
+}
+
+//控制登录数据区域的显示与隐藏
+function isShowLoginArea(e){
+    var value = $(e).val()
+    if(value == "0"){
+        $("#login_area").css("display","none")
+    }else{
+        $("#login_area").css("display","block")
+    }
+}
+///////////////////////////////// websocket 代码开始 /////////////////////////////////
+client = "0"
+ws = null;
+i = 1;
+showLog = true;   //设置日志是否显示
+(function(){
+     ws = null;
+     i = 1;
+})()
+
+function WebSocketTest(){
+      if ("WebSocket" in window){
+          console.log("您的浏览器支持 WebSocket!");
+          var domain = document.domain;
+          ws = new WebSocket("ws://" + domain + ":5009");
+          ws.onopen = function(){
+                console.log("socket 已经连接上！")
+          };
+          ws.onmessage = function (evt) {
+                var received_msg = JSON.parse(evt.data)
+                var curTime = getCurTime();
+                if(received_msg["code"] == "0001"){           //0001代表连接消息通信
+                    client = received_msg["client"]
+                }
+                var text = $("#showFeedback").val()
+                if(text == ""){
+                    text = text + "[" + curTime + "] " + received_msg["msg"] + "\n";
+                }else{
+                    text = text + "[" + curTime + "] " + received_msg["msg"] + "\n";
+                    $('#showFeedback').scrollTop($('#showFeedback')[0].scrollHeight);
+                }
+                if(showLog){
+                    $("#showFeedback").val(text);
+                }
+          };
+          ws.onclose = function(){
+                alert("连接已关闭...");      // 关闭 websocket
+          };
+      }else{
+                alert("您的浏览器不支持 WebSocket!");      // 浏览器不支持 WebSocket
+      }
+}
+
+function sendMsg(){
+    var msg = $("#sendMsg").val()
+    var data = {};
+    data["code"] = "0002";                        //0002代表普通消息通信
+    data["client"] = client;
+    data["msg"] = msg;
+    data = JSON.stringify(data)
+    ws.send(data);
+}
+
+function endService(){
+    var msg = ""
+    var data = {};
+    data["code"] = "0003";                        //0002代表普通消息通信
+    data["client"] = client;
+    data["msg"] = msg;
+    data = JSON.stringify(data)
+    ws.send(data);
+}
+
+function myclose(){
+    var data = {};
+    data["code"] = "0000";                      //0000代表关闭服务器套接字程序
+    data["client"] = client;
+    data["msg"] = "";
+    data = JSON.stringify(data);
+    ws.send(data);
+    ws.close();
+    console.log("执行了socket服务的关闭操作...");
+}
+///////////////////////////////// websocket 代码结束 /////////////////////////////////
+function uploadFile(){
+    var form = new FormData(document.getElementById("form"));
+    var host = window.location.host;
+    $.ajax({
+        url:"http://" + host + "/m300Tools/M_m300Simulater_process/fileUplad",
+        type:"post",
+        data:form,
+        cache: false,
+        processData: false,
+        contentType: false,
+        success:function(data){
+            //提交成功
+            if (data.status == "200") {
+                $("#fileAttach").val("")
+                $("#selectGPSLine").prepend("<option value=" + data.file.filenameOri + ">" + data.file.filename + "</option>")
+                alert("sucess")
+            }else{
+                alert("fail")
+            }
+        },
+        error:function(data){
+            var result=document.getElementById("Result");
+            result.innerHTML="服务器错误";
+        }
+    });
+}
+
+//删除选中的轨迹
+function del_gpsLine(){
+    var res;
+    var gpsLineTxt = $("#selectGPSLine").find("option:selected").text();
+    var gpsLine = $("#selectGPSLine").val()
+	res=confirm("是否删除当前轨迹:" + gpsLineTxt + "?");
+
+	data = {};
+	data["fileName"] = gpsLine;
+	if(res == true){
+        var host = window.location.host;
+        $.ajax({
+            url:"http://" + host + "/m300Tools/M_m300Simulater_process/delGpsLine",
+            type:"post",
+            data:data,
+            dataType:"json",
+            success:function(data){
+                if(data.status == 200){
+                    alert(data.message);
+                    $("#selectGPSLine").find("option:selected").remove();
+                }else{
+                    alert(data.message);
+                }
+            }
+        });
+	}
+}
+
+function download_sample(){
+    var host = window.location.host;
+    window.location.href = "http://" + host + "/m300Tools/M_m300Simulater_process/sampleDowload";
+}
+
+//查询车机今日行驶数据
+$("#searchCarData").click(function(){
+    var carId = $("#carId").val();
+    var data = {};
+    data["carId"] = carId;
+
+    var host = window.location.host;
+    $.ajax({
+        url:"http://" + host + "/m300Tools/M_m300Simulater_process/searchCarsimulaterData",
+        type:"post",
+        data:data,
+        dataType:"json",
+        success:function(data){
+            if(data.status == 200){
+                //window.location.reload()
+                msg = data.message
+                $("#searchCardataShow").val(msg)
+            }else{
+                $("#searchCardataShow").val(data.message)
+                alert(data.message);
+            }
+        }
+    });
+});
+
+//设置隐藏或显示日志
+function isLogShow(e){
+    if($(e).is(':checked')){
+        showLog = false;
+    }else{
+        showLog = true;
+    }
+}
+// -------------------------------- session多人在线js代码-------------------------------------------
+//获取水机session id
+function getSessionId(){
+    var sessionNum = parseInt(Math.random() * 100000);
+    if(sessionNum < 100000){
+        sessionNum = sessionNum + 100000;
+    }
+    var sessionStr = ""
+    var strAll = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRETUVWXYZ";
+    var strAllLen = strAll.length;
+    for(var i = 0;i < 8;i++){
+        var wh = parseInt(Math.random() * 100);
+        if(wh >= strAllLen){
+            wh = wh - strAllLen
+        }
+        sessionStr = sessionStr + strAll.charAt(wh)
+    }
+    session = sessionStr + "_" + sessionNum
+    return session
+}
+//设置车机session Id
+(function setSessionId(){
+    var sessionId = getSessionId()
+    $("#curSession").val(sessionId)
+})()
+
+//获取所有的使用用户
+function getAllUsers(){
+    var data = {};
+    var host = window.location.host;
+    $.ajax({
+        url:"http://" + host + "/m300Tools/M_m300Simulater_process/getConnects",
+        type:"post",
+        data:data,
+        dataType:"json",
+        success:function(data){
+            if(data.status == 200){
+                //window.location.reload()
+                //obj = data.result
+                obj = data.result.replace(/'service'(.*?)>,/g,"").replace(/'/g,"\"")
+                obj = JSON.parse(obj)
+                console.log(obj)
+                $("#totalSessionNums").val(data.userCounts)
+            }else{
+                $("#searchCardataShow").val(data.message)
+                alert(data.message);
+            }
+        }
+    });
+}
+//获取所有的使用用户
+(function(){
+    var data = {};
+    var host = window.location.host;
+    $.ajax({
+        url:"http://" + host + "/m300Tools/M_m300Simulater_process/getConnects",
+        type:"post",
+        data:data,
+        dataType:"json",
+        success:function(data){
+            if(data.status == 200){
+                //window.location.reload()
+                obj = data.result
+                $("#totalSessionNums").val(data.userCounts)
+            }else{
+
+            }
+        }
+    });
+})()
+
+// -------------------------------- 实时控制js代码-------------------------------------------
+//设置隐藏或显示实时控制区域
+function isShowRealTimeCtrArea(e){
+    var value = $(e).val()
+    if(value == "0"){
+        $("#realTimeCtl_area").css("display","none")
+    }else{
+        $("#realTimeCtl_area").css("display","block")
+    }
+}
+
+
+// -------------------------------- 事件控制js代码-------------------------------------------
+//设置隐藏或显示事件控制区域
+function isShowEventArea(e){
+    var value = $(e).val()
+    if(value == "0"){
+        $("#event_area").css("display","none")
+    }else{
+        $("#event_area").css("display","block")
+    }
+}
+
+//事件的选择与取消选择
+function eventSelect(e){
+    if($(e).is(':checked')){
+        if($(e).attr("id") == "rapidlyAccelerateEvent_check"){
+            $("#rapidlyAccelerateEvent_button").css("display","inline")
+        }else if($(e).attr("id") == "sharpSlowdownEvent_check"){
+            $("#sharpSlowdownEvent_button").css("display","inline")
+        }else if($(e).attr("id") == "sharpTurnEvent_check"){
+            $("#sharpTurnEvent_button").css("display","inline")
+        }
+    }else{
+        if($(e).attr("id") == "rapidlyAccelerateEvent_check"){
+            $("#rapidlyAccelerateEvent_button").css("display","none")
+        }else if($(e).attr("id") == "sharpSlowdownEvent_check"){
+            $("#sharpSlowdownEvent_button").css("display","none")
+        }else if($(e).attr("id") == "sharpTurnEvent_check"){
+            $("#sharpTurnEvent_button").css("display","none")
+        }
+    }
+}
+
+//发送急加速事件消息
+function sendRapidlyAccelerateEvent(){
+    var data = getPageData()
+    url = "/m300Tools/M_m300Simulater_process/sendAccelerateEvent",
+    sendjson(data,url);
+}
+//发送急减速事件消息
+function sendSharpSlowdownEvent(){
+    var data = getPageData()
+    url = "/m300Tools/M_m300Simulater_process/sendDecelerateEvent",
+    sendjson(data,url);
+}
+//发送急转弯事件消息
+function sendSharpTurnEvent(){
+    var data = getPageData()
+    url = "/m300Tools/M_m300Simulater_process/sendSharpTurnEvent",
+    sendjson(data,url);
+}
+// -------------------------------- 实时控制js代码-------------------------------------------
+//改变车速
+function changeSpeed(){
+    var data = {}
+    var carId = $("#carId").val()
+    var speed = $("#change_speed").val()
+    data["carId"] = carId
+    data["speed"] = speed
+    //会话session数据
+    data["session"] = {}
+    var sessionId = $("#curSession").val()
+    data["session"]["sessionId"] = sessionId
+    url = "/m300Tools/M_m300Simulater_process/changeCarSpeed",
+    $("#carSpeed").val(speed)
+    sendjson(data,url);
+}
+//改变油耗
+function changeOilExpend(){
+    var data = {}
+    var carId = $("#carId").val()
+    var oilExpend = $("#change_oilExpend").val()
+    data["carId"] = carId
+    data["oilExpend"] = oilExpend
+    //会话session数据
+    data["session"] = {}
+    var sessionId = $("#curSession").val()
+    data["session"]["sessionId"] = sessionId
+    url = "/m300Tools/M_m300Simulater_process/changeOilExpend",
+    $("#oilExpend").val(oilExpend)
+    sendjson(data,url);
+}
+//改变发送间隔
+function changeDurTime(){
+    var data = {}
+    var carId = $("#carId").val()
+    var durTime = $("#change_durTime").val()
+    data["carId"] = carId
+    data["durTime"] = durTime
+    //会话session数据
+    data["session"] = {}
+    var sessionId = $("#curSession").val()
+    data["session"]["sessionId"] = sessionId
+    $("#durTime").val(durTime)
+    url = "/m300Tools/M_m300Simulater_process/changeDurTime",
+    sendjson(data,url);
+}
+</script>
+    {% endblock %}
+</div>
+{% endblock %}

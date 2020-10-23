@@ -1,0 +1,96 @@
+{% extends "protocolTools/report/GPS_protocol_page.html" %}
+{% block title %}VoltageData_protocol{% endblock %}
+{% block content_1 %}
+<div id="container3" style="width:100%;min-height:750px;float:left;_background:green;margin-top:10px;_border-top: 1px solid #eee;">
+    <div style="width:100%;_background:green;padding:5px;padding-top:0px;">
+        <h3 style="border-bottom: 1px solid #eee;">设置协议头：</h3>
+        <label>消息流水号：</label><input id="WATER_CODE" type="text" class="form-control" value="0003" style="width:100px;">
+        <label style="margin-left:10px;">车机号：</label><input id="DEV_ID" type="text" class="form-control" value="M121501010001">
+    </div>
+    <H3 style="border-bottom: 1px solid #eee;">设置电压上报消息内容：</H3>
+    <ul class="protocol_content" style="padding:0px;">
+        <li style="width:170px"><label>采样个数：</label><input style="width:80px;" id="sampleNums" type="text" class="form-control" value="2"></li>
+        <li><label style="font-size:10px;">采样开始时间：</label><input id="curTime" type="text" class="form-control" value=""></li>
+        <li><label style="font-size:10px;">采样间隔时间（秒）：</label><input id="durTime" type="text" class="form-control" value="60"></li>
+        <li style="width:500px"><label style="font-size:10px;">采样值，多个用空格隔开：</label><input style="width:400px;" id="sampleVals" type="text" class="form-control" value="12 14"></li>
+    </ul>
+    <H3 style="border-bottom: 1px solid #eee;">控制：</H3>
+    <div style="width:100%;padding:5px;margin-top:10px;">
+        <button type="button" class="btn btn-primary" id="sendMsgBtn">发送消息</button>
+    </div>
+    <H3 style="border-bottom: 1px solid #eee;">返回信息：</H3>
+    <div style="width:100%;padding:5px;margin-top:10px;">
+        <textarea id="showFeedback" style="width:100%;padding:5px;" rows="8"></textarea>
+    </div>
+</div>
+
+
+<script>
+//发送电瓶采样数据包
+$("#sendMsgBtn").click(function(){
+    var WATER_CODE = $("#WATER_CODE").val();
+    var DEV_ID = $("#DEV_ID").val();
+
+    var sampleNums = parseInt($("#sampleNums").val());
+    var curTime = $("#curTime").val();
+    var timestampTemp = DateToTimestamp(curTime)
+    curTime = formatDate(parseInt(timestampTemp) - 8 * 3600 * 1000)
+
+    var durTime = parseInt($("#durTime").val());
+    var sampleVals = $("#sampleVals").val();
+    var sampleValsArr = sampleVals.split(" ")
+
+    var data = {};
+    data["WATER_CODE"] = WATER_CODE;
+    data["DEV_ID"] = DEV_ID;
+    data["sampleNums"] = sampleNums;
+    var sampleData = [];
+    data["sampleData"] = sampleData;
+    for(var i = 0;i < sampleNums;i++){
+        var d = {}
+        if(i == 0){
+            d["sampleTime"] = curTime;
+            d["voltage"] = sampleValsArr[i]
+        }else{
+            ts = DateToTimestamp(curTime) + durTime * 1000;
+            d["sampleTime"] = formatDate(ts)
+            d["voltage"] = sampleValsArr[i]
+        }
+        sampleData.push(d)
+    }
+
+    if(sampleValsArr.length < sampleNums){
+        alert("采样值不足" + sampleNums + "个")
+    }else{
+        var host = window.location.host;
+        $("#showFeedback").val("")
+        $.ajax({
+            url:"http://" + host + "/protocolTools/protocolReport_process/porcessVoltageDataMsg",
+            type:"post",
+            data:JSON.stringify(data),
+            contentType:"application/json",
+            dataType:"json",
+            success:function(data){
+                if(data.status == 200){
+                    //window.location.reload()
+                    msg = "发送消息：" + data.msgSend + "\n"
+                    msg = msg + "收到消息：" + data.result + "\n"
+                    msg = msg + "收到消息16进制：" + data.rev + "\n"
+                    msg = msg + "收到消息解析结果：" + JSON.stringify(data.orgRev) + "\n"
+                    $("#showFeedback").val(msg)
+                }else{
+                    $("#showFeedback").val(data.message)
+                    alert(data.message);
+                }
+            }
+        });
+    }
+});
+//设置当前时间到UTC时间输入框
+(function(){
+    var curTime = getCurTime();
+    $("#curTime").val(curTime);
+})();
+
+</script>
+{% endblock %}

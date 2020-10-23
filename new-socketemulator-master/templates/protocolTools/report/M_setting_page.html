@@ -1,0 +1,42 @@
+{% extends "protocolTools/report/M_carSimulater_page.html" %}
+{% block title %}GPS_protocol{% endblock %}
+{% block content_1 %}
+<div id="container3" style="width:100%;min-height:750px;float:left;_background:green;margin-top:10px;_border-top: 1px solid #eee;">
+    <div style="width:100%;padding-bottom:10px;border-bottom: 1px solid #eee;">
+        <label>主机地址：</label><input id="host" type="text" class="form-control" value="{{ arg['socket']['host']}}">
+        <label style="margin-left:10px;">端口：</label><input id="port" type="text" class="form-control" value="{{ arg['socket']['port']}}" style="width:100px;">
+        <button id="saveSocketSetting" type="button" class="btn btn-primary" id="saveSetting">保存</button>
+    </div>
+
+
+
+</div>
+
+<script>
+    $("#saveSocketSetting").click(function(){
+        var host = $("#host").val();
+        var port = $("#port").val();
+
+        var data = {};
+        data["host"] = host;
+        data["port"] = port;
+
+        var host = window.location.host;
+        $.ajax({
+            url:"http://" + host + "/protocolTools/M_carSimulater_process/porcessSocketSetting",
+            type:"post",
+            data:data,
+            dataType:"json",
+            success:function(data){
+                if(data.status == 200){
+                    window.location.reload()
+                }else{
+                    $("#showFeedback").val(data.message)
+                    alert(data.message);
+                }
+            }
+        });
+    });
+</script>
+
+{% endblock %}

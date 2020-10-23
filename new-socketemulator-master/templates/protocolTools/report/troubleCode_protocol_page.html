@@ -1,0 +1,102 @@
+{% extends "protocolTools/report/GPS_protocol_page.html" %}
+{% block title %}troubleCode_protocol{% endblock %}
+{% block content_1 %}
+<div id="container3" style="width:100%;min-height:750px;float:left;_background:green;margin-top:10px;_border-top: 1px solid #eee;">
+    <div style="width:100%;_background:green;padding:5px;padding-top:0px;">
+        <h3 style="border-bottom: 1px solid #eee;">设置协议头：</h3>
+        <label>消息流水号：</label><input id="WATER_CODE" type="text" class="form-control" value="0003" style="width:100px;">
+        <label style="margin-left:10px;">车机号：</label><input id="DEV_ID" type="text" class="form-control" value="M121501010001">
+    </div>
+    <H3 style="border-bottom: 1px solid #eee;">设置电压上报消息内容：</H3>
+    <ul class="protocol_content" style="padding:0px;">
+        <li><label>时间：</label><input id="curTime" type="text" class="form-control" value="2020-1-20 16:24:36"></li>
+        <li style="width:170px;"><label>故障码个数：</label><input style="width:80px;" id="troubleCodeNum" type="text" class="form-control" value="1"></li>
+        <li><label>故障码类型：</label><select id="systemId" class="form-control">
+            <option value="00">发动机故障码</option>
+            <option value="01">变速箱故障码</option>
+            <option value="02">ABS 故障码</option>
+            <option value="03">安全气囊故障码</option>
+        </select></li>
+        <li><label>故障码状态：</label><select id="status" class="form-control">
+            <option value="0">未解决</option>
+            <option value="1">已解决</option>
+        </select></li>
+        <li><label>MIL状态：</label><select id="MILStatus" class="form-control">
+            <option value="0">ON</option>
+            <option value="1">OFF</option>
+        </select></li>
+    </ul>
+    <H3 style="border-bottom: 1px solid #eee;">控制：</H3>
+    <div style="width:100%;padding:5px;margin-top:10px;">
+        <button type="button" class="btn btn-primary" id="sendMsgBtn">发送消息</button>
+    </div>
+    <H3 style="border-bottom: 1px solid #eee;">返回信息：</H3>
+    <div style="width:100%;padding:5px;margin-top:10px;">
+        <textarea id="showFeedback" style="width:100%;padding:5px;" rows="8"></textarea>
+    </div>
+</div>
+
+
+<script>
+//发送故障码数据包
+$("#sendMsgBtn").click(function(){
+    var WATER_CODE = $("#WATER_CODE").val();
+    var DEV_ID = $("#DEV_ID").val();
+
+    var curTime = $("#curTime").val();
+    var timestampTemp = DateToTimestamp(curTime)
+    curTime = formatDate(parseInt(timestampTemp) - 8 * 3600 * 1000)
+    var troubleCodeNum = parseInt($("#troubleCodeNum").val())
+    var systemId = $("#systemId").val()
+    var status = $("#status").val()
+    var troubleCode = []
+    for(var i = 0;i < troubleCodeNum;i++){
+        var temp = {}
+        temp["systemId"] = systemId
+        temp["content1"] = "00"
+        temp["content2"] = "0" + (i + 1)
+        temp["status"] = status
+        troubleCode.push(temp)
+    }
+    var MILStatus = $("#MILStatus").val()
+
+
+    var data = {};
+    data["WATER_CODE"] = WATER_CODE;
+    data["DEV_ID"] = DEV_ID;
+
+    data["curTime"] = curTime;
+    data["troubleCodeNum"] = troubleCodeNum;
+    data["troubleCode"] = troubleCode;
+    data["MILStatus"] = MILStatus;
+    var host = window.location.host;
+    $("#showFeedback").val("")
+    $.ajax({
+        url:"http://" + host + "/protocolTools/protocolReport_process/porcessTroubleCodeMsg",
+        type:"post",
+        data:JSON.stringify(data),
+        contentType:"application/json",
+        dataType:"json",
+        success:function(data){
+            if(data.status == 200){
+                //window.location.reload()
+                msg = "发送消息：" + data.msgSend + "\n"
+                msg = msg + "收到消息：" + data.result + "\n"
+                msg = msg + "收到消息16进制：" + data.rev + "\n"
+                msg = msg + "收到消息解析结果：" + JSON.stringify(data.orgRev) + "\n"
+                $("#showFeedback").val(msg)
+            }else{
+                $("#showFeedback").val(data.message)
+                alert(data.message);
+            }
+        }
+    });
+});
+//设置当前时间到UTC时间输入框
+(function(){
+    var curTime = getCurTime();
+    $("#curTime").val(curTime);
+})();
+
+</script>
+{% endblock %}

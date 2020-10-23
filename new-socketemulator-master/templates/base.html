@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="../../static/img/victory.ico" type="image/x-icon"/>
+    <title>{% block title %}{% endblock %}</title>
+    <link href="../../static/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../static/bootstrap-3.3.7-dist/css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="../../static/bootstrap-3.3.7-dist/css/other/docs.css" rel="stylesheet">
+    <script src="../../static/jquery/jquery-3.4.1.js"></script>
+    <script src="../../static/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+    <script src="../../static/js/util.js"></script>
+    <script src="../../static/js/index.js"></script>
+
+</head>
+<body>
+{% block top %}
+<div class="top_nav">
+    <div style="background:#222222;height:50px;">
+        <a href="#" style="color: #eeeeee;font-size:18px;position: absolute;left: 10px;margin-top: 5px;text-decoration:none;"><img style="height:40px;" src="../../static/img/victory.png"><b>测试工具平台</b></a>
+<!--        <a  style="position: absolute;right: 20px;margin-top: 5px;" href="http://10.100.11.5/liyuanhong/new-socketemulator"><img style="height: 40px;" src="../../static/img/gitlab.png"></a>-->
+    </div>
+    <div style="width: 70%;margin: 0 auto">
+        <ul class="nav nav-tabs" style="font-size:18px;">
+            <li role="presentation" {% if arg.path[0]=="protocolTools" %} class="active" {% endif %}><a onclick="swichTap(this)" id="protocolTools">M500协议工具</a></li>
+            <li role="presentation" {% if arg.path[0]=="m300Tools" %} class="active" {% endif %}><a onclick="swichTap(this)" id="m300Tools">M300协议工具</a></li>
+            <li role="presentation" {% if arg.path[0]=="messageTools" %} class="active" {% endif %}><a onclick="swichTap(this)" id="messageTools">车安优消息工具</a></li>
+            <li role="presentation" {% if arg.path[0]=="otherTools" %} class="active" {% endif %}><a onclick="swichTap(this)" id="otherTools">其他工具</a></li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+    {% block content %}
+    <div style="width:100%;min-height:750px;background-color:gray;">
+
+    </div>
+    {% endblock %}
+
+    {% block bottom %}
+    <div style="width:100%;height:80px;background-color:grey;float:left;margin-top:10px;">
+    {% endblock %}
+
+    </div>
+</div>
+</body>
+</html>

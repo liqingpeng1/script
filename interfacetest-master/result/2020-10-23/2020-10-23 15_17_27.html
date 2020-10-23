@@ -1,0 +1,1184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>车安优App接口测试</title>
+    <meta name="generator" content="HTMLTestRunner 0.8.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    
+<style type="text/css" media="screen">
+body        { font-family: verdana, arial, helvetica, sans-serif; font-size: 80%; }
+table       { font-size: 100%; }
+pre         { white-space: pre-wrap; }
+
+/* -- heading ---------------------------------------------------------------------- */
+h1 {
+	font-size: 16pt;
+	color: gray;
+}
+.heading {
+    margin-top: 0ex;
+    margin-bottom: 1ex;
+}
+
+.heading .attribute {
+    margin-top: 1ex;
+    margin-bottom: 0;
+}
+
+.heading .description {
+    margin-top: 4ex;
+    margin-bottom: 6ex;
+}
+
+/* -- css div popup ------------------------------------------------------------------------ */
+a.popup_link {
+}
+
+a.popup_link:hover {
+    color: red;
+}
+
+.popup_window {
+    display: none;
+    position: relative;
+    left: 0px;
+    top: 0px;
+    /*border: solid #627173 1px; */
+    padding: 10px;
+    background-color: #E6E6D6;
+    font-family: "Lucida Console", "Courier New", Courier, monospace;
+    text-align: left;
+    font-size: 8pt;
+    width: 500px;
+}
+
+}
+/* -- report ------------------------------------------------------------------------ */
+#show_detail_line {
+    margin-top: 3ex;
+    margin-bottom: 1ex;
+}
+#result_table {
+    width: 80%;
+    border-collapse: collapse;
+    border: 1px solid #777;
+}
+#header_row {
+    font-weight: bold;
+    color: white;
+    background-color: #777;
+}
+#result_table td {
+    border: 1px solid #777;
+    padding: 2px;
+}
+#total_row  { font-weight: bold; }
+.passClass  { background-color: #6c6; }
+.failClass  { background-color: #c60; }
+.errorClass { background-color: #c00; }
+.passCase   { color: #6c6; }
+.failCase   { color: #c60; font-weight: bold; }
+.errorCase  { color: #c00; font-weight: bold; }
+.hiddenRow  { display: none; }
+.testcase   { margin-left: 2em; }
+
+
+/* -- ending ---------------------------------------------------------------------- */
+#ending {
+}
+
+</style>
+
+</head>
+<body>
+<script language="javascript" type="text/javascript"><!--
+output_list = Array();
+
+/* level - 0:Summary; 1:Failed; 2:All */
+function showCase(level) {
+    trs = document.getElementsByTagName("tr");
+    for (var i = 0; i < trs.length; i++) {
+        tr = trs[i];
+        id = tr.id;
+        if (id.substr(0,2) == 'ft') {
+            if (level < 1) {
+                tr.className = 'hiddenRow';
+            }
+            else {
+                tr.className = '';
+            }
+        }
+        if (id.substr(0,2) == 'pt') {
+            if (level > 1) {
+                tr.className = '';
+            }
+            else {
+                tr.className = 'hiddenRow';
+            }
+        }
+    }
+}
+
+
+function showClassDetail(cid, count) {
+    var id_list = Array(count);
+    var toHide = 1;
+    for (var i = 0; i < count; i++) {
+        tid0 = 't' + cid.substr(1) + '.' + (i+1);
+        tid = 'f' + tid0;
+        tr = document.getElementById(tid);
+        if (!tr) {
+            tid = 'p' + tid0;
+            tr = document.getElementById(tid);
+        }
+        id_list[i] = tid;
+        if (tr.className) {
+            toHide = 0;
+        }
+    }
+    for (var i = 0; i < count; i++) {
+        tid = id_list[i];
+        if (toHide) {
+            document.getElementById('div_'+tid).style.display = 'none'
+            document.getElementById(tid).className = 'hiddenRow';
+        }
+        else {
+            document.getElementById(tid).className = '';
+        }
+    }
+}
+
+
+function showTestDetail(div_id){
+    var details_div = document.getElementById(div_id)
+    var displayState = details_div.style.display
+    // alert(displayState)
+    if (displayState != 'block' ) {
+        displayState = 'block'
+        details_div.style.display = 'block'
+    }
+    else {
+        details_div.style.display = 'none'
+    }
+}
+
+
+function html_escape(s) {
+    s = s.replace(/&/g,'&amp;');
+    s = s.replace(/</g,'&lt;');
+    s = s.replace(/>/g,'&gt;');
+    return s;
+}
+
+/* obsoleted by detail in <div>
+function showOutput(id, name) {
+    var w = window.open("", //url
+                    name,
+                    "resizable,scrollbars,status,width=800,height=450");
+    d = w.document;
+    d.write("<pre>");
+    d.write(html_escape(output_list[id]));
+    d.write("\n");
+    d.write("<a href='javascript:window.close()'>close</a>\n");
+    d.write("</pre>\n");
+    d.close();
+}
+*/
+--></script>
+
+<div class='heading'>
+<h1>车安优App接口测试</h1>
+<p class='attribute'><strong>开始测试时间：:</strong> 2020-10-23 15:17:27</p>
+<p class='attribute'><strong>测试耗时：:</strong> 0:00:11.387651</p>
+<p class='attribute'><strong>状态：:</strong> 通过 31</p>
+
+<p class='description'>车安优App拨测程序测试报告...</p>
+</div>
+
+
+
+<p id='show_detail_line'>展示
+<a href='javascript:showCase(0)'>收起报告</a>
+<a href='javascript:showCase(1)'>查看失败</a>
+<a href='javascript:showCase(2)'>展开报告</a>
+</p>
+<table id='result_table'>
+<colgroup>
+<col align='left' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+</colgroup>
+<tr id='header_row'>
+    <td>Test Group/Test case</td>
+    <td>Count</td>
+    <td>Pass</td>
+    <td>Fail</td>
+    <td>Error</td>
+    <td>View</td>
+</tr>
+
+<tr class='passClass'>
+    <td>testCase.User_interface_cases.User_interface_cases</td>
+    <td>12</td>
+    <td>12</td>
+    <td>0</td>
+    <td>0</td>
+    <td><a href="javascript:showClassDetail('c1',12)">Detail</a></td>
+</tr>
+
+<tr id='pt1.1' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_user_authorize_pwd_login</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.1')" >
+        pass</a>
+
+    <div id='div_pt1.1' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.1').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.1: 原始结果：{"error":0,"msg":"成功","result":{"sid":"a6fde75f19834aed932003494f1854e6","uid":"bb4d91ccc1f6461daec7a0daf1c8e8f2","mobile":"18883284712","isbind":1,"refreshToken":null}}
+
+请求地址：https://api.vandyo.com/user/authorize/pwd/login
+-------------------------返回结果：-------------------------
+{"error":0,"msg":"成功","result":{"sid":"a6fde75f19834aed932003494f1854e6","uid":"bb4d91ccc1f6461daec7a0daf1c8e8f2","mobile":"18883284712","isbind":1,"refreshToken":null}}
+接口响应时间：1098毫秒
+
+请求地址：https://api.vandyo.com/car/my_car/list
+-------------------------返回结果：-------------------------
+{"error":0,"msg":"成功","result":[{"cid":"49a92ac0f9b14ba59d91ee8debe8357d","plate":"渝Z12345","nickname":"444","din":"M502744004592","bind":"1","typeid":"976","typename":"宝斯通","modelid":"10002414","modelname":"2.2L 手动 高级版HFC4GA2-1B","cbrand":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/221.jpg","addtime":"1585794035","gasno":"92","engine":"","vin":"","bxexpiretime":"","insurance":"","bxcity":"","bxlasttime":"","notmodifymile":0,"tipmodifymile":"行驶总里程与仪表盘数据同步，不可修改","mile":"0","mlast":"","mmile":"","lastmiletime":"","register":"","nsexpiretime":"","nslasttime":"","cityName":"","deviceType":0,"maintain":"-99","insuranceDays":"-99","price":"-99"}]}
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.2' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_user_mall_goods_list</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.2')" >
+        pass</a>
+
+    <div id='div_pt1.2' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.2').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.2: 
+请求地址：https://api.vandyo.com/user/mall/goods/list
+-------------------------返回结果：-------------------------
+{"error":0,"msg":"成功","result":{"bl":[],"ob":[{"name":"智脑销售","url":"https://weidian.com/?userid=1667601632&amp;spider_token=47f7","imgUrl":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/app/manage//mallgoods/1590651543347.jpg","order":1}],"re":[]}}
+接口响应时间：262毫秒
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.3' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_user_third_party_app_list</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.3')" >
+        pass</a>
+
+    <div id='div_pt1.3' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.3').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.3: 
+请求地址：https://api.vandyo.com/user/third/party/app/list
+-------------------------返回结果：-------------------------
+{"error":0,"msg":"成功","result":[{"name":"爱车防盗","appUrl":"https://activity.vandyo.com/rescue","imgUrl":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/app/manage//appconf/1597307414367.png","order":1,"orderType":1},{"name":"年检代办","appUrl":"http://api.vandyo.com/user/app/redirect/annualcheck","imgUrl":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/app/manage//appconf/1597307463714.png","order":2,"orderType":1},{"name":"添加车辆","appUrl":"cayr://?cayr_data=%7B%22type%22%3A%22add_car%22%7D","imgUrl":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/app/manage//appconf/1597307561972.png","order":3,"orderType":1},{"name":"道路救援","appUrl":"http://html.vandyo.com/carshop/tellist.html","imgUrl":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/app/manage//appconf/1597308809005.png","order":12,"orderType":1},{"name":"养车","appUrl":"https://caw-c.vandyo.com/maintain_record/index.html#/stat","imgUrl":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/app/manage//appconf/1597307227251.png","order":14,"orderType":1},{"name":"流量宝","appUrl":"https://appstore.vandyo.com/drive/#/flow/index","imgUrl":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/vip/menu/20200904DLDt3rhFl.png","order":15,"orderType":1}]}
+接口响应时间：231毫秒
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.4' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_user_business_cooperation_get</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.4')" >
+        pass</a>
+
+    <div id='div_pt1.4' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.4').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.4: 
+请求地址：https://api.vandyo.com/user/business/cooperation/get
+-------------------------返回结果：-------------------------
+{"error":0,"msg":"保存成功","result":null}
+接口响应时间：259毫秒
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.5' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_user_info_get</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.5')" >
+        pass</a>
+
+    <div id='div_pt1.5' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.5').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.5: 
+请求地址：https://api.vandyo.com/user/info/get
+-------------------------返回结果：-------------------------
+{"error":0,"msg":"成功","result":{"uid":"bb4d91ccc1f6461daec7a0daf1c8e8f2","nickname":"","path":"","mobile":"18883284712","sex":1,"level":1,"card":1,"header":0,"gold":0,"days":225,"miles":0,"inviteCode":"YHJBMM","vipExpireTime":null,"driveExp":0,"city":"","birthday":null,"wxBind":0}}
+接口响应时间：328毫秒
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.6' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_user_pop_list</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.6')" >
+        pass</a>
+
+    <div id='div_pt1.6' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.6').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.6: 
+请求地址：https://api.vandyo.com/user/pop/list
+-------------------------返回结果：-------------------------
+{"error":0,"msg":"成功","result":{"adverts":[{"adId":"8e28b8eaf71140269553bd6f06baadd9","name":"汽车之家合作","imgUrl":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/app/manage//bannerad/1602816494159.png","url":"https://activity.vandyo.com/redpacket/#/autohome/autoindex","order":1,"singleUserMaxExposure":-1,"singleUserMaxClick":-1}]}}
+接口响应时间：401毫秒
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.7' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_user_banner_list</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.7')" >
+        pass</a>
+
+    <div id='div_pt1.7' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.7').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.7: 
+请求地址：https://api.vandyo.com/user/banner/list
+-------------------------返回结果：-------------------------
+{"error":0,"msg":"成功","result":[{"name":"9.9洗车活动","imgUrl":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/app/manage//bannerad/1597908870524.png","url":"https://appstore.vandyo.com/drive/#/wash/introduce","order":1},{"name":"1元洗车","imgUrl":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/app/manage//bannerad/1597291543687.png","url":"https://activity.vandyo.com/carwash","order":1},{"name":"8.20VIP权益日","imgUrl":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/app/manage//bannerad/1597829655317.png","url":"https://html.vandyo.com/cheanyou2/#/advt/vip","order":1},{"name":"288转盘活动","imgUrl":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/app/manage//bannerad/1595484027938.png","url":"https://activity.vandyo.com/gift/","order":1},{"name":"绑定教程","imgUrl":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/app/manage//bannerad/1589363292428.png","url":"https://mp.weixin.qq.com/s/zdaXXK_rTIlcsMdnDyUMlQ","order":3}]}
+接口响应时间：243毫秒
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.8' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_user_flash_list</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.8')" >
+        pass</a>
+
+    <div id='div_pt1.8' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.8').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.8: 
+请求地址：https://api.vandyo.com/user/flash/list
+-------------------------返回结果：-------------------------
+{"error":0,"msg":"成功","result":{"adverts":[{"adId":"56b961fd432c4038b926a205eace3d50","name":"七天里程换物","imgUrl":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/app/manage//bannerad/1602756680324.png","url":"https://mp.weixin.qq.com/s/EN20NROH3shNVGRXp8I_9g","order":1,"showTimeLength":5,"singleUserMaxExposure":-1,"singleUserMaxClick":-1}]}}
+接口响应时间：287毫秒
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.9' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_user_car_msg_config_get</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.9')" >
+        pass</a>
+
+    <div id='div_pt1.9' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.9').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.9: 
+请求地址：https://api.vandyo.com/user/car_msg/config/get
+-------------------------返回结果：-------------------------
+{"error":0,"msg":"成功","result":{"ignitionMsg":1,"ignitionPushMsg":1,"ignitionAudioMsg":1,"flameOutMsg":1,"flameOutPushMsg":1,"flameOutAudioMsg":1,"carReportMsg":1,"carReportPushMsg":1,"carReportAudioMsg":1,"drivingBehaviorMsg":1,"drivingBehaviorPushMsg":1,"drivingBehaviorAudioMsg":1,"faultMsg":1,"faultPushMsg":1,"faultAudioMsg":1,"machinePlugMsg":1,"machinePlugPushMsg":1,"machinePlugAudioMsg":1}}
+接口响应时间：210毫秒
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.10' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_user_user_msg_config_get</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.10')" >
+        pass</a>
+
+    <div id='div_pt1.10' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.10').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.10: 
+请求地址：https://api.vandyo.com/user/user_msg/config/get
+-------------------------返回结果：-------------------------
+{"error":0,"msg":"成功","result":{"total":1,"sys":1}}
+接口响应时间：213毫秒
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.11' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_user_config_version_update_get</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.11')" >
+        pass</a>
+
+    <div id='div_pt1.11' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.11').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.11: 
+请求地址：https://api.vandyo.com/user/config/version/update/get
+-------------------------返回结果：-------------------------
+{"error":0,"msg":"成功","result":{"version":"3.0.4","des":"1、 解锁更多热门活动，福利提前享\n2、 优化功能体验，智慧用车更省心","url":"https://down.vandyo.com","update":1,"apkurl":"https://down.vandyo.com","showprompt":1}}
+接口响应时间：202毫秒
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.12' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_user_menu_list</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.12')" >
+        pass</a>
+
+    <div id='div_pt1.12' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.12').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.12: 
+请求地址：https://api.vandyo.com/user/menu/list
+-------------------------返回结果：-------------------------
+{"error":0,"msg":"成功","result":{"my_menus":[]}}
+接口响应时间：256毫秒
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr class='passClass'>
+    <td>testCase.Car_interface_cases.Car_interface_cases</td>
+    <td>14</td>
+    <td>14</td>
+    <td>0</td>
+    <td>0</td>
+    <td><a href="javascript:showClassDetail('c2',14)">Detail</a></td>
+</tr>
+
+<tr id='pt2.1' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_car_brand_list</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.1')" >
+        pass</a>
+
+    <div id='div_pt2.1' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.1').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.1: 
+请求地址：https://api.vandyo.com/car/brand/list
+-------------------------返回结果：-------------------------
+{"error":0,"msg":"成功","result":[{"A":[{"bid":"1","bna":"AC Schnitzer","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/117.jpg"},{"bid":"2","bna":"ALPINA","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/276.jpg"},{"bid":"100","bna":"奥兹莫比尔","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202562609.png"},{"bid":"101","bna":"奥迪","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/33.jpg"},{"bid":"102","bna":"奥驰","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202563162.png"},{"bid":"106","bna":"安凯","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/221.jpg"},{"bid":"174","bna":"爱驰汽车","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202583297.png"},{"bid":"238","bna":"阿尔法·罗密欧","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/34.jpg"},{"bid":"239","bna":"阿斯顿·马丁","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/35.jpg"}]},{"B":[{"bid":"49","bna":"保斐利","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202554066.png"},{"bid":"50","bna":"保时捷","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/40.jpg"},{"bid":"58","bna":"别克","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/38.jpg"},{"bid":"62","bna":"北京","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/27.jpg"},{"bid":"63","bna":"北京汽车","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/173.jpg"},{"bid":"64","bna":"北汽制造","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/154.jpg"},{"bid":"65","bna":"北汽威旺","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/143.jpg"},{"bid":"66","bna":"北汽幻速","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/203.jpg"},{"bid":"67","bna":"北汽新能源","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/208.jpg"},{"bid":"68","bna":"北汽昌河","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/79.jpg"},{"bid":"69","bna":"北汽道达","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/2bd70c3707db446a8e49ae7d6c8d9e82.jpg"},{"bid":"98","bna":"奔腾","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/95.jpg"},{"bid":"99","bna":"奔驰","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/36.jpg"},{"bid":"108","bna":"宝沃","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/231.jpg"},{"bid":"109","bna":"宝马","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/15.jpg"},{"bid":"110","bna":"宝骏","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/120.jpg"},{"bid":"111","bna":"宾利","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/39.jpg"},{"bid":"115","bna":"巴博斯","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/140.jpg"},{"bid":"116","bna":"布加迪","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/37.jpg"},{"bid":"149","bna":"本田","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/14.jpg"},{"bid":"152","bna":"标致","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/13.jpg"},{"bid":"157","bna":"比亚迪","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/75.jpg"},{"bid":"158","bna":"比德文汽车","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202579550.png"},{"bid":"159","bna":"比速","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/271.jpg"}]},{"C":[{"bid":"3","bna":"ConquestVehicles","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202543851.png"},{"bid":"130","bna":"成功","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/196.jpg"},{"bid":"148","bna":"春田","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202577081.png"},{"bid":"233","bna":"长城","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/77.jpg"},{"bid":"234","bna":"长安","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/76.jpg"},{"bid":"235","bna":"长安欧尚","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202595067.png"},{"bid":"236","bna":"长安跨越","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202595797.png"},{"bid":"237","bna":"长安轻型车","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202596385.png"}]},{"D":[{"bid":"4","bna":"Donkervoort","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202547152.png"},{"bid":"5","bna":"DS","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/169.jpg"},{"bid":"23","bna":"东南","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/81.jpg"},{"bid":"24","bna":"东风","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/32.jpg"},{"bid":"25","bna":"东风●瑞泰特","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202942488.png"},{"bid":"26","bna":"东风富康","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202550299.png"},{"bid":"27","bna":"东风小康","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/142.jpg"},{"bid":"28","bna":"东风风光","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/259.jpg"},{"bid":"29","bna":"东风风度","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/187.jpg"},{"bid":"30","bna":"东风风神","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/113.jpg"},{"bid":"31","bna":"东风风行","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/165.jpg"},{"bid":"91","bna":"大乘汽车","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202559644.png"},{"bid":"92","bna":"大众","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1.jpg"},{"bid":"93","bna":"大宇","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202560200.png"},{"bid":"94","bna":"大运","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202560758.png"},{"bid":"184","bna":"电咖","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/db1167ee2df141f986016d1d2e5fb23d.jpg"},{"bid":"221","bna":"道奇","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/41.jpg"}]},{"F":[{"bid":"39","bna":"丰田","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/3.jpg"},{"bid":"168","bna":"法拉利","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/42.jpg"},{"bid":"186","bna":"福汽启腾","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/197.jpg"},{"bid":"187","bna":"福特","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/8.jpg"},{"bid":"188","bna":"福田","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/282.jpg"},{"bid":"189","bna":"福迪","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/141.jpg"},{"bid":"203","bna":"菲亚特","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/11.jpg"},{"bid":"252","bna":"飞驰商务车","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202598618.png"}]},{"G":[{"bid":"6","bna":"GMC","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/112.jpg"},{"bid":"51","bna":"光冈","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/116.jpg"},{"bid":"89","bna":"国机智骏","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202558351.png"},{"bid":"90","bna":"国金","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202559066.png"},{"bid":"118","bna":"广汽传祺","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/82.jpg"},{"bid":"119","bna":"广汽吉奥","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/108.jpg"},{"bid":"120","bna":"广汽新能源","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202567035.png"},{"bid":"209","bna":"观致","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/152.jpg"}]},{"H":[{"bid":"70","bna":"华凯","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/245.jpg"},{"bid":"71","bna":"华普","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/85.jpg"},{"bid":"72","bna":"华泰","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/260.jpg"},{"bid":"73","bna":"华颂","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/220.jpg"},{"bid":"74","bna":"华骐","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/184.jpg"},{"bid":"81","bna":"合众汽车","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202557042.png"},{"bid":"86","bna":"哈弗","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/181.jpg"},{"bid":"87","bna":"哈飞","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/24.jpg"},{"bid":"128","bna":"恒天","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/164.jpg"},{"bid":"129","bna":"悍马","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/43.jpg"},{"bid":"161","bna":"汇众","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202580251.png"},{"bid":"162","bna":"汉腾","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/267.jpg"},{"bid":"163","bna":"汉龙汽车","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202580931.png"},{"bid":"170","bna":"海格","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/150.jpg"},{"bid":"171","bna":"海马","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/86.jpg"},{"bid":"172","bna":"潍柴欧睿","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202582104.png"},{"bid":"173","bna":"潍柴汽车","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202582711.png"},{"bid":"192","bna":"红旗","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/91.jpg"},{"bid":"193","bna":"红星汽车","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202586299.png"},{"bid":"255","bna":"黄海","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/97.jpg"},{"bid":"256","bna":"黑豹","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202599292.png"}]},{"J":[{"bid":"7","bna":"Jeep","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/46.jpg"},{"bid":"42","bna":"九龙","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/151.jpg"},{"bid":"54","bna":"几何汽车","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202554647.png"},{"bid":"82","bna":"吉利","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/105.jpg"},{"bid":"84","bna":"君马","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/a1929434c67040b6b1b5c7f879831e6e.jpg"},{"bid":"114","bna":"巨威","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202566488.png"},{"bid":"132","bna":"捷尼赛思","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202570871.png"},{"bid":"133","bna":"捷豹","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/44.jpg"},{"bid":"134","bna":"捷达","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202571472.png"},{"bid":"135","bna":"捷途","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202572206.png"},{"bid":"150","bna":"极星","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202577739.png"},{"bid":"164","bna":"江南","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202581447.png"},{"bid":"165","bna":"江淮","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/84.jpg"},{"bid":"166","bna":"江铃","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/119.jpg"},{"bid":"225","bna":"金冠","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202592565.png"},{"bid":"226","bna":"金旅","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/175.jpg"},{"bid":"227","bna":"金杯","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/83.jpg"},{"bid":"228","bna":"金程","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202593131.png"},{"bid":"229","bna":"金龙","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/145.jpg"},{"bid":"230","bna":"钧天汽车","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202593752.png"}]},{"K":[{"bid":"8","bna":"Karma","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202547886.png"},{"bid":"9","bna":"KTM","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/109.jpg"},{"bid":"52","bna":"克莱斯勒","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/9.jpg"},{"bid":"55","bna":"凯翼","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/214.jpg"},{"bid":"56","bna":"凯迪拉克","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/47.jpg"},{"bid":"57","bna":"凯马","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202555284.png"},{"bid":"76","bna":"卡升","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/224.jpg"},{"bid":"77","bna":"卡威","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/199.jpg"},{"bid":"78","bna":"卡尔森","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/156.jpg"},{"bid":"122","bna":"康迪全球鹰","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202567604.png"},{"bid":"123","bna":"开沃汽车","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202568227.png"},{"bid":"124","bna":"开瑞","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/101.jpg"},{"bid":"190","bna":"科尼赛克","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/100.jpg"},{"bid":"191","bna":"科瑞斯的","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202585798.png"}]},{"L":[{"bid":"53","bna":"兰博基尼","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/48.jpg"},{"bid":"60","bna":"力帆","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/80.jpg"},{"bid":"131","bna":"拉达","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202570198.png"},{"bid":"151","bna":"林肯","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/51.jpg"},{"bid":"176","bna":"猎豹","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/78.jpg"},{"bid":"179","bna":"理念","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/124.jpg"},{"bid":"180","bna":"理想","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202583962.png"},{"bid":"195","bna":"罗伦士","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/118.jpg"},{"bid":"196","bna":"罗夫哈特","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202586906.png"},{"bid":"202","bna":"莲花","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/89.jpg"},{"bid":"205","bna":"蓝海房车","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202588180.png"},{"bid":"214","bna":"路特斯","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/50.jpg"},{"bid":"215","bna":"路虎","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/49.jpg"},{"bid":"231","bna":"铃木","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/53.jpg"},{"bid":"240","bna":"陆地方舟","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/204.jpg"},{"bid":"241","bna":"陆风","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/88.jpg"},{"bid":"246","bna":"零跑汽车","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202597541.png"},{"bid":"247","bna":"雷丁","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/215.jpg"},{"bid":"248","bna":"雷克萨斯","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/52.jpg"},{"bid":"249","bna":"雷诺","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/10.jpg"},{"bid":"250","bna":"领克","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/37b3a3db667546f99ccf7519bf5fb199.jpg"},{"bid":"251","bna":"领途汽车","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202598045.png"}]},{"M":[{"bid":"10","bna":"MINI","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/56.jpg"},{"bid":"83","bna":"名爵","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/20.jpg"},{"bid":"136","bna":"摩根","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/168.jpg"},{"bid":"177","bna":"玛莎拉蒂","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/57.jpg"},{"bid":"197","bna":"美亚","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202587546.png"},{"bid":"216","bna":"迈凯伦","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/129.jpg"},{"bid":"217","bna":"迈巴赫","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/55.jpg"},{"bid":"218","bna":"迈迪","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202589391.png"},{"bid":"253","bna":"马自达","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/58.jpg"}]},{"N":[{"bid":"61","bna":"劳斯莱斯","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/54.jpg"},{"bid":"75","bna":"南骏汽车","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202556399.png"},{"bid":"194","bna":"纳智捷","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/130.jpg"}]},{"O":[{"bid":"153","bna":"欧宝","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/59.jpg"},{"bid":"154","bna":"欧拉","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202578360.png"},{"bid":"155","bna":"欧朗","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/146.jpg"},{"bid":"156","bna":"欧联","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202578936.png"},{"bid":"210","bna":"讴歌","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/60.jpg"}]},{"P":[{"bid":"117","bna":"帕加尼","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/61.jpg"}]},{"Q":[{"bid":"41","bna":"乔治·巴顿","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/6252e57e5ce145d3a16e6d9c8c119adb.jpg"},{"bid":"59","bna":"前途","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202555834.png"},{"bid":"85","bna":"启辰","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/122.jpg"},{"bid":"97","bna":"奇瑞","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/26.jpg"},{"bid":"121","bna":"庆铃","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/660.jpg"},{"bid":"212","bna":"起亚","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/62.jpg"}]},{"R":[{"bid":"144","bna":"日产","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/63.jpg"},{"bid":"181","bna":"瑞驰新能源","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202584561.png"},{"bid":"182","bna":"瑞麒","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/103.jpg"},{"bid":"201","bna":"荣威","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/19.jpg"}]},{"S":[{"bid":"11","bna":"smart","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/45.jpg"},{"bid":"12","bna":"SPIRRA","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202548401.png"},{"bid":"13","bna":"SRM鑫源","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/5cfb788255a84b56943d6e2ef73f5a03.jpg"},{"bid":"14","bna":"STARTECH","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/238.jpg"},{"bid":"15","bna":"SWM斯威","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/269.jpg"},{"bid":"19","bna":"三菱","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/68.jpg"},{"bid":"20","bna":"上喆汽车","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202549711.png"},{"bid":"21","bna":"上汽大通","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/155.jpg"},{"bid":"22","bna":"世爵","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/66.jpg"},{"bid":"79","bna":"双环","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/90.jpg"},{"bid":"80","bna":"双龙","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/69.jpg"},{"bid":"113","bna":"山姆","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202565927.png"},{"bid":"126","bna":"思皓","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202569429.png"},{"bid":"127","bna":"思铭","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/162.jpg"},{"bid":"137","bna":"斯巴鲁","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/65.jpg"},{"bid":"138","bna":"斯柯达","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/67.jpg"},{"bid":"204","bna":"萨博","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/64.jpg"},{"bid":"211","bna":"赛麟","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/205.jpg"},{"bid":"242","bna":"陕汽通家","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/149.jpg"},{"bid":"243","bna":"陕汽重卡","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202596921.png"}]},{"T":[{"bid":"88","bna":"唐骏汽车","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202557726.png"},{"bid":"95","bna":"天际","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202561271.png"},{"bid":"96","bna":"天马","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202561914.png"},{"bid":"169","bna":"泰卡特","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/202.jpg"},{"bid":"175","bna":"特斯拉","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/133.jpg"},{"bid":"198","bna":"腾势","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/161.jpg"},{"bid":"220","bna":"通田","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202590775.png"}]},{"W":[{"bid":"16","bna":"WEY","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/283.jpg"},{"bid":"18","bna":"万丰","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202549072.png"},{"bid":"45","bna":"五十铃","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/167.jpg"},{"bid":"46","bna":"五菱","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/114.jpg"},{"bid":"103","bna":"威兹曼","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/99.jpg"},{"bid":"104","bna":"威马汽车","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202563895.png"},{"bid":"105","bna":"威麟","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/102.jpg"},{"bid":"167","bna":"沃尔沃","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/70.jpg"},{"bid":"183","bna":"瓦滋","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202585141.png"},{"bid":"206","bna":"蔚来","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/0f95cbd621604c34b8ca91c3e5da4e9e.jpg"}]},{"X":[{"bid":"112","bna":"小鹏汽车","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202565279.png"},{"bid":"139","bna":"新凯","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/185.jpg"},{"bid":"140","bna":"新大地","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202573082.png"},{"bid":"141","bna":"新宝骏","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202573587.png"},{"bid":"142","bna":"新特汽车","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202574246.png"},{"bid":"143","bna":"新雅途","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202574804.png"},{"bid":"145","bna":"星客特","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202575351.png"},{"bid":"146","bna":"星途","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202575921.png"},{"bid":"147","bna":"星驰","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202576495.png"},{"bid":"178","bna":"现代","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/12.jpg"},{"bid":"208","bna":"西雅特","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/98.jpg"},{"bid":"244","bna":"雪佛兰","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/71.jpg"},{"bid":"245","bna":"雪铁龙","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/72.jpg"}]},{"Y":[{"bid":"17","bna":"一汽","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/110.jpg"},{"bid":"43","bna":"云度","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/f8ea49310eef4e32b1598bdff5c68d9c.jpg"},{"bid":"44","bna":"云雀汽车","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/38fbc5370a52489a8e49a7f878e5c64e.jpg"},{"bid":"48","bna":"依维柯","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/144.jpg"},{"bid":"125","bna":"御捷","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202568718.png"},{"bid":"160","bna":"永源","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/93.jpg"},{"bid":"199","bna":"英致汽车","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/192.jpg"},{"bid":"200","bna":"英菲尼迪","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/73.jpg"},{"bid":"207","bna":"裕路","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/307.jpg"},{"bid":"213","bna":"跃进","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202588843.png"},{"bid":"219","bna":"远程汽车","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202589989.png"},{"bid":"224","bna":"野马","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/111.jpg"},{"bid":"232","bna":"银隆新能源","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202594482.png"},{"bid":"254","bna":"驭胜","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/263.jpg"}]},{"Z":[{"bid":"32","bna":"中兴","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/74.jpg"},{"bid":"33","bna":"中华","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/22.jpg"},{"bid":"34","bna":"中客华北","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202551008.png"},{"bid":"35","bna":"中欧房车","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202551557.png"},{"bid":"36","bna":"中正汽车","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202552182.png"},{"bid":"37","bna":"中誉","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202552829.png"},{"bid":"38","bna":"中顺","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202553501.png"},{"bid":"40","bna":"之诺","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/182.jpg"},{"bid":"47","bna":"众泰","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/94.jpg"},{"bid":"107","bna":"宗申","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202564506.png"},{"bid":"185","bna":"知豆","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/206.jpg"},{"bid":"222","bna":"重汽HOWO轻卡","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202591368.png"},{"bid":"223","bna":"重汽王牌","path":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202591908.png"}]}]}
+接口响应时间：341毫秒
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.2' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_car_my_car_list</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.2')" >
+        pass</a>
+
+    <div id='div_pt2.2' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.2').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.2: 原始结果：{"error":0,"msg":"成功","result":[{"cid":"49a92ac0f9b14ba59d91ee8debe8357d","plate":"渝Z12345","nickname":"444","din":"M502744004592","bind":"1","typeid":"976","typename":"宝斯通","modelid":"10002414","modelname":"2.2L 手动 高级版HFC4GA2-1B","cbrand":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/221.jpg","addtime":"1585794035","gasno":"92","engine":"","vin":"","bxexpiretime":"","insurance":"","bxcity":"","bxlasttime":"","notmodifymile":0,"tipmodifymile":"行驶总里程与仪表盘数据同步，不可修改","mile":"0","mlast":"","mmile":"","lastmiletime":"","register":"","nsexpiretime":"","nslasttime":"","cityName":"","deviceType":0,"maintain":"-99","insuranceDays":"-99","price":"-99"}]}
+
+请求地址：https://api.vandyo.com/car/my_car/list
+-------------------------返回结果：-------------------------
+{"error":0,"msg":"成功","result":[{"cid":"49a92ac0f9b14ba59d91ee8debe8357d","plate":"渝Z12345","nickname":"444","din":"M502744004592","bind":"1","typeid":"976","typename":"宝斯通","modelid":"10002414","modelname":"2.2L 手动 高级版HFC4GA2-1B","cbrand":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/221.jpg","addtime":"1585794035","gasno":"92","engine":"","vin":"","bxexpiretime":"","insurance":"","bxcity":"","bxlasttime":"","notmodifymile":0,"tipmodifymile":"行驶总里程与仪表盘数据同步，不可修改","mile":"0","mlast":"","mmile":"","lastmiletime":"","register":"","nsexpiretime":"","nslasttime":"","cityName":"","deviceType":0,"maintain":"-99","insuranceDays":"-99","price":"-99"}]}
+接口响应时间：244毫秒
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.3' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_car_my_car_info</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.3')" >
+        pass</a>
+
+    <div id='div_pt2.3' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.3').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.3: 
+请求地址：https://api.vandyo.com/car/my_car/info
+-------------------------返回结果：-------------------------
+{"error":0,"msg":"成功","result":{"cid":"49a92ac0f9b14ba59d91ee8debe8357d","plate":"渝Z12345","nickname":"444","din":"M502744004592","bind":"1","displacement":"2.2L/T","typeid":"976","typename":"宝斯通","modelid":"10002414","modelname":"2010款","cbrand":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/221.jpg","gasno":"92","engine":"","vin":"","bxexpiretime":"","insurance":"","bxcity":"","bxlasttime":"","notmodifymile":0,"tipmodifymile":"行驶总里程与仪表盘数据同步，不可修改","mile":"0","mlast":"","mmile":"","lastmiletime":"","register":"","nsexpiretime":"","nslasttime":"","addtime":"1585794035","cityName":"","deviceType":0}}
+接口响应时间：333毫秒
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.4' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_car_man_speak</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.4')" >
+        pass</a>
+
+    <div id='div_pt2.4' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.4').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.4: {'cid': '49a92ac0f9b14ba59d91ee8debe8357d', 'message': '发动机转速'}
+
+请求地址：https://api.vandyo.com/car/man/speak
+-------------------------返回结果：-------------------------
+{"error":0,"msg":"成功","result":[{"type":"1","message":"{\"txt\": \"我的【发动机转速】:\\n没有相关记录\"}","msgid":"d83c502bc25c4d56a8ab06e3f7ae1a77","mid":"49a92ac0f9b14ba59d91ee8debe8357d","mtype":"2","sendtime":1603437450}]}
+接口响应时间：294毫秒
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.5' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_car_api_reprt_reportDay_get</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.5')" >
+        pass</a>
+
+    <div id='div_pt2.5' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.5').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.5: 
+请求地址：https://api.vandyo.com/car/api/reprt/reportDay/get
+-------------------------返回结果：-------------------------
+{"error":0,"msg":"成功","result":{"days":[]}}
+接口响应时间：298毫秒
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.6' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_car_api_locus_list_page</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.6')" >
+        pass</a>
+
+    <div id='div_pt2.6' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.6').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.6: 
+请求地址：https://api.vandyo.com/car/api/locus/list/page
+-------------------------返回结果：-------------------------
+{"error":0,"msg":"成功","result":[]}
+接口响应时间：282毫秒
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.7' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_car_api_locus_points_list</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.7')" >
+        pass</a>
+
+    <div id='div_pt2.7' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.7').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.7: 
+请求地址：https://api.vandyo.com/car/api/locus/points/list
+-------------------------返回结果：-------------------------
+{"error":0,"msg":"成功","result":[]}
+接口响应时间：227毫秒
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.8' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_car_car_health</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.8')" >
+        pass</a>
+
+    <div id='div_pt2.8' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.8').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.8: 
+请求地址：https://api.vandyo.com/car/car_health
+-------------------------返回结果：-------------------------
+{"error":99,"msg":"设备未上线","result":null}
+接口响应时间：230毫秒
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.9' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_car_car_health_battery</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.9')" >
+        pass</a>
+
+    <div id='div_pt2.9' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.9').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.9: 
+请求地址：https://api.vandyo.com/car/car_health_battery
+-------------------------返回结果：-------------------------
+{"error":3022,"msg":"车辆数据过少，不足以完成检测","result":null}
+接口响应时间：236毫秒
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.10' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_car_car_health_brake</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.10')" >
+        pass</a>
+
+    <div id='div_pt2.10' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.10').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.10: 
+请求地址：https://api.vandyo.com/car/car_health_brake
+-------------------------返回结果：-------------------------
+{"error":3022,"msg":"车辆数据过少，不足以完成检测","result":null}
+接口响应时间：295毫秒
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.11' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_car_car_health_engine</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.11')" >
+        pass</a>
+
+    <div id='div_pt2.11' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.11').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.11: 
+请求地址：https://api.vandyo.com/car/car_health_engine
+-------------------------返回结果：-------------------------
+{"error":3022,"msg":"车辆数据过少，不足以完成检测","result":null}
+接口响应时间：276毫秒
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.12' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_car_car_health_gearbox</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.12')" >
+        pass</a>
+
+    <div id='div_pt2.12' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.12').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.12: 
+请求地址：https://api.vandyo.com/car/car_health_gearbox
+-------------------------返回结果：-------------------------
+{"error":3022,"msg":"车辆数据过少，不足以完成检测","result":null}
+接口响应时间：239毫秒
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.13' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_car_car_health_oilbox</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.13')" >
+        pass</a>
+
+    <div id='div_pt2.13' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.13').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.13: 
+请求地址：https://api.vandyo.com/car/car_health_oilbox
+-------------------------返回结果：-------------------------
+{"error":3022,"msg":"车辆数据过少，不足以完成检测","result":null}
+接口响应时间：270毫秒
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.14' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_car_car_health_total_user</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.14')" >
+        pass</a>
+
+    <div id='div_pt2.14' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.14').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.14: 
+请求地址：https://api.vandyo.com/car/car_health_total_user
+-------------------------返回结果：-------------------------
+{"error":0,"msg":"成功","result":{"num":140477}}
+接口响应时间：332毫秒
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr class='passClass'>
+    <td>testCase.DemoCar_case.DemoCar_case</td>
+    <td>4</td>
+    <td>4</td>
+    <td>0</td>
+    <td>0</td>
+    <td><a href="javascript:showClassDetail('c3',4)">Detail</a></td>
+</tr>
+
+<tr id='pt3.1' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_user_authorize_pwd_login</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt3.1')" >
+        pass</a>
+
+    <div id='div_pt3.1' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt3.1').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt3.1: 原始结果：{"error":0,"msg":"成功","result":{"sid":"b4bb8253c752402fa8f4bda7d8d7447c","uid":"82f90bdb42b9429a83ff64f204493331","mobile":"guest","isbind":1,"refreshToken":null}}
+
+请求地址：https://api.vandyo.com/user/authorize/pwd/login
+-------------------------返回结果：-------------------------
+{"error":0,"msg":"成功","result":{"sid":"b4bb8253c752402fa8f4bda7d8d7447c","uid":"82f90bdb42b9429a83ff64f204493331","mobile":"guest","isbind":1,"refreshToken":null}}
+接口响应时间：309毫秒
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt3.2' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_car_my_car_list</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt3.2')" >
+        pass</a>
+
+    <div id='div_pt3.2' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt3.2').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt3.2: 原始结果：{"error":0,"msg":"成功","result":[{"cid":"c62875db74c24f11836cce7f5f49a906","plate":"V&amp;U666","nickname":"演示车辆","din":"M202004150001","bind":"1","typeid":"833","typename":"奔驰GLC级","modelid":"136480","modelname":"2.0T 自动 GLC 260 L 4MATIC 动感型","cbrand":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/36.jpg","addtime":"1586969046","gasno":"95","engine":"isisisi","vin":"jznnsnzjskmsmsmms","bxexpiretime":"2021-04-16 00:00:00","insurance":"人保车险","bxcity":"北京","bxlasttime":"2020-04-16 00:00:00","notmodifymile":0,"tipmodifymile":"行驶总里程与仪表盘数据同步，不可修改","mile":"38552415","mlast":"5000","mmile":"5000","lastmiletime":"2020-04-16 00:00:00","register":"2019-04-16 00:00:00","nsexpiretime":"2021-04-15 00:00:00","nslasttime":"2020-04-16 00:00:00","cityName":"","deviceType":0,"maintain":"-98","insuranceDays":"174","price":"-99"}]}
+
+请求地址：https://api.vandyo.com/car/my_car/list
+-------------------------返回结果：-------------------------
+{"error":0,"msg":"成功","result":[{"cid":"c62875db74c24f11836cce7f5f49a906","plate":"V&amp;U666","nickname":"演示车辆","din":"M202004150001","bind":"1","typeid":"833","typename":"奔驰GLC级","modelid":"136480","modelname":"2.0T 自动 GLC 260 L 4MATIC 动感型","cbrand":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/36.jpg","addtime":"1586969046","gasno":"95","engine":"isisisi","vin":"jznnsnzjskmsmsmms","bxexpiretime":"2021-04-16 00:00:00","insurance":"人保车险","bxcity":"北京","bxlasttime":"2020-04-16 00:00:00","notmodifymile":0,"tipmodifymile":"行驶总里程与仪表盘数据同步，不可修改","mile":"38552415","mlast":"5000","mmile":"5000","lastmiletime":"2020-04-16 00:00:00","register":"2019-04-16 00:00:00","nsexpiretime":"2021-04-15 00:00:00","nslasttime":"2020-04-16 00:00:00","cityName":"","deviceType":0,"maintain":"-98","insuranceDays":"174","price":"-99"}]}
+接口响应时间：294毫秒
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt3.3' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_carDynamic_api_status_car_state_get</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt3.3')" >
+        pass</a>
+
+    <div id='div_pt3.3' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt3.3').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt3.3: 
+请求地址：https://api.vandyo.com/carDynamic/api/status/car/state/get
+-------------------------返回结果：-------------------------
+{"error":0,"msg":"","result":{"acc":0,"accuracy":"0.0","current":{"head":"224","lat":"29.63335","lng":"106.49026","time":1603436259},"duration":2100,"flameout":1603436259,"fuel":"2.3","gprs":1,"gpsvalid":1,"hfuel":"9.9","ignition":1603434121,"mile":"23.3","price":"13.5","speed":"40.0"}}
+接口响应时间：294毫秒
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt3.4' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_car_api_locus_list_page</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt3.4')" >
+        pass</a>
+
+    <div id='div_pt3.4' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt3.4').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt3.4: 原始结果：{"error":0,"msg":"成功","result":[{"traceid":"2976939905080374581603434121","sti":"1603434121","eti":"1603436259","mil":"23.3","slat":"29.649694","slng":"106.579147","elat":"29.63335","elng":"106.490257","asp":"40","oil":"2.3","duration":"2100","hfuel":"9.9","mspeed":"0","price":"13.5","gold":null},{"traceid":"2976939905080374581603430521","sti":"1603430521","eti":"1603432041","mil":"16.5","slat":"29.649649","slng":"106.579147","elat":"29.588486","elng":"106.541824","asp":"40","oil":"1.6","duration":"1490","hfuel":"9.9","mspeed":"0","price":"9.6","gold":null},{"traceid":"2976939905080374581603426921","sti":"1603426921","eti":"1603428178","mil":"13.7","slat":"29.632505","slng":"106.491852","elat":"29.649521","elng":"106.579086","asp":"40","oil":"1.4","duration":"1230","hfuel":"9.9","mspeed":"0","price":"7.9","gold":null},{"traceid":"2976939905080374581603423321","sti":"1603423321","eti":"1603424346","mil":"11.1","slat":"29.581181","slng":"106.599022","elat":"29.575745","elng":"106.58799","asp":"40","oil":"1.1","duration":"1000","hfuel":"9.9","mspeed":"0","price":"6.4","gold":null},{"traceid":"2976939905080374581603419721","sti":"1603419721","eti":"1603421464","mil":"19","slat":"29.713234","slng":"106.498741","elat":"29.649675","elng":"106.579109","asp":"40","oil":"1.9","duration":"1710","hfuel":"9.9","mspeed":"0","price":"11","gold":null},{"traceid":"2976939905080374581603416121","sti":"1603416121","eti":"1603418228","mil":"23","slat":"29.715498","slng":"106.597496","elat":"29.575621","elng":"106.587921","asp":"40","oil":"2.3","duration":"2070","hfuel":"9.9","mspeed":"0","price":"13.3","gold":null},{"traceid":"2976939905080374581603412521","sti":"1603412521","eti":"1603414041","mil":"16.5","slat":"29.649649","slng":"106.579147","elat":"29.588486","elng":"106.541824","asp":"40","oil":"1.6","duration":"1490","hfuel":"9.9","mspeed":"0","price":"9.6","gold":null},{"traceid":"2976939905080374581603408921","sti":"1603408921","eti":"1603410178","mil":"13.7","slat":"29.632505","slng":"106.491852","elat":"29.649521","elng":"106.579086","asp":"40","oil":"1.4","duration":"1230","hfuel":"9.9","mspeed":"0","price":"7.9","gold":null},{"traceid":"2976939905080374581603405321","sti":"1603405321","eti":"1603407428","mil":"23","slat":"29.715498","slng":"106.597496","elat":"29.575621","elng":"106.587921","asp":"40","oil":"2.3","duration":"2070","hfuel":"9.9","mspeed":"0","price":"13.3","gold":null},{"traceid":"2976939905080374581603401721","sti":"1603401721","eti":"1603403241","mil":"16.5","slat":"29.649649","slng":"106.579147","elat":"29.588486","elng":"106.541824","asp":"40","oil":"1.6","duration":"1490","hfuel":"9.9","mspeed":"0","price":"9.6","gold":null}]}
+
+请求地址：https://api.vandyo.com/car/api/locus/list/page
+-------------------------返回结果：-------------------------
+{"error":0,"msg":"成功","result":[{"traceid":"2976939905080374581603434121","sti":"1603434121","eti":"1603436259","mil":"23.3","slat":"29.649694","slng":"106.579147","elat":"29.63335","elng":"106.490257","asp":"40","oil":"2.3","duration":"2100","hfuel":"9.9","mspeed":"0","price":"13.5","gold":null},{"traceid":"2976939905080374581603430521","sti":"1603430521","eti":"1603432041","mil":"16.5","slat":"29.649649","slng":"106.579147","elat":"29.588486","elng":"106.541824","asp":"40","oil":"1.6","duration":"1490","hfuel":"9.9","mspeed":"0","price":"9.6","gold":null},{"traceid":"2976939905080374581603426921","sti":"1603426921","eti":"1603428178","mil":"13.7","slat":"29.632505","slng":"106.491852","elat":"29.649521","elng":"106.579086","asp":"40","oil":"1.4","duration":"1230","hfuel":"9.9","mspeed":"0","price":"7.9","gold":null},{"traceid":"2976939905080374581603423321","sti":"1603423321","eti":"1603424346","mil":"11.1","slat":"29.581181","slng":"106.599022","elat":"29.575745","elng":"106.58799","asp":"40","oil":"1.1","duration":"1000","hfuel":"9.9","mspeed":"0","price":"6.4","gold":null},{"traceid":"2976939905080374581603419721","sti":"1603419721","eti":"1603421464","mil":"19","slat":"29.713234","slng":"106.498741","elat":"29.649675","elng":"106.579109","asp":"40","oil":"1.9","duration":"1710","hfuel":"9.9","mspeed":"0","price":"11","gold":null},{"traceid":"2976939905080374581603416121","sti":"1603416121","eti":"1603418228","mil":"23","slat":"29.715498","slng":"106.597496","elat":"29.575621","elng":"106.587921","asp":"40","oil":"2.3","duration":"2070","hfuel":"9.9","mspeed":"0","price":"13.3","gold":null},{"traceid":"2976939905080374581603412521","sti":"1603412521","eti":"1603414041","mil":"16.5","slat":"29.649649","slng":"106.579147","elat":"29.588486","elng":"106.541824","asp":"40","oil":"1.6","duration":"1490","hfuel":"9.9","mspeed":"0","price":"9.6","gold":null},{"traceid":"2976939905080374581603408921","sti":"1603408921","eti":"1603410178","mil":"13.7","slat":"29.632505","slng":"106.491852","elat":"29.649521","elng":"106.579086","asp":"40","oil":"1.4","duration":"1230","hfuel":"9.9","mspeed":"0","price":"7.9","gold":null},{"traceid":"2976939905080374581603405321","sti":"1603405321","eti":"1603407428","mil":"23","slat":"29.715498","slng":"106.597496","elat":"29.575621","elng":"106.587921","asp":"40","oil":"2.3","duration":"2070","hfuel":"9.9","mspeed":"0","price":"13.3","gold":null},{"traceid":"2976939905080374581603401721","sti":"1603401721","eti":"1603403241","mil":"16.5","slat":"29.649649","slng":"106.579147","elat":"29.588486","elng":"106.541824","asp":"40","oil":"1.6","duration":"1490","hfuel":"9.9","mspeed":"0","price":"9.6","gold":null}]}
+接口响应时间：216毫秒
+原始结果：{"error":0,"msg":"","result":{"acc":0,"accuracy":"0.0","current":{"head":"224","lat":"29.63335","lng":"106.49026","time":1603436259},"duration":2100,"flameout":1603436259,"fuel":"2.3","gprs":1,"gpsvalid":1,"hfuel":"9.9","ignition":1603434121,"mile":"23.3","price":"13.5","speed":"40.0"}}
+接口响应时间：236毫秒
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr class='passClass'>
+    <td>testCase.CarDynamic_interface_cases.CarDynamic_interface_cases</td>
+    <td>1</td>
+    <td>1</td>
+    <td>0</td>
+    <td>0</td>
+    <td><a href="javascript:showClassDetail('c4',1)">Detail</a></td>
+</tr>
+
+<tr id='pt4.1' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_carDynamic_api_status_car_state_get</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt4.1')" >
+        pass</a>
+
+    <div id='div_pt4.1' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt4.1').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt4.1: 
+请求地址：https://api.vandyo.com/carDynamic/api/status/car/state/get
+-------------------------返回结果：-------------------------
+{"error":0,"msg":"","result":{}}
+接口响应时间：229毫秒
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='total_row'>
+    <td>Total</td>
+    <td>31</td>
+    <td>31</td>
+    <td>0</td>
+    <td>0</td>
+    <td>&nbsp;</td>
+</tr>
+</table>
+
+<div id='ending'>&nbsp;</div>
+
+</body>
+</html>

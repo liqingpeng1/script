@@ -1,0 +1,82 @@
+{% extends "protocolTools/index.html" %}
+{% block title %}socket{% endblock %}
+{% block content_01 %}
+<script src="../../static/js/protocolTools/setting.js"></script>
+<style>
+    .nav-pills li {
+        margin-bottom:5px;
+    }
+    .form-control {
+        display:inline;
+        width:160px;
+    }
+    .protocol_content:after{
+        clear:both;
+        display:block;
+        content:" ";
+    }
+
+    .protocol_content li {
+        width:250px;
+        _background:yellow;
+        list-style:none;
+        margin-top:5px;
+        float:left;
+    }
+    .protocol_content label{
+        width:90px;
+        text-align:right;
+    }
+</style>
+<div id="container2" style="width:82%;min-height:750px;float:left;_background:grey;margin-top:50px;">
+    {% block content_02 %}
+    <ul class="nav nav-pills" style="font-size:14px;">
+        <li role="presentation"><a id="socketSetting" {% if arg.path[2]=="socketSetting_page" %} class="link-tab" {% endif %} onclick="settingManTab(this)">socket设置</b></a></li>
+        <li role="presentation"><a id="style_index1" {% if arg.path[2]=="1" %} class="link-tab" {% endif %} onclick="settingManTab(this)">其他设置</b></a></li>
+    </ul>
+    {% endblock %}
+    {% block content_1 %}
+    <div id="container3" style="width:100%;min-height:750px;float:left;_background:green;margin-top:10px;_border-top: 1px solid #eee;">
+        <div style="width:100%;_background:green;padding:5px;padding-top:0px;">
+            <h3 style="border-bottom: 1px solid #eee;">连接设置：</h3>
+            <label>主机地址：</label><input id="host" type="text" class="form-control" value="{{ arg['socket']['host']}}">
+            <label style="margin-left:10px;">端口：</label><input id="port" type="text" class="form-control" value="{{ arg['socket']['port']}}" style="width:100px;">
+        </div>
+        <H3 style="border-bottom: 1px solid #eee;">控制：</H3>
+        <div style="width:100%;padding:5px;margin-top:10px;">
+            <button type="button" class="btn btn-primary" id="saveSetting">保存设置</button>
+        </div>
+    </div>
+
+
+
+    <script>
+    //保存设置数据
+    $("#saveSetting").click(function(){
+        var host = $("#host").val();
+        var port = $("#port").val();
+
+        var data = {};
+        data["host"] = host;
+        data["port"] = port;
+
+        var host = window.location.host;
+        $.ajax({
+            url:"http://" + host + "/protocolTools/setting_process/porcessSocketSetting",
+            type:"post",
+            data:data,
+            dataType:"json",
+            success:function(data){
+                if(data.status == 200){
+                    window.location.reload()
+                }else{
+                    $("#showFeedback").val(data.message)
+                    alert(data.message);
+                }
+            }
+        });
+    });
+    </script>
+    {% endblock %}
+</div>
+{% endblock %}

@@ -1,0 +1,225 @@
+{% extends "protocolTools/report/GPS_protocol_page.html" %}
+{% block title %}OBD_CAN_protocol{% endblock %}
+{% block content_1 %}
+<div id="container3" style="width:100%;min-height:750px;float:left;_background:green;margin-top:10px;_border-top: 1px solid #eee;">
+    <div style="width:100%;_background:green;padding:5px;padding-top:0px;">
+        <h3 style="border-bottom: 1px solid #eee;">设置协议头：</h3>
+        <label>消息流水号：</label><input id="WATER_CODE" type="text" class="form-control" value="0012" style="width:100px;">
+        <label style="margin-left:10px;">车机号：</label><input id="DEV_ID" type="text" class="form-control" value="M121501010001">
+        <label style="margin-left:10px;">OBD_CAN消息数量：</label><input id="msgCount" type="text" class="form-control" value="1" style="width:100px;">
+    </div>
+    <H3 style="border-bottom: 1px solid #eee;">设置OBD_CAN消息内容：</H3>
+    <ul class="protocol_content" style="padding:0px;">
+        <li><label>时间：</label><input id="infoTime" type="text" class="form-control" value="2020-1-20 16:24:36"></li>
+        <li><label>数据掩码：</label><input id="dataFlowCode" type="text" class="form-control" value="ffffffffff"></li>
+        <li><label>协议类型：</label><select id="protocolType" class="form-control">
+                <option value="0101">OBD_ST_HCAN</option>
+                <option value="0102">OBD_ST_MCAN</option>
+                <option value="0103">OBD_EX_HCAN</option>
+                <option value="0104">OBD_EX_MCAN</option>
+                <option value="0105">OBD_FK</option>
+                <option value="0106">OBD_K_ADDR</option>
+                <option value="0107">OBD_ISO</option>
+                <option value="0108">OBD_VPW</option>
+                <option value="0109">OBD_PWM</option>
+                <option value="0201">VW_ST_HCAN</option>
+                <option value="0202">VW_BOSCH</option>
+                <option value="0203">VW_TP_CAN</option>
+                <option value="0204">VW_K_ADDR</option>
+                <option value="0205">VW_UDS</option>
+            </select>
+        </li>
+        <li><label>点火状态：</label><select id="fireStatus" class="form-control">
+                <option value="1">点火</option>
+                <option value="0">熄火</option>
+            </select></li>
+        <li><label>ACC状态：</label><select id="ACCStatus" class="form-control">
+                <option value="1">ACC ON</option>
+                <option value="0">ACC OFF</option>
+            </select></li>
+        <li><label>电瓶电压：</label><input id="voltage" type="text" class="form-control" value="36.06"></li>
+        <li><label>故障灯状态：</label><select id="troubleLightStatus" class="form-control">
+                <option value="1">ON</option>
+                <option value="0" selected = "selected">OFF</option>
+            </select></li>
+        <li><label>故障码个数：</label><input id="toubleCodeCount" type="text" class="form-control" value="2"></li>
+        <li><label>发动机转速：</label><input id="engineSpeed" type="text" class="form-control" value="4000"></li>
+        <li><label>车辆速度：</label><input id="speed" type="text" class="form-control" value="60"></li>
+        <li><label>仪表里程值：</label><input id="meterMileage" type="text" class="form-control" value="128500"></li>
+        <li><label style="font-size:12px;">里程统计方式：</label><select id="mileageStatisticsStyle" class="form-control">
+                <option value="00">GPS</option>
+                <option value="01" selected = "selected">OBD</option>
+            </select></li></li>
+        <li><label>总里程：</label><input id="totalMileage" type="text" class="form-control" value="4129040"></li>
+        <li><label style="font-size:12px;">故障行驶里程：</label><input id="troubleMileage" type="text" class="form-control" value="500"></li>
+        <li><label>总耗油量：</label><input id="totalOilExpend" type="text" class="form-control" value="3500"></li>
+        <li><label>剩余油量：</label><input id="surplusOil" type="text" class="form-control" value="505"></li>
+        <li><label style="word-break:break-all;font-size:12px;">车辆总运行时间：</label><input id="totalRunTime" type="text" class="form-control" value="50000000"></li>
+        <li><label style="word-break:break-all;font-size:12px;">发动机运行时间：</label><input id="totalEngineTime" type="text" class="form-control" value="5000"></li>
+        <li style="width:500px;"><label>进气口温度：</label><input id="airIntoAisleTemperture" type="text" class="form-control" value="42">&nbsp;&nbsp;<p style="display:inline;font-size:12px;">进气口温度(上报范围0~255) </p></li>
+        <li style="width:500px;"><label>冷却液温度：</label><input id="coolingLiquidTemperture" type="text" class="form-control" value="63">&nbsp;&nbsp;<p style="display:inline;font-size:12px;">进气口温度(上报范围0~255) </p></li>
+        <li style="width:500px;"><label style="word-break:break-all;font-size:12px;">车辆环境温度：</label><input id="envTemperture" type="text" class="form-control" value="68">&nbsp;&nbsp;<p style="display:inline;font-size:12px;">进气口温度(上报范围0~255) </p></li>
+        <li style="width:500px;"><label style="word-break:break-all;font-size:12px;">进气歧管压力：</label><input id="ariIntoPress" type="text" class="form-control" value="20">&nbsp;&nbsp;<p style="display:inline;font-size:12px;">进气歧管压力   (10~105kpa) </p></li>
+        <li><label>燃油压力：</label><input id="oilPressure" type="text" class="form-control" value="5500"></li>
+        <li><label>大气压力：</label><input id="atmosphericPressure" type="text" class="form-control" value="120"></li>
+        <li><label>空气流量：</label><input id="airFlow" type="text" class="form-control" value="3600"></li>
+        <li><label style="word-break:break-all;font-size:12px;">气门位置传感器：</label><input id="valveLocationSensor" type="text" class="form-control" value="4000"></li>
+        <li style="width:500px;"><label style="word-break:break-all;font-size:12px;">油门踏板位置：</label><input id="acceleratorLocation" type="text" class="form-control" value="50">&nbsp;&nbsp;<p style="display:inline;font-size:12px;">取值 ( 0~100)</p></li>
+        <li style="width:500px;"><label>发动机负荷：</label><input id="engineLoad" type="text" class="form-control" value="55">&nbsp;&nbsp;<p style="display:inline;font-size:12px;">取值 ( 0~100)</p></li>
+        <li><label style="word-break:break-all;font-size:12px;">长期燃油修正(组1)：</label><input id="fuelTrim" type="text" class="form-control" value="34"></li>
+        <li><label>点火提前角：</label><input id="fireAngle" type="text" class="form-control" value="800"></li>
+        <li><label style="word-break:break-all;font-size:12px;">B1-S1氧传感器输出电压：</label><input id="B1S1oxygenSensorVoltage" type="text" class="form-control" value="18"></li>
+        <li><label style="word-break:break-all;font-size:12px;">B1-S2氧传感器输出电压：</label><input id="B1S2oxygenSensorVoltage" type="text" class="form-control" value="20"></li>
+        <li><label style="word-break:break-all;font-size:12px;">B1-S1氧传感器输出电流：</label><input id="B1S1oxygenSensorElectricity" type="text" class="form-control" value="13000"></li>
+        <li><label style="word-break:break-all;font-size:12px;">B1-S2氧传感器输出电流：</label><input id="B1S2oxygenSensorElectricity" type="text" class="form-control" value="13200"></li>
+        <li><label>瞬时油耗：</label><input id="momentOilExpend" type="text" class="form-control" value="15"></li>
+        <li><label>仪表油耗：</label><input id="meterOilExpend" type="text" class="form-control" value="20000"></li>
+        <li><label style="word-break:break-all;font-size:12px;">发动机绝对负荷：</label><input id="engineAbsoluteLoad" type="text" class="form-control" value="32"></li>
+        <li><label style="word-break:break-all;font-size:12px;">方向盘转向角：</label><input id="steeringWheelAngle" type="text" class="form-control" value="10"></li>
+        <li style="width:500px;"><label>扭矩百分比：</label><input id="torquePercentage" type="text" class="form-control" value="31">&nbsp;&nbsp;<p style="display:inline;font-size:12px;">显示值为0~100</p></li>
+        <li style="width:500px;"><label style="word-break:break-all;font-size:12px;">档位（仅商用车）：</label><input id="gearsLocation" type="text" class="form-control" value="1">&nbsp;&nbsp;<p style="display:inline;font-size:10px;">0为空档，1-16为前进档，17-20为后退档，21为P档</p></li>
+        <li><label>GPS车速：</label><input id="GPSSpeed" type="text" class="form-control" value="72.4"></li>
+        <li><label>GPS里程：</label><input id="GPSMileage" type="text" class="form-control" value="380000"></li>
+    </ul>
+    <H3 style="border-bottom: 1px solid #eee;">控制：</H3>
+    <div style="width:100%;padding:5px;margin-top:10px;">
+        <button type="button" class="btn btn-primary" id="sendMsgBtn">发送消息</button>
+    </div>
+    <H3 style="border-bottom: 1px solid #eee;">返回信息：</H3>
+    <div style="width:100%;padding:5px;margin-top:10px;">
+        <textarea id="showFeedback" style="width:100%;padding:5px;" rows="8"></textarea>
+    </div>
+</div>
+
+
+<script>
+//发送OBD_CAN数据
+$("#sendMsgBtn").click(function(){
+    var WATER_CODE = $("#WATER_CODE").val();
+    var DEV_ID = $("#DEV_ID").val();
+    var msgCount = $("#msgCount").val();
+
+    var infoTime = $("#infoTime").val();
+    var timestampTemp = DateToTimestamp(infoTime)
+    infoTime = formatDate(parseInt(timestampTemp) - 8 * 3600 * 1000)
+
+    var dataFlowCode = $("#dataFlowCode").val();
+    var protocolType = $("#protocolType").val();
+    var fireStatus = $("#fireStatus").val();
+    var ACCStatus = $("#ACCStatus").val();
+    var voltage = $("#voltage").val();
+    var troubleLightStatus = $("#troubleLightStatus").val();
+    var toubleCodeCount = $("#toubleCodeCount").val();
+    var engineSpeed = $("#engineSpeed").val();
+    var speed = $("#speed").val();
+    var meterMileage = $("#meterMileage").val();
+    var mileageStatisticsStyle = $("#mileageStatisticsStyle").val();
+    var totalMileage = $("#totalMileage").val();
+    var troubleMileage = $("#troubleMileage").val();
+    var totalOilExpend = $("#totalOilExpend").val();
+    var surplusOil = $("#surplusOil").val();
+    var totalRunTime = $("#totalRunTime").val();
+    var totalEngineTime = $("#totalEngineTime").val();
+    var airIntoAisleTemperture = $("#airIntoAisleTemperture").val();
+    var coolingLiquidTemperture = $("#coolingLiquidTemperture").val();
+    var envTemperture = $("#envTemperture").val();
+    var ariIntoPress = $("#ariIntoPress").val();
+    var oilPressure = $("#oilPressure").val();
+    var atmosphericPressure = $("#atmosphericPressure").val();
+    var airFlow = $("#airFlow").val();
+    var valveLocationSensor = $("#valveLocationSensor").val();
+    var acceleratorLocation = $("#acceleratorLocation").val();
+    var engineLoad = $("#engineLoad").val();
+    var fuelTrim = $("#fuelTrim").val();
+    var fireAngle = $("#fireAngle").val();
+    var B1S1oxygenSensorVoltage = $("#B1S1oxygenSensorVoltage").val();
+    var B1S2oxygenSensorVoltage = $("#B1S2oxygenSensorVoltage").val();
+    var B1S1oxygenSensorElectricity = $("#B1S1oxygenSensorElectricity").val();
+    var B1S2oxygenSensorElectricity = $("#B1S2oxygenSensorElectricity").val();
+    var momentOilExpend = $("#momentOilExpend").val();
+    var meterOilExpend = $("#meterOilExpend").val();
+    var engineAbsoluteLoad = $("#engineAbsoluteLoad").val();
+    var steeringWheelAngle = $("#steeringWheelAngle").val();
+    var torquePercentage = $("#torquePercentage").val();
+    var gearsLocation = $("#gearsLocation").val();
+    var GPSSpeed = $("#GPSSpeed").val();
+    var GPSMileage = $("#GPSMileage").val();
+
+    var data = {};
+    data["WATER_CODE"] = WATER_CODE;
+    data["DEV_ID"] = DEV_ID;
+    data["msgCount"] = msgCount;
+
+    data["infoTime"] = infoTime;
+    data["dataFlowCode"] = dataFlowCode;
+    data["protocolType"] = protocolType;
+    data["fireStatus"] = fireStatus;
+    data["ACCStatus"] = ACCStatus;
+    data["voltage"] = voltage;
+    data["troubleLightStatus"] = troubleLightStatus;
+    data["toubleCodeCount"] = toubleCodeCount;
+    data["engineSpeed"] = engineSpeed;
+    data["speed"] = speed;
+    data["meterMileage"] = meterMileage;
+    data["mileageStatisticsStyle"] = mileageStatisticsStyle;
+    data["totalMileage"] = totalMileage;
+    data["troubleMileage"] = troubleMileage;
+    data["totalOilExpend"] = totalOilExpend;
+    data["surplusOil"] = surplusOil;
+    data["totalRunTime"] = totalRunTime;
+    data["totalEngineTime"] = totalEngineTime;
+    data["airIntoAisleTemperture"] = airIntoAisleTemperture;
+    data["coolingLiquidTemperture"] = coolingLiquidTemperture;
+    data["envTemperture"] = envTemperture;
+    data["ariIntoPress"] = ariIntoPress;
+    data["oilPressure"] = oilPressure;
+    data["atmosphericPressure"] = atmosphericPressure;
+    data["airFlow"] = airFlow;
+    data["valveLocationSensor"] = valveLocationSensor;
+    data["acceleratorLocation"] = acceleratorLocation;
+    data["engineLoad"] = engineLoad;
+    data["fuelTrim"] = fuelTrim;
+    data["fireAngle"] = fireAngle;
+    data["B1S1oxygenSensorVoltage"] = B1S1oxygenSensorVoltage;
+    data["B1S2oxygenSensorVoltage"] = B1S2oxygenSensorVoltage;
+    data["B1S1oxygenSensorElectricity"] = B1S1oxygenSensorElectricity;
+    data["B1S2oxygenSensorElectricity"] = B1S2oxygenSensorElectricity;
+    data["momentOilExpend"] = momentOilExpend;
+    data["meterOilExpend"] = meterOilExpend;
+    data["engineAbsoluteLoad"] = engineAbsoluteLoad;
+    data["steeringWheelAngle"] = steeringWheelAngle;
+    data["torquePercentage"] = torquePercentage;
+    data["gearsLocation"] = gearsLocation;
+    data["GPSSpeed"] = GPSSpeed;
+    data["GPSMileage"] = GPSMileage;
+
+    var host = window.location.host;
+    $("#showFeedback").val("")
+    $.ajax({
+        url:"http://" + host + "/protocolTools/protocolReport_process/porcessOBD_CAN_Msg",
+        type:"post",
+        data:data,
+        dataType:"json",
+        success:function(data){
+            if(data.status == 200){
+                //window.location.reload()
+                msg = "发送消息：" + data.msgSend + "\n"
+                msg = msg + "收到消息：" + data.result + "\n"
+                msg = msg + "收到消息16进制：" + data.rev + "\n"
+                msg = msg + "收到消息解析结果：" + JSON.stringify(data.orgRev) + "\n"
+                $("#showFeedback").val(msg)
+            }else{
+                $("#showFeedback").val(data.message)
+                alert(data.message);
+            }
+        }
+    });
+});
+
+//设置当前时间到时间输入框
+    (function(){
+        var curTime = getCurTime();
+        $("#infoTime").val(curTime);
+    })();
+</script>
+{% endblock %}

@@ -1,0 +1,140 @@
+{% extends "messageTools/message/heartBeat_msg_page.html" %}
+{% block title %}dataUpstreamTransport_msg{% endblock %}
+{% block content_1 %}
+<div id="container3" style="width:100%;min-height:750px;float:left;_background:green;margin-top:10px;_border-top: 1px solid #eee;">
+    <div style="width:100%;_background:green;padding:5px;padding-top:0px;">
+        <h3 style="border-bottom: 1px solid #eee;">设置消息头：</h3>
+        <label>消息ID：</label><input id="msgID" type="text" class="form-control" disabled="disabled" value="0900" style="width:80px;">
+        <label>车机号：</label><input id="phoneNum" type="text" class="form-control" value="13146201119" style="width:150px;">
+        <label>消息流水号：</label><input id="msgWaterCode" type="text" class="form-control" value="1" style="width:60px;">
+        <label>是否加密：</label><select style="width:100px;" id="encryptionType" class="form-control">
+            <option value="0">不加密</option>
+            <option value="1024">加密</option>
+        </select>
+        <label>有无分包：</label><select style="width:80px;" id="subPkg" class="form-control" onchange="hasSubPkg()">
+            <option value="0">无</option>
+            <option value="8192">有</option>
+        </select>
+        <label id="subPkg_label" style="color:grey;">分包个数：</label><input disabled="disabled" id="pkgCounts" type="text" class="form-control" value="0" style="width:60px;">
+    </div>
+    <H3 style="border-bottom: 1px solid #eee;">数据上行透传消息内容：</H3>
+    <div style="width:100%;margin-bottom:10px;">
+        <label>选择数据类型：</label><select style="width:300px;" id="msgType" class="form-control" onchange="changeMsgType()">
+            <option value="F1">驾驶行程数据 （熄火发送）</option>
+            <option value="F2">故障码数据 （状态改变发送）</option>
+            <option value="F3">休眠进入 (进入休眠模式发送)</option>
+            <option value="F4" selected="selected">休眠唤醒 （退出休眠模式发送）</option>
+        </select>
+    </div>
+    <ul class="protocol_content" style="padding:0px;">
+        <li><label>时间：</label><input id="infoTime" type="text" class="form-control"></li>
+        <li><label style="word-break:break-all;font-size:10px;">休眠唤醒类型：</label><select id="outSleepType" class="form-control">
+            <option value="01">休眠定时唤醒</option>
+            <option value="02">CAN1</option>
+            <option value="04">CAN2</option>
+            <option value="08">gSensor</option>
+            <option value="10">电压变化</option>
+            <option value="20">GSM 远程唤醒</option>
+        </select></li>
+        <li><label>车辆电压：</label><input id="carVoltage" type="text" class="form-control" value="3600"></li>
+        <li><label style="word-break:break-all;font-size:10px;">振动唤醒加速度值，单位mg：</label><input id="vibrateOutSleepSpeedUpVal" type="text" class="form-control" value="3700"></li>
+    </ul>
+    <H3 style="border-bottom: 1px solid #eee;">控制：</H3>
+    <div style="width:100%;padding:5px;margin-top:10px;">
+        <button type="button" class="btn btn-primary" id="sendMsgBtn">发送消息</button>
+    </div>
+    <H3 style="border-bottom: 1px solid #eee;">返回信息：</H3>
+    <div style="width:100%;padding:5px;margin-top:10px;">
+        <textarea id="showFeedback" style="width:100%;padding:5px;" rows="8"></textarea>
+    </div>
+</div>
+
+<script>
+//发送GPS数据
+$("#sendMsgBtn").click(function(){
+    var msgID = $("#msgID").val();
+    var phoneNum = $("#phoneNum").val();
+    var msgWaterCode = $("#msgWaterCode").val();
+    var encryptionType = $("#encryptionType").val();
+    var subPkg = $("#subPkg").val();
+    var pkgCounts = ""
+    if (subPkg != "8192"){
+        pkgCounts = "0"
+    }else{
+        pkgCounts = $("#pkgCounts").val();
+    }
+
+    var msgType = $("#msgType").val();
+    var infoTime = $("#infoTime").val();
+    var outSleepType = $("#outSleepType").val();
+    var carVoltage = $("#carVoltage").val();
+    var vibrateOutSleepSpeedUpVal = $("#vibrateOutSleepSpeedUpVal").val();
+
+    var data = {};
+    data["msgID"] = msgID;
+    data["phoneNum"] = phoneNum;
+    data["msgWaterCode"] = msgWaterCode;
+    data["encryptionType"] = encryptionType;
+    data["subPkg"] = subPkg;
+    data["pkgCounts"] = pkgCounts;
+
+    data["msgType"] = msgType;
+    data["infoTime"] = infoTime;
+    data["outSleepType"] = outSleepType;
+    data["carVoltage"] = carVoltage;
+    data["vibrateOutSleepSpeedUpVal"] = vibrateOutSleepSpeedUpVal;
+
+    var host = window.location.host;
+    $("#showFeedback").val("")
+    $.ajax({
+        url:"http://" + host + "/messageTools/message_process/porcessDataUpstreamTransportMsg_F4",
+        type:"post",
+        data:data,
+        dataType:"json",
+        success:function(data){
+            if(data.status == 200){
+                //window.location.reload()
+                    var theShow = "原始数据：　"　+ data.original + "\n";
+                    theShow = theShow + "收到数据：　" + data.result + "\n";
+                    theShow = theShow + "收到数据16进制：　" + data.resultH + "\n";
+                    theShow = theShow + "解析数据：　"　+ JSON.stringify(data.parse) + "\n";
+                    $("#showFeedback").val(theShow)
+            }else{
+                $("#showFeedback").val(data.message)
+                alert(data.message);
+            }
+        }
+    });
+});
+
+function hasSubPkg(){
+    value = $("#subPkg").val()
+    if(value == "8192"){
+        $("#subPkg_label").css("color","black")
+        $("#pkgCounts").removeAttr("disabled")
+    }else{
+        $("#subPkg_label").css("color","grey")
+        $("#pkgCounts").attr("disabled","disabled")
+    }
+}
+
+function changeMsgType(){
+    var value = $("#msgType").val()
+    if(value == "F1"){
+        $(location).attr('href', "http://" + window.location.host + "/messageTools/message_view/dataUpstreamTransport_msg_page");
+    }else if(value == "F2"){
+        $(location).attr('href', "http://" + window.location.host + "/messageTools/message_view/dataUpstreamTransport_msg_f2_page");
+    }else if(value == "F3"){
+        $(location).attr('href', "http://" + window.location.host + "/messageTools/message_view/dataUpstreamTransport_msg_f3_page");
+    }else if(value == "F4"){
+        $(location).attr('href', "http://" + window.location.host + "/messageTools/message_view/dataUpstreamTransport_msg_f4_page");
+    }
+}
+
+//设置当前时间到时间输入框
+(function(){
+    var curTime = getCurTime();
+    $("#infoTime").val(curTime);
+})();
+</script>
+{% endblock %}

@@ -1,0 +1,91 @@
+{% extends "m300Tools/report/P_heartBeat_m300_page.html" %}
+{% block title %}version_msg{% endblock %}
+
+{% block content_1 %}
+<div id="container3" style="width:100%;min-height:750px;float:left;_background:green;margin-top:10px;_border-top: 1px solid #eee;">
+    <div style="width:100%;_background:green;padding:5px;padding-top:0px;">
+        <h3 style="border-bottom: 1px solid #eee;">设置消息头：</h3>
+        <label>功能ID：</label><input id="FUNID" type="text" class="form-control" disabled="disabled" value="0007" style="width:80px;">
+        <label>消息序列号：</label><input id="waterCode" type="text" class="form-control" value="1" style="width:60px;">
+        <label>设备ID：</label><input id="DEV_ID" type="text" class="form-control" value="M202004070000" style="width:150px;">
+        <label>是否加密：</label><select style="width:100px;" id="encryptionType" class="form-control">
+            <option value="0">不加密</option>
+            <option value="1024">加密</option>
+        </select>
+    </div>
+    <H3 style="border-bottom: 1px solid #eee;">设置版本消息内容：</H3>
+    <ul class="protocol_content" style="padding:0px;">
+        <li><label>软件版本号：</label><input id="SWVersion" type="text" class="form-control" value="VSTA000GV100"></li>
+        <li><label>软件日期：</label><input id="SWDate" type="text" class="form-control" value="2020-03-30"></li>
+        <li><label>硬件版本：</label><input id="HWVersion" type="text" class="form-control" value="M1.0"></li>
+        <li><label>GSM 型号：</label><input id="GSMType" type="text" class="form-control" value="GSM_type_123456"></li>
+        <li><label>车系车型ID：</label><input id="carType" type="text" class="form-control" value="150"></li>
+        <li><label style="word-break:break-all;font-size:10px;">发动机编码类别：</label><input id="engineCode" type="text" class="form-control" value="1"></li>
+        <li style="width:350px;"><label style="word-break:break-all;font-size:10px;">汽车VIN码或发动机ECU编码：</label><input style="width:250px;" id="VINCode" type="text" class="form-control" value="VIN_CODE_01234567890"></li>
+    </ul>
+    <H3 style="border-bottom: 1px solid #eee;">控制：</H3>
+    <div style="width:100%;padding:5px;margin-top:10px;">
+        <button type="button" class="btn btn-primary" id="sendMsgBtn">发送消息</button>
+    </div>
+    <H3 style="border-bottom: 1px solid #eee;">返回信息：</H3>
+    <div style="width:100%;padding:5px;margin-top:10px;">
+        <textarea id="showFeedback" style="width:100%;padding:5px;" rows="8"></textarea>
+    </div>
+</div>
+
+
+
+<script>
+//发送GPS数据
+$("#sendMsgBtn").click(function(){
+    var FUNID = $("#FUNID").val();
+    var waterCode = $("#waterCode").val();
+    var DEV_ID = $("#DEV_ID").val();
+    var encryptionType = $("#encryptionType").val();
+
+    var SWVersion = $("#SWVersion").val();
+    var SWDate = $("#SWDate").val();
+    var HWVersion = $("#HWVersion").val();
+    var GSMType = $("#GSMType").val();
+    var carType = $("#carType").val();
+    var engineCode = $("#engineCode").val();
+    var VINCode = $("#VINCode").val();
+
+    var data = {};
+    data["FUNID"] = FUNID;
+    data["waterCode"] = waterCode;
+    data["DEV_ID"] = DEV_ID;
+    data["encryptionType"] = encryptionType;
+
+    data["SWVersion"] = SWVersion;
+    data["SWDate"] = SWDate;
+    data["HWVersion"] = HWVersion;
+    data["GSMType"] = GSMType;
+    data["carType"] = carType;
+    data["engineCode"] = engineCode;
+    data["VINCode"] = VINCode;
+
+    var host = window.location.host;
+    $("#showFeedback").val("")
+    $.ajax({
+        url:"http://" + host + "/m300Tools/P_m300Protocol_process/porcessVersionMsg",
+        type:"post",
+        data:data,
+        dataType:"json",
+        success:function(data){
+            if(data.status == 200){
+                //window.location.reload()
+                var theShow = "原始数据：　"　+ data.msgSend + "\n";
+                theShow = theShow + "收到数据：　" + data.result + "\n";
+                theShow = theShow + "收到数据16进制：　" + data.rev + "\n";
+                theShow = theShow + "解析数据：　"　+ JSON.stringify(data.orgRev) + "\n";
+                $("#showFeedback").val(theShow)
+            }else{
+                $("#showFeedback").val(data.message)
+                alert(data.message);
+            }
+        }
+    });
+});
+</script>
+{% endblock %}

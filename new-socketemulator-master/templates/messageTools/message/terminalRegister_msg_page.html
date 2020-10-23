@@ -1,0 +1,113 @@
+{% extends "messageTools/message/heartBeat_msg_page.html" %}
+{% block title %}terminalRegister_msg{% endblock %}
+{% block content_1 %}
+<div id="container3" style="width:100%;min-height:750px;float:left;_background:green;margin-top:10px;_border-top: 1px solid #eee;">
+    <div style="width:100%;_background:green;padding:5px;padding-top:0px;">
+        <h3 style="border-bottom: 1px solid #eee;">设置消息头：</h3>
+        <label>消息ID：</label><input id="msgID" type="text" class="form-control" disabled="disabled" value="0100" style="width:80px;">
+        <label>车机号：</label><input id="phoneNum" type="text" class="form-control" value="13146201119" style="width:150px;">
+        <label>消息流水号：</label><input id="msgWaterCode" type="text" class="form-control" value="1" style="width:60px;">
+        <label>是否加密：</label><select style="width:100px;" id="encryptionType" class="form-control">
+            <option value="0">不加密</option>
+            <option value="1024">加密</option>
+        </select>
+        <label>有无分包：</label><select style="width:80px;" id="subPkg" class="form-control" onchange="hasSubPkg()">
+            <option value="0">无</option>
+            <option value="8192">有</option>
+        </select>
+        <label id="subPkg_label" style="color:grey;">分包个数：</label><input disabled="disabled" id="pkgCounts" type="text" class="form-control" value="0" style="width:60px;">
+    </div>
+    <H3 style="border-bottom: 1px solid #eee;">设置终端注册消息内容：</H3>
+    <ul class="protocol_content" style="padding:0px;">
+        <li><label>省域ID：</label><input id="provinceId" type="text" class="form-control" value="50"></li>
+        <li><label>市县域ID：</label><input id="countyId" type="text" class="form-control" value="103"></li>
+        <li><label>制造商ID：</label><input id="manufacturerId" type="text" class="form-control" value="11010"></li>
+        <li style="width:500px;"><label>终端型号：</label><input style="width:320px;" id="terminalType" type="text" class="form-control" value="a865h643gfdj64fd7432"></li>
+        <li><label>终端ID：</label><input id="terminalId" type="text" class="form-control" value="H6uyt08"></li>
+        <li><label>车牌颜色：</label><input id="licencePlateColor" type="text" class="form-control" value="1"></li>
+        <li><label>车辆标识：</label><input id="carSign" type="text" class="form-control" value="渝B23CX"></li>
+    </ul>
+    <H3 style="border-bottom: 1px solid #eee;">控制：</H3>
+    <div style="width:100%;padding:5px;margin-top:10px;">
+        <button type="button" class="btn btn-primary" id="sendMsgBtn">发送消息</button>
+    </div>
+    <H3 style="border-bottom: 1px solid #eee;">返回信息：</H3>
+    <div style="width:100%;padding:5px;margin-top:10px;">
+        <textarea id="showFeedback" style="width:100%;padding:5px;" rows="8"></textarea>
+    </div>
+</div>
+
+<script>
+//发送GPS数据
+$("#sendMsgBtn").click(function(){
+    var msgID = $("#msgID").val();
+    var phoneNum = $("#phoneNum").val();
+    var msgWaterCode = $("#msgWaterCode").val();
+    var encryptionType = $("#encryptionType").val();
+    var subPkg = $("#subPkg").val();
+    var pkgCounts = ""
+    if (subPkg != "8192"){
+        pkgCounts = "0"
+    }else{
+        pkgCounts = $("#pkgCounts").val();
+    }
+
+    var provinceId = $("#provinceId").val();
+    var countyId = $("#countyId").val();
+    var manufacturerId = $("#manufacturerId").val();
+    var terminalType = $("#terminalType").val();
+    var terminalId = $("#terminalId").val();
+    var licencePlateColor = $("#licencePlateColor").val();
+    var carSign = $("#carSign").val();
+
+    var data = {};
+    data["msgID"] = msgID;
+    data["phoneNum"] = phoneNum;
+    data["msgWaterCode"] = msgWaterCode;
+    data["encryptionType"] = encryptionType;
+    data["subPkg"] = subPkg;
+    data["pkgCounts"] = pkgCounts;
+
+    data["provinceId"] = provinceId;
+    data["countyId"] = countyId;
+    data["manufacturerId"] = manufacturerId;
+    data["terminalType"] = terminalType;
+    data["terminalId"] = terminalId;
+    data["licencePlateColor"] = licencePlateColor;
+    data["carSign"] = carSign;
+
+    var host = window.location.host;
+    $("#showFeedback").val("")
+    $.ajax({
+        url:"http://" + host + "/messageTools/message_process/porcessTerminalRegisterMsg",
+        type:"post",
+        data:data,
+        dataType:"json",
+        success:function(data){
+            if(data.status == 200){
+                //window.location.reload()
+                    var theShow = "原始数据：　"　+ data.original + "\n";
+                    theShow = theShow + "收到数据：　" + data.result + "\n";
+                    theShow = theShow + "收到数据16进制：　" + data.resultH + "\n";
+                    theShow = theShow + "解析数据：　"　+ JSON.stringify(data.parse) + "\n";
+                    $("#showFeedback").val(theShow)
+            }else{
+                $("#showFeedback").val(data.message)
+                alert(data.message);
+            }
+        }
+    });
+});
+
+function hasSubPkg(){
+    value = $("#subPkg").val()
+    if(value == "8192"){
+        $("#subPkg_label").css("color","black")
+        $("#pkgCounts").removeAttr("disabled")
+    }else{
+        $("#subPkg_label").css("color","grey")
+        $("#pkgCounts").attr("disabled","disabled")
+    }
+}
+</script>
+{% endblock %}

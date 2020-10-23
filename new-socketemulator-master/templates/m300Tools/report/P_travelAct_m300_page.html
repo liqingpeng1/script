@@ -1,0 +1,187 @@
+{% extends "m300Tools/report/P_heartBeat_m300_page.html" %}
+{% block title %}travelAct_msg{% endblock %}
+
+{% block content_1 %}
+<div id="container3" style="width:100%;min-height:750px;float:left;_background:green;margin-top:10px;_border-top: 1px solid #eee;">
+    <div style="width:100%;_background:green;padding:5px;padding-top:0px;">
+        <h3 style="border-bottom: 1px solid #eee;">设置消息头：</h3>
+        <label>功能ID：</label><input id="FUNID" type="text" class="form-control" disabled="disabled" value="0007" style="width:80px;">
+        <label>消息序列号：</label><input id="waterCode" type="text" class="form-control" value="1" style="width:60px;">
+        <label>设备ID：</label><input id="DEV_ID" type="text" class="form-control" value="M202004070000" style="width:150px;">
+        <label>是否加密：</label><select style="width:100px;" id="encryptionType" class="form-control">
+            <option value="0">不加密</option>
+            <option value="1024">加密</option>
+        </select>
+    </div>
+    <H3 style="border-bottom: 1px solid #eee;">设置驾驶行为消息内容：</H3>
+    <div style="width:100%;border-width:1px;border-style:solid;border-color:darkgray;border-radius:10px;padding:2px;">
+        <h5>GPS报警信息<span style="margin-left:10px;border-width:1px;border-style:solid;border-color:darkgray;border-radius:10px;padding:1px 10px;">
+            <label><input name="gps_radio" type="radio" value="0" checked="checked" onclick="isShowGPS_area(this)"/>隐藏</label>
+            <label style="margin-left:10px;"><input name="gps_radio" type="radio" value="1" onclick="isShowGPS_area(this)"/>显示</label>
+        </span></h5>
+        <ul class="protocol_content" style="padding:0px;display:none;"  id="GPS_area">
+            <li><label>日期：</label><input id="dateInfo" type="text" class="form-control" value=""></li>
+            <li style="width:495px;"><label>维度：</label><span>
+                <input id="latitude" type="text" class="form-control" value="40.22077">
+                <select style="width:80px;" id="latitudeType" class="form-control">
+                    <option value="0">北纬</option>
+                    <option value="1">南纬</option></select>
+            </span></li>
+            <li style="width:495px;"><label>经度：</label><span>
+                <input id="longitude" type="text" class="form-control" value="116.23128">
+                <select style="width:80px;" id="longitudeType" class="form-control">
+                    <option value="0">东经</option>
+                    <option value="1">西经</option></select>
+            </span></li>
+            <li><label>定位星数：</label><input id="positionStar" type="text" class="form-control" value="2"></li>
+            <li><label>速度：</label><input id="speed" type="text" class="form-control" value="66.0"></li>
+            <li><label>方向角：</label><input id="direction" type="text" class="form-control" value="55.3"></li>
+            <li><label>海拔高度：</label><input id="altitude" type="text" class="form-control" value="11.0"></li>
+            <li><label>ACC状态：</label><select style="width:155px;" id="ACCStatus" class="form-control">
+                    <option value="0">关</option>
+                    <option value="1" selected="selected">开</option></select></li>
+            <li><label style="word-break:break-all;font-size:10px;">汽车电瓶电压：</label><input id="valtage" type="text" class="form-control" value="36.0"></li>
+            <li><label style="word-break:break-all;font-size:10px;">汽车OBD速度：</label><input id="OBDSpeed" type="text" class="form-control" value="66.4"></li>
+            <li><label style="word-break:break-all;font-size:10px;">GPS定位是否有效：</label><select style="width:155px;" id="valid_1" class="form-control">
+                    <option value="0">否</option>
+                    <option value="1" selected="selected">是</option></select></li>
+            <li><label style="word-break:break-all;font-size:10px;">车机是否处于修车模式：</label><select style="width:155px;" id="valid_2" class="form-control">
+                    <option value="0">否</option>
+                    <option value="128">是</option></select></li>
+            <li><label style="word-break:break-all;font-size:10px;">驾驶循环标签：</label><input id="tripMark" type="text" class="form-control" value="0"></li>
+        </ul>
+    </div>
+    <ul class="protocol_content" style="padding:0px;">
+        <li><label style="word-break:break-all;font-size:10px;">驾驶行为类别：</label><select id="actType" class="form-control">
+            <option value="1">急加速</option>
+            <option value="2">急减速</option>
+            <option value="3">急转弯</option></select>
+        </li>
+        <li><label style="word-break:break-all;font-size:10px;">急加速总次数：</label><input id="accelerateTotalTimes" type="text" class="form-control" value="2"></li>
+        <li><label style="word-break:break-all;font-size:10px;">急减速总次数：</label><input id="decelerateTotalTimes" type="text" class="form-control" value="2"></li>
+        <li><label style="word-break:break-all;font-size:10px;">急转弯总次数：</label><input id="sharpTurnTotalTimes" type="text" class="form-control" value="2"></li>
+        <li><label style="word-break:break-all;font-size:10px;">事件发生时加速度值（mg）：</label><input id="acceleration" type="text" class="form-control" value="500"></li>
+        <li><label style="word-break:break-all;font-size:10px;">事件发生时车辆速度：</label><input id="TC_speed" type="text" class="form-control" value="60"></li>
+    </ul>
+    <H3 style="border-bottom: 1px solid #eee;">控制：</H3>
+    <div style="width:100%;padding:5px;margin-top:10px;">
+        <button type="button" class="btn btn-primary" id="sendMsgBtn">发送消息</button>
+    </div>
+    <H3 style="border-bottom: 1px solid #eee;">返回信息：</H3>
+    <div style="width:100%;padding:5px;margin-top:10px;">
+        <textarea id="showFeedback" style="width:100%;padding:5px;" rows="8"></textarea>
+    </div>
+</div>
+
+
+
+<script>
+//发送GPS数据
+$("#sendMsgBtn").click(function(){
+    var FUNID = $("#FUNID").val();
+    var waterCode = $("#waterCode").val();
+    var DEV_ID = $("#DEV_ID").val();
+    var encryptionType = $("#encryptionType").val();
+
+    var gps = getGpsData()
+    var actType = $("#actType").val();
+    var accelerateTotalTimes = $("#accelerateTotalTimes").val();
+    var decelerateTotalTimes = $("#decelerateTotalTimes").val();
+    var sharpTurnTotalTimes = $("#sharpTurnTotalTimes").val();
+    var acceleration = $("#acceleration").val();
+    var speed = $("#TC_speed").val();
+
+    var data = {};
+    data["FUNID"] = FUNID;
+    data["waterCode"] = waterCode;
+    data["DEV_ID"] = DEV_ID;
+    data["encryptionType"] = encryptionType;
+
+    data["gps"] = gps;
+    data["actType"] = actType;
+    data["accelerateTotalTimes"] = accelerateTotalTimes;
+    data["decelerateTotalTimes"] = decelerateTotalTimes;
+    data["sharpTurnTotalTimes"] = sharpTurnTotalTimes;
+    data["acceleration"] = acceleration;
+    data["speed"] = speed;
+
+    //console.log(JSON.stringify(data))
+    var host = window.location.host;
+    $("#showFeedback").val("")
+    $.ajax({
+        url:"http://" + host + "/m300Tools/P_m300Protocol_process/porcessTravelActMsg",
+        type:"post",
+        data:JSON.stringify(data),
+        contentType:"application/json",
+        dataType:"json",
+        success:function(data){
+            if(data.status == 200){
+                //window.location.reload()
+                var theShow = "原始数据：　"　+ data.msgSend + "\n";
+                theShow = theShow + "收到数据：　" + data.result + "\n";
+                theShow = theShow + "收到数据16进制：　" + data.rev + "\n";
+                theShow = theShow + "解析数据：　"　+ JSON.stringify(data.orgRev) + "\n";
+                $("#showFeedback").val(theShow)
+            }else{
+                $("#showFeedback").val(data.message)
+                alert(data.message);
+            }
+        }
+    });
+});
+
+//获取GPS数据
+function getGpsData(){
+    var dateInfo = $("#dateInfo").val();
+    var latitude = parseFloat($("#latitude").val());
+    var latitudeType = parseInt($("#latitudeType").val());
+    if(latitudeType == 1){
+        latitude = latitude + 2147483648 / 1000000
+    }
+    var longitude = parseFloat($("#longitude").val());
+    var longitudeType = parseInt($("#longitudeType").val());
+    if(longitudeType == 1){
+        longitude = longitude + 2147483648 / 1000000
+    }
+    var positionStar = $("#positionStar").val();
+    var speed = $("#speed").val();
+    var direction = $("#direction").val();
+    var altitude = $("#altitude").val();
+    var ACCStatus = $("#ACCStatus").val();
+    var valtage = $("#valtage").val();
+    var OBDSpeed = $("#OBDSpeed").val();
+    var valid_1 = parseInt($("#valid_1").val());
+    var valid_2 = parseInt($("#valid_2").val());
+    var valid = valid_1 + valid_2
+    var tripMark = $("#tripMark").val();
+    var data = {};
+    data["dateInfo"] = dateInfo;
+    data["latitude"] = latitude;
+    data["longitude"] = longitude;
+    data["positionStar"] = positionStar;
+    data["speed"] = speed;
+    data["direction"] = direction;
+    data["altitude"] = altitude;
+    data["ACCStatus"] = ACCStatus;
+    data["valtage"] = valtage;
+    data["OBDSpeed"] = OBDSpeed;
+    data["valid"] = valid;
+    data["tripMark"] = tripMark;
+    return data
+}
+//gps区域的显示与隐藏
+function isShowGPS_area(e){
+    var val = $(e).val()
+    if(val == "0"){
+        $("#GPS_area").css("display","none")
+    }else{
+        $("#GPS_area").css("display","block")
+    }
+}
+//设置当前时间到UTC时间输入框
+(function(){
+    var curTime = getCurTime();
+    $("#dateInfo").val(curTime);
+})();
+</script>
+{% endblock %}

@@ -1,0 +1,69 @@
+{% extends "protocolTools/report/GPS_protocol_page.html" %}
+{% block title %}Login_protocol{% endblock %}
+{% block content_1 %}
+<div id="container3" style="width:100%;min-height:750px;float:left;_background:green;margin-top:10px;_border-top: 1px solid #eee;">
+    <div style="width:100%;_background:green;padding:5px;padding-top:0px;">
+        <h3 style="border-bottom: 1px solid #eee;">设置协议头：</h3>
+        <label>消息流水号：</label><input id="WATER_CODE" type="text" class="form-control" value="0002" style="width:100px;">
+        <label style="margin-left:10px;">车机号：</label><input id="DEV_ID" type="text" class="form-control" value="M121501010001">
+    </div>
+    <H3 style="border-bottom: 1px solid #eee;">设置终端登录消息内容：</H3>
+    <ul class="protocol_content" style="padding:0px;">
+        <li style="width:320px;"><label style="word-break:break-all;font-size:12px;">CPU-ID：</label><input style="width:220px;" id="cpuId" type="text" class="form-control" value="CPU-ID001122334455667788"></li>
+        <li><label style="word-break:break-all;font-size:12px;">SIM卡IMSI号：</label><input id="imsi" type="text" class="form-control" value="IMSI13145678902"></li>
+        <li style="width:300px;"><label style="word-break:break-all;font-size:12px;">SIM卡CCID号：</label><input style="width:200px;" id="ccid" type="text" class="form-control" value="CCID1122334455667788"></li>
+        <li><label style="word-break:break-all;font-size:10px;">GSM模块IMEI码：</label><input id="imei" type="text" class="form-control" value="IMEI12233445566"></li>
+    </ul>
+    <H3 style="border-bottom: 1px solid #eee;">控制：</H3>
+    <div style="width:100%;padding:5px;margin-top:10px;">
+        <button type="button" class="btn btn-primary" id="sendMsgBtn">发送消息</button>
+    </div>
+    <H3 style="border-bottom: 1px solid #eee;">返回信息：</H3>
+    <div style="width:100%;padding:5px;margin-top:10px;">
+        <textarea id="showFeedback" style="width:100%;padding:5px;" rows="8"></textarea>
+    </div>
+</div>
+
+
+<script>
+//发送心跳数据包
+$("#sendMsgBtn").click(function(){
+    var WATER_CODE = $("#WATER_CODE").val();
+    var DEV_ID = $("#DEV_ID").val();
+    var cpuId = $("#cpuId").val();
+    var imsi = $("#imsi").val();
+    var ccid = $("#ccid").val();
+    var imei = $("#imei").val();
+
+    var data = {};
+    data["WATER_CODE"] = WATER_CODE;
+    data["DEV_ID"] = DEV_ID;
+    data["cpuId"] = cpuId
+    data["imsi"] = imsi
+    data["ccid"] = ccid
+    data["imei"] = imei
+
+    var host = window.location.host;
+    $("#showFeedback").val("")
+    $.ajax({
+        url:"http://" + host + "/protocolTools/protocolReport_process/porcessLoginMsg",
+        type:"post",
+        data:data,
+        dataType:"json",
+        success:function(data){
+            if(data.status == 200){
+                msg = "发送消息：" + data.msgSend + "\n"
+                msg = msg + "收到消息：" + data.result + "\n"
+                msg = msg + "收到消息16进制：" + data.rev + "\n"
+                msg = msg + "收到消息解析结果：" + JSON.stringify(data.orgRev) + "\n"
+                $("#showFeedback").val(msg)
+            }else{
+                $("#showFeedback").val(data.message)
+                alert(data.message);
+            }
+        }
+    });
+});
+
+</script>
+{% endblock %}

@@ -1,0 +1,113 @@
+{% extends "m300Tools/index.html" %}
+{% block title %}heartBeat_msg{% endblock %}
+{% block content_01 %}
+<script src="../../static/js/m300Tools/m300.js"></script>
+<style>
+    .nav-pills li {
+        margin-bottom:5px;
+    }
+    .form-control {
+        display:inline;
+        width:160px;
+    }
+    .protocol_content:after{
+        clear:both;
+        display:block;
+        content:" ";
+    }
+
+    .protocol_content li {
+        width:250px;
+        _background:yellow;
+        list-style:none;
+        margin-top:5px;
+        float:left;
+    }
+
+    .protocol_content label{
+    width:90px;
+    text-align:right;
+    }
+</style>
+<div id="container2" style="width:83%;min-height:750px;float:left;_background:grey;margin-top:50px;">
+    {% block content_02 %}
+    <ul class="nav nav-pills" style="font-size:14px;">
+        <li role="presentation"><a id="socketSetting" {% if arg.path[2]=="socketSetting_page" %} class="link-tab" {% endif %} onclick="m300ProtocolManTab(this)">设置</b></a></li>
+        <li role="presentation"><a id="P_userDefined_m300_msg" {% if arg.path[2]=="P_userDefined_m300_page" %} class="link-tab" {% endif %} onclick="m300ProtocolManTab(this)">自定义消息</b></a></li>
+        <li role="presentation"><a id="P_heartBeat_m300_msg" {% if arg.path[2]=="P_heartBeat_m300_page" %} class="link-tab" {% endif %} onclick="m300ProtocolManTab(this)">心跳消息</b></a></li>
+        <li role="presentation"><a id="P_login_m300_msg" {% if arg.path[2]=="P_login_m300_page" %} class="link-tab" {% endif %} onclick="m300ProtocolManTab(this)">登录消息</b></a></li>
+        <li role="presentation"><a id="P_version_m300_msg" {% if arg.path[2]=="P_version_m300_page" %} class="link-tab" {% endif %} onclick="m300ProtocolManTab(this)">版本消息</b></a></li>
+        <li role="presentation"><a id="P_GPS_m300_msg" {% if arg.path[2]=="P_GPS_m300_page" %} class="link-tab" {% endif %} onclick="m300ProtocolManTab(this)">GPS消息</b></a></li>
+        <li role="presentation"><a id="P_CAN_m300_msg" {% if arg.path[2]=="P_CAN_m300_page" %} class="link-tab" {% endif %} onclick="m300ProtocolManTab(this)">CAN消息</b></a></li>
+        <li role="presentation"><a id="P_alarm_m300_msg" {% if arg.path[2]=="P_alarm_m300_page" %} class="link-tab" {% endif %} onclick="m300ProtocolManTab(this)">报警消息</b></a></li>
+        <li role="presentation"><a id="P_travelAct_m300_msg" {% if arg.path[2]=="P_travelAct_m300_page" %} class="link-tab" {% endif %} onclick="m300ProtocolManTab(this)">驾驶行为消息</b></a></li>
+    </ul>
+    {% endblock %}
+    {% block content_1 %}
+    <div id="container3" style="width:100%;min-height:750px;float:left;_background:green;margin-top:10px;_border-top: 1px solid #eee;">
+        <div style="width:100%;_background:green;padding:5px;padding-top:0px;">
+            <h3 style="border-bottom: 1px solid #eee;">设置消息头：</h3>
+            <label>功能ID：</label><input id="FUNID" type="text" class="form-control" disabled="disabled" value="0004" style="width:80px;">
+            <label>消息序列号：</label><input id="waterCode" type="text" class="form-control" value="1" style="width:60px;">
+            <label>设备ID：</label><input id="DEV_ID" type="text" class="form-control" value="M202004070000" style="width:150px;">
+            <label>是否加密：</label><select style="width:100px;" id="encryptionType" class="form-control">
+                <option value="0">不加密</option>
+                <option value="1024">加密</option>
+            </select>
+        </div>
+        <H3 style="border-bottom: 1px solid #eee;">设置心跳消息内容：</H3>
+        <ul class="protocol_content" style="padding:0px;">
+            <label style="color:red;width:130px;">心跳消息无消息体...</label>
+        </ul>
+        <H3 style="border-bottom: 1px solid #eee;">控制：</H3>
+        <div style="width:100%;padding:5px;margin-top:10px;">
+            <button type="button" class="btn btn-primary" id="sendMsgBtn">发送消息</button>
+        </div>
+        <H3 style="border-bottom: 1px solid #eee;">返回信息：</H3>
+        <div style="width:100%;padding:5px;margin-top:10px;">
+            <textarea id="showFeedback" style="width:100%;padding:5px;" rows="8"></textarea>
+        </div>
+    </div>
+
+
+
+    <script>
+    //发送GPS数据
+    $("#sendMsgBtn").click(function(){
+        var FUNID = $("#FUNID").val();
+        var waterCode = $("#waterCode").val();
+        var DEV_ID = $("#DEV_ID").val();
+        var encryptionType = $("#encryptionType").val();
+
+        var data = {};
+        data["FUNID"] = FUNID;
+        data["waterCode"] = waterCode;
+        data["DEV_ID"] = DEV_ID;
+        data["encryptionType"] = encryptionType;
+
+        var host = window.location.host;
+        $("#showFeedback").val("")
+        $.ajax({
+            url:"http://" + host + "/m300Tools/P_m300Protocol_process/porcessHeartBeatMsg",
+            type:"post",
+            data:data,
+            dataType:"json",
+            success:function(data){
+                if(data.status == 200){
+                    //window.location.reload()
+                    var theShow = "原始数据：　"　+ data.msgSend + "\n";
+                    theShow = theShow + "收到数据：　" + data.result + "\n";
+                    theShow = theShow + "收到数据16进制：　" + data.rev + "\n";
+                    theShow = theShow + "解析数据：　"　+ JSON.stringify(data.orgRev) + "\n";
+                    $("#showFeedback").val(theShow)
+                }else{
+                    $("#showFeedback").val(data.message)
+                    alert(data.message);
+                }
+            }
+        });
+    });
+    </script>
+    {% endblock %}
+</div>
+{% endblock %}

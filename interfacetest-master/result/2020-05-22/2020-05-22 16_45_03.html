@@ -1,0 +1,696 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>车安优App接口测试</title>
+    <meta name="generator" content="HTMLTestRunner 0.8.2"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    
+<style type="text/css" media="screen">
+body        { font-family: verdana, arial, helvetica, sans-serif; font-size: 80%; }
+table       { font-size: 100%; }
+pre         { white-space: pre-wrap; }
+
+/* -- heading ---------------------------------------------------------------------- */
+h1 {
+	font-size: 16pt;
+	color: gray;
+}
+.heading {
+    margin-top: 0ex;
+    margin-bottom: 1ex;
+}
+
+.heading .attribute {
+    margin-top: 1ex;
+    margin-bottom: 0;
+}
+
+.heading .description {
+    margin-top: 4ex;
+    margin-bottom: 6ex;
+}
+
+/* -- css div popup ------------------------------------------------------------------------ */
+a.popup_link {
+}
+
+a.popup_link:hover {
+    color: red;
+}
+
+.popup_window {
+    display: none;
+    position: relative;
+    left: 0px;
+    top: 0px;
+    /*border: solid #627173 1px; */
+    padding: 10px;
+    background-color: #E6E6D6;
+    font-family: "Lucida Console", "Courier New", Courier, monospace;
+    text-align: left;
+    font-size: 8pt;
+    width: 500px;
+}
+
+}
+/* -- report ------------------------------------------------------------------------ */
+#show_detail_line {
+    margin-top: 3ex;
+    margin-bottom: 1ex;
+}
+#result_table {
+    width: 80%;
+    border-collapse: collapse;
+    border: 1px solid #777;
+}
+#header_row {
+    font-weight: bold;
+    color: white;
+    background-color: #777;
+}
+#result_table td {
+    border: 1px solid #777;
+    padding: 2px;
+}
+#total_row  { font-weight: bold; }
+.passClass  { background-color: #6c6; }
+.failClass  { background-color: #c60; }
+.errorClass { background-color: #c00; }
+.passCase   { color: #6c6; }
+.failCase   { color: #c60; font-weight: bold; }
+.errorCase  { color: #c00; font-weight: bold; }
+.hiddenRow  { display: none; }
+.testcase   { margin-left: 2em; }
+
+
+/* -- ending ---------------------------------------------------------------------- */
+#ending {
+}
+
+</style>
+
+</head>
+<body>
+<script language="javascript" type="text/javascript"><!--
+output_list = Array();
+
+/* level - 0:Summary; 1:Failed; 2:All */
+function showCase(level) {
+    trs = document.getElementsByTagName("tr");
+    for (var i = 0; i < trs.length; i++) {
+        tr = trs[i];
+        id = tr.id;
+        if (id.substr(0,2) == 'ft') {
+            if (level < 1) {
+                tr.className = 'hiddenRow';
+            }
+            else {
+                tr.className = '';
+            }
+        }
+        if (id.substr(0,2) == 'pt') {
+            if (level > 1) {
+                tr.className = '';
+            }
+            else {
+                tr.className = 'hiddenRow';
+            }
+        }
+    }
+}
+
+
+function showClassDetail(cid, count) {
+    var id_list = Array(count);
+    var toHide = 1;
+    for (var i = 0; i < count; i++) {
+        tid0 = 't' + cid.substr(1) + '.' + (i+1);
+        tid = 'f' + tid0;
+        tr = document.getElementById(tid);
+        if (!tr) {
+            tid = 'p' + tid0;
+            tr = document.getElementById(tid);
+        }
+        id_list[i] = tid;
+        if (tr.className) {
+            toHide = 0;
+        }
+    }
+    for (var i = 0; i < count; i++) {
+        tid = id_list[i];
+        if (toHide) {
+            document.getElementById('div_'+tid).style.display = 'none'
+            document.getElementById(tid).className = 'hiddenRow';
+        }
+        else {
+            document.getElementById(tid).className = '';
+        }
+    }
+}
+
+
+function showTestDetail(div_id){
+    var details_div = document.getElementById(div_id)
+    var displayState = details_div.style.display
+    // alert(displayState)
+    if (displayState != 'block' ) {
+        displayState = 'block'
+        details_div.style.display = 'block'
+    }
+    else {
+        details_div.style.display = 'none'
+    }
+}
+
+
+function html_escape(s) {
+    s = s.replace(/&/g,'&amp;');
+    s = s.replace(/</g,'&lt;');
+    s = s.replace(/>/g,'&gt;');
+    return s;
+}
+
+/* obsoleted by detail in <div>
+function showOutput(id, name) {
+    var w = window.open("", //url
+                    name,
+                    "resizable,scrollbars,status,width=800,height=450");
+    d = w.document;
+    d.write("<pre>");
+    d.write(html_escape(output_list[id]));
+    d.write("\n");
+    d.write("<a href='javascript:window.close()'>close</a>\n");
+    d.write("</pre>\n");
+    d.close();
+}
+*/
+--></script>
+
+<div class='heading'>
+<h1>车安优App接口测试</h1>
+<p class='attribute'><strong>开始测试时间：:</strong> 2020-05-22 16:45:03</p>
+<p class='attribute'><strong>测试耗时：:</strong> 0:00:03.305924</p>
+<p class='attribute'><strong>状态：:</strong> 通过 14 失败 1</p>
+
+<p class='description'>车安优App拨测程序测试报告...</p>
+</div>
+
+
+
+<p id='show_detail_line'>展示
+<a href='javascript:showCase(0)'>收起报告</a>
+<a href='javascript:showCase(1)'>查看失败</a>
+<a href='javascript:showCase(2)'>展开报告</a>
+</p>
+<table id='result_table'>
+<colgroup>
+<col align='left' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+</colgroup>
+<tr id='header_row'>
+    <td>Test Group/Test case</td>
+    <td>Count</td>
+    <td>Pass</td>
+    <td>Fail</td>
+    <td>Error</td>
+    <td>View</td>
+</tr>
+
+<tr class='failClass'>
+    <td>testCase.User_interface_cases.User_interface_cases</td>
+    <td>12</td>
+    <td>11</td>
+    <td>1</td>
+    <td>0</td>
+    <td><a href="javascript:showClassDetail('c1',12)">Detail</a></td>
+</tr>
+
+<tr id='pt1.1' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_user_authorize_pwd_login</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.1')" >
+        pass</a>
+
+    <div id='div_pt1.1' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.1').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.1: 
+请求地址：http://api-test.vandyo.com/user/authorize/pwd/login
+-------------------------返回结果：-------------------------
+{"error":0,"msg":"成功","result":{"sid":"1cf991a5bea047688eed1ea3d9ca1256","uid":"7c25eb4194504b2fa99d3f10ef4e0c3b","mobile":"13146201116","isbind":1,"refreshToken":null}}
+接口响应时间：307毫秒
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.2' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_user_mall_goods_list</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.2')" >
+        pass</a>
+
+    <div id='div_pt1.2' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.2').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.2: 
+请求地址：http://api-test.vandyo.com/user/mall/goods/list
+-------------------------返回结果：-------------------------
+{"error":0,"msg":"成功","result":{"bl":[{"name":"商城优选1","url":"http://test.pay.vandyo.com/activity/yangche/#/detail?type=1&amp;id=2","imgUrl":"https://testyuna.obs.cn-north-4.myhuaweicloud.com:443/app/manage//mallgoods/1578560813363.jpeg","order":2}],"ob":[{"name":"咨询","url":"http://dev.pay.vandyo.com/leasemachine/weixin/h5pay?orderId=5434gfegd433","imgUrl":"https://testyuna.obs.cn-north-4.myhuaweicloud.com:443/app/manage//mallgoods/1579243433367.jpg","order":2}],"re":[]}}
+接口响应时间：200毫秒
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.3' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_user_third_party_app_list</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.3')" >
+        pass</a>
+
+    <div id='div_pt1.3' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.3').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.3: 
+请求地址：http://api-test.vandyo.com/user/third/party/app/list
+-------------------------返回结果：-------------------------
+{"error":0,"msg":"成功","result":[{"name":"转盘活动测试","appUrl":"http://test.pay.vandyo.com/activity/gift/","imgUrl":"https://proyuna.obs.cn-north-4.myhuaweicloud.com/vip/menu/1586846046861.png","order":-2,"orderType":0},{"name":"转盘跳转地址","appUrl":"http://test.pay.vandyo.com/activity/readypan/","imgUrl":"https://testyuna.obs.cn-north-4.myhuaweicloud.com:443/app/manage//appconf/1589447060345.png","order":-1,"orderType":0},{"name":"道路救援","appUrl":"https://html.vandyo.com/carshop/tellist.html","imgUrl":"https://testyuna.obs.cn-north-4.myhuaweicloud.com:443/app/manage/appconf/1576567340018.png","order":1,"orderType":1},{"name":"健康出行","appUrl":"https://test-shop.vandyo.com/tuanyou/#/","imgUrl":"https://testyuna.obs.cn-north-4.myhuaweicloud.com:443/app/manage//appconf/1589184868997.png","order":2,"orderType":1}]}
+接口响应时间：224毫秒
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.4' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_user_business_cooperation_get</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.4')" >
+        pass</a>
+
+    <div id='div_pt1.4' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.4').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.4: 
+请求地址：http://api-test.vandyo.com/user/business/cooperation/get
+-------------------------返回结果：-------------------------
+{"error":0,"msg":"保存成功","result":null}
+接口响应时间：196毫秒
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.5' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_user_info_get</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.5')" >
+        pass</a>
+
+    <div id='div_pt1.5' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.5').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.5: 
+请求地址：http://api-test.vandyo.com/user/info/get
+-------------------------返回结果：-------------------------
+{"error":0,"msg":"成功","result":{"uid":"7c25eb4194504b2fa99d3f10ef4e0c3b","nickname":"","path":"","mobile":"13146201116","sex":1,"level":0,"card":0}}
+接口响应时间：229毫秒
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.6' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_user_pop_list</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.6')" >
+        pass</a>
+
+    <div id='div_pt1.6' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.6').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.6: 
+请求地址：http://api-test.vandyo.com/user/pop/list
+-------------------------返回结果：-------------------------
+{"error":0,"msg":"成功","result":{"adverts":null}}
+接口响应时间：194毫秒
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.7' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_user_banner_list</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.7')" >
+        pass</a>
+
+    <div id='div_pt1.7' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.7').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.7: 
+请求地址：http://api-test.vandyo.com/user/banner/list
+-------------------------返回结果：-------------------------
+{"error":0,"msg":"成功","result":[{"name":"banner2","imgUrl":"https://testyuna.obs.cn-north-4.myhuaweicloud.com:443/app/manage//bannerad/1589350549161.jpg","url":"http://test.pay.vandyo.com/activity/subscribe ","order":2}]}
+接口响应时间：201毫秒
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.8' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_user_flash_list</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.8')" >
+        pass</a>
+
+    <div id='div_pt1.8' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.8').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.8: 
+请求地址：http://api-test.vandyo.com/user/flash/list
+-------------------------返回结果：-------------------------
+{"error":0,"msg":"成功","result":{"adverts":null}}
+接口响应时间：191毫秒
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='ft1.9' class='none'>
+    <td class='failCase'><div class='testcase'>test_user_car_msg_config_get</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft1.9')" >
+        fail</a>
+
+    <div id='div_ft1.9' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft1.9').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft1.9: 
+请求地址：http://api-test.vandyo.com/user/car_msg/config/get
+-------------------------返回结果：-------------------------
+{"error":3001,"msg":"该车不属于当前用户","result":null}
+Traceback (most recent call last):
+  File "D:\myProgram\python\interfaceTest\testCase\User_interface_cases.py", line 204, in test_user_car_msg_config_get
+    self.baseAssert(resObj)
+  File "D:\myProgram\python\interfaceTest\testCase\User_interface_cases.py", line 278, in baseAssert
+    self.assertEqual(error, 0, "接口返回错误：" + str(error) + "   content: " + resObj.text)
+AssertionError: 3001 != 0 : 接口返回错误：3001   content: {"error":3001,"msg":"该车不属于当前用户","result":null}
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.10' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_user_user_msg_config_get</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.10')" >
+        pass</a>
+
+    <div id='div_pt1.10' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.10').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.10: 
+请求地址：http://api-test.vandyo.com/user/user_msg/config/get
+-------------------------返回结果：-------------------------
+{"error":0,"msg":"成功","result":{"total":1,"sys":1}}
+接口响应时间：201毫秒
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.11' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_user_config_version_update_get</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.11')" >
+        pass</a>
+
+    <div id='div_pt1.11' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.11').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.11: 
+请求地址：http://api-test.vandyo.com/user/config/version/update/get
+-------------------------返回结果：-------------------------
+{"error":0,"msg":"成功","result":{"version":null,"des":null,"url":null,"update":0,"apkurl":null,"showprompt":null}}
+接口响应时间：196毫秒
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.12' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_user_menu_list</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.12')" >
+        pass</a>
+
+    <div id='div_pt1.12' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.12').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.12: 
+请求地址：http://api-test.vandyo.com/user/menu/list
+-------------------------返回结果：-------------------------
+{"error":0,"msg":"成功","result":{"my_menus":[]}}
+接口响应时间：223毫秒
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr class='passClass'>
+    <td>testCase.Car_interface_cases.Car_interface_cases</td>
+    <td>3</td>
+    <td>3</td>
+    <td>0</td>
+    <td>0</td>
+    <td><a href="javascript:showClassDetail('c2',3)">Detail</a></td>
+</tr>
+
+<tr id='pt2.1' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_car_my_car_list</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.1')" >
+        pass</a>
+
+    <div id='div_pt2.1' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.1').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.1: 
+请求地址：http://api-test.vandyo.com/car/my_car/list
+-------------------------返回结果：-------------------------
+{"error":0,"msg":"成功","result":[{"cid":"840ace3de46c44d5b0737941095b1dd8","plate":"渝A12321","nickname":"","din":"M202003060518","bind":"1","typeid":"916","typename":"奥驰T系","modelid":"10002909","modelname":"3.8L 手动 T2 自卸车3.64米 129马力 FD3043P10K4","cbrand":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202563162.png","addtime":"1589372400"}]}
+接口响应时间：229毫秒
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.2' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_car_my_car_info</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.2')" >
+        pass</a>
+
+    <div id='div_pt2.2' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.2').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.2: 
+请求地址：http://api-test.vandyo.com/car/my_car/info
+-------------------------返回结果：-------------------------
+{"error":0,"msg":"成功","result":{"cid":"840ace3de46c44d5b0737941095b1dd8","plate":"渝A12321","nickname":"","din":"M202003060518","bind":"1","displacement":"3.8L/T","typeid":"916","typename":"奥驰T系","modelid":"10002909","modelname":"2015款","cbrand":"https://proyuna.obs.cn-north-4.myhuaweicloud.com:443/car/brand/1585202563162.png","gasno":"0","engine":"","vin":"","bxexpiretime":"","insurance":"","bxcity":"","bxlasttime":"","notmodifymile":0,"tipmodifymile":"行驶总里程与仪表盘数据同步，不可修改","mile":"11530","mlast":"","mmile":"","lastmiletime":"","register":"","nsexpiretime":"","nslasttime":"","addtime":"1589372400"}}
+接口响应时间：210毫秒
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.3' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_car_my_man_speak</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.3')" >
+        pass</a>
+
+    <div id='div_pt2.3' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.3').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.3: {'cid': '840ace3de46c44d5b0737941095b1dd8', 'message': '车辆位置'}
+
+请求地址：http://api-test.vandyo.com/car/man/speak
+-------------------------返回结果：-------------------------
+{"error":0,"msg":"成功","result":[{"type":"4","message":"{\"txt\": \"我的【车辆位置】:\\n我在${gps}\",\"spare\":\"我的【车辆位置】:\\n正在定位中\",\"type\": \"car_loc\",\"cnt\":{\"lat\":\"29.612025\",\"lng\":\"106.361245\",\"car_gps\":{\"lat\":\"29.612025\",\"lng\":\"106.361245\"}}}","msgid":"b99c91c666c948debad2ba8e5abbbb9e","mid":"840ace3de46c44d5b0737941095b1dd8","mtype":"2","sendtime":1590137105}]}
+接口响应时间：229毫秒
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='total_row'>
+    <td>Total</td>
+    <td>15</td>
+    <td>14</td>
+    <td>1</td>
+    <td>0</td>
+    <td>&nbsp;</td>
+</tr>
+</table>
+
+<div id='ending'>&nbsp;</div>
+
+</body>
+</html>

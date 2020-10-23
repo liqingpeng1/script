@@ -1,0 +1,359 @@
+{% extends "protocolTools/report/GPS_protocol_page.html" %}
+{% block title %}Security_protocol{% endblock %}
+{% block content_1 %}
+<div id="container3" style="width:100%;min-height:750px;float:left;_background:green;margin-top:10px;_border-top: 1px solid #eee;">
+    <div style="width:100%;_background:green;padding:5px;padding-top:0px;">
+        <h3 style="border-bottom: 1px solid #eee;">设置协议头：</h3>
+        <label>消息流水号：</label><input id="WATER_CODE" type="text" class="form-control" value="0014" style="width:100px;">
+        <label style="margin-left:10px;">车机号：</label><input id="DEV_ID" type="text" class="form-control" value="M121501010001">
+        <label style="margin-left:10px;">安防状态消息数量：</label><input id="msgCount" type="text" class="form-control" value="1" style="width:100px;">
+    </div>
+    <H3 style="border-bottom: 1px solid #eee;">设置终端上报安防状态消息内容：</H3>
+    <ul class="protocol_content" style="padding:0px;">
+        <li style="width:320px;"><label>状态掩码：</label><input style="width:220px;" id="statusCode" type="text" class="form-control" value="ffffffffffffffffffff"></li>
+        <label style="margin-left:10px;">定位类型：</label><select style="width:120px;" id="locationType" class="form-control">
+            <option value="1">GPS包</option>
+            <option value="2">基站包</option>
+        </select>
+    </ul>
+    <h4>安全状态:</h4>
+    <ul class="protocol_content" style="padding:0px;">
+        <li style="width:175px;"><label>ACC状态：</label><select style="width:80px;" id="accStatus" class="form-control">
+            <option value="1">开</option>
+            <option value="0">关</option>
+        </select></li>
+        <li style="width:175px;"><label style="word-break:break-all;font-size:12px;">设防撤防状态：</label><select style="width:80px;" id="defenseStatus" class="form-control">
+            <option value="2">设防</option>
+            <option value="0">撤防</option>
+        </select></li>
+        <li style="width:175px;"><label>脚刹状态：</label><select style="width:80px;" id="brakeStatus" class="form-control">
+            <option value="4">踩下</option>
+            <option value="0" selected="selected">松开</option>
+        </select></li>
+        <li style="width:175px;"><label>是否踩油门：</label><select style="width:80px;" id="acceleratorStatus" class="form-control">
+            <option value="8">踩下</option>
+            <option value="0">松开</option>
+        </select></li>
+        <li style="width:175px;"><label>手刹状态：</label><select style="width:80px;" id="handBrakeStatus" class="form-control">
+            <option value="16">拉起</option>
+            <option value="0" selected="selected">松开</option>
+        </select></li>
+        <li style="width:175px;"><label style="word-break:break-all;font-size:12px;">主驾驶安全带：</label><select style="width:80px;" id="mainSafetyBelt" class="form-control">
+            <option value="32">插入</option>
+            <option value="0">松开</option>
+        </select></li>
+        <li style="width:175px;"><label style="word-break:break-all;font-size:12px;">副驾驶安全带：</label><select style="width:80px;" id="subSafetyBelt" class="form-control">
+            <option value="64">插入</option>
+            <option value="0">松开</option>
+        </select></li>
+    </ul>
+    <h4>门状态:</h4>
+    <ul class="protocol_content" style="padding:0px;">
+        <li style="width:175px;"><label>左前门：</label><select style="width:80px;" id="lfDoorStatus" class="form-control">
+            <option value="1">开</option>
+            <option value="0" selected="selected">关</option>
+        </select></li>
+        <li style="width:175px;"><label>右前门：</label><select style="width:80px;" id="rfDoorStatus" class="form-control">
+            <option value="2">开</option>
+            <option value="0" selected="selected">关</option>
+        </select></li>
+        <li style="width:175px;"><label>左后门：</label><select style="width:80px;" id="lbDoorStatus" class="form-control">
+            <option value="4">开</option>
+            <option value="0" selected="selected">关</option>
+        </select></li>
+        <li style="width:175px;"><label>右后门：</label><select style="width:80px;" id="rbDoorStatus" class="form-control">
+            <option value="8">开</option>
+            <option value="0" selected="selected">关</option>
+        </select></li>
+        <li style="width:175px;"><label>后备箱：</label><select style="width:80px;" id="trunk" class="form-control">
+            <option value="16">开</option>
+            <option value="0" selected="selected">关</option>
+        </select></li>
+        <li style="width:175px;"><label>发送机盖：</label><select style="width:80px;" id="enginCover" class="form-control">
+            <option value="32">开</option>
+            <option value="0" selected="selected">关</option>
+        </select></li>
+    </ul>
+    <h4>锁状态:</h4>
+    <ul class="protocol_content" style="padding:0px;">
+        <li style="width:175px;"><label style="word-break:break-all;font-size:12px;">左前门锁状态：</label><select style="width:80px;" id="lfDoorLockStatus" class="form-control">
+            <option value="1">开</option>
+            <option value="0" selected="selected">关</option>
+        </select></li>
+        <li style="width:175px;"><label style="word-break:break-all;font-size:12px;">右前门锁状态：</label><select style="width:80px;" id="rfDoorLockStatus" class="form-control">
+            <option value="2">开</option>
+            <option value="0" selected="selected">关</option>
+        </select></li>
+        <li style="width:175px;"><label style="word-break:break-all;font-size:12px;">左后门锁状态：</label><select style="width:80px;" id="lbDoorLockStatus" class="form-control">
+            <option value="4">开</option>
+            <option value="0" selected="selected">关</option>
+        </select></li>
+        <li style="width:175px;"><label style="word-break:break-all;font-size:12px;">右后门锁状态：</label><select style="width:80px;" id="rbDoorLockStatus" class="form-control">
+            <option value="8">开</option>
+            <option value="0" selected="selected">关</option>
+        </select></li>
+    </ul>
+    <h4>窗户状态:</h4>
+    <ul class="protocol_content" style="padding:0px;">
+        <li style="width:175px;"><label>左前窗：</label><select style="width:80px;" id="lfWindowStatus" class="form-control">
+            <option value="1">开</option>
+            <option value="0" selected="selected">关</option>
+        </select></li>
+        <li style="width:175px;"><label>右前窗：</label><select style="width:80px;" id="rfWindowStatus" class="form-control">
+            <option value="2">开</option>
+            <option value="0" selected="selected">关</option>
+        </select></li>
+        <li style="width:175px;"><label>左后窗：</label><select style="width:80px;" id="lbWindowStatus" class="form-control">
+            <option value="4">开</option>
+            <option value="0" selected="selected">关</option>
+        </select></li>
+        <li style="width:175px;"><label>右后窗：</label><select style="width:80px;" id="rbWindowStatus" class="form-control">
+            <option value="8">开</option>
+            <option value="0" selected="selected">关</option>
+        </select></li>
+        <li style="width:175px;"><label>天窗开关：</label><select style="width:80px;" id="topWindowStatus" class="form-control">
+            <option value="16">开</option>
+            <option value="0" selected="selected">关</option>
+        </select></li>
+        <li style="width:175px;"><label>左转向灯：</label><select style="width:80px;" id="lTurnLight" class="form-control">
+            <option value="32">开</option>
+            <option value="0" selected="selected">关</option>
+        </select></li>
+        <li style="width:175px;"><label>右转向灯：</label><select style="width:80px;" id="rTurnLight" class="form-control">
+            <option value="64">开</option>
+            <option value="0" selected="selected">关</option>
+        </select></li>
+        <li style="width:175px;"><label>阅读灯：</label><select style="width:80px;" id="readLight" class="form-control">
+            <option value="128">开</option>
+            <option value="0" selected="selected">关</option>
+        </select></li>
+    </ul>
+    <h4>灯光状态:</h4>
+    <ul class="protocol_content" style="padding:0px;">
+        <li style="width:175px;"><label>近光灯：</label><select style="width:80px;" id="lowHeadlight" class="form-control">
+            <option value="1">开</option>
+            <option value="0" selected="selected">关</option>
+        </select></li>
+        <li style="width:175px;"><label>远光灯：</label><select style="width:80px;" id="highHeadlight" class="form-control">
+            <option value="2">开</option>
+            <option value="0" selected="selected">关</option>
+        </select></li>
+        <li style="width:175px;"><label>前雾灯：</label><select style="width:80px;" id="ffogLight" class="form-control">
+            <option value="4">开</option>
+            <option value="0" selected="selected">关</option>
+        </select></li>
+        <li style="width:175px;"><label>后雾灯：</label><select style="width:80px;" id="bfogLight" class="form-control">
+            <option value="8">开</option>
+            <option value="0" selected="selected">关</option>
+        </select></li>
+        <li style="width:175px;"><label>危险灯：</label><select style="width:80px;" id="dangerLight" class="form-control">
+            <option value="16">开</option>
+            <option value="0" selected="selected">关</option>
+        </select></li>
+        <li style="width:175px;"><label>倒车灯：</label><select style="width:80px;" id="backCarLight" class="form-control">
+            <option value="32">开</option>
+            <option value="0" selected="selected">关</option>
+        </select></li>
+        <li style="width:175px;"><label>auto灯：</label><select style="width:80px;" id="autoLight" class="form-control">
+            <option value="64">开</option>
+            <option value="0" selected="selected">关</option>
+        </select></li>
+        <li style="width:175px;"><label>示宽灯：</label><select style="width:80px;" id="widthLight" class="form-control">
+            <option value="128">开</option>
+            <option value="0" selected="selected">关</option>
+        </select></li>
+    </ul>
+    <h4>开关状态A:</h4>
+    <ul class="protocol_content" style="padding:0px;">
+        <li style="width:175px;"><label>机油报警：</label><select style="width:80px;" id="machineOilWarning" class="form-control">
+            <option value="1">开</option>
+            <option value="0" selected="selected">关</option>
+        </select></li>
+        <li style="width:175px;"><label>燃油报警：</label><select style="width:80px;" id="oilWarning" class="form-control">
+            <option value="2">开</option>
+            <option value="0" selected="selected">关</option>
+        </select></li>
+        <li style="width:175px;"><label>雨刷报警：</label><select style="width:80px;" id="wiperWarning" class="form-control">
+            <option value="4">开</option>
+            <option value="0" selected="selected">关</option>
+        </select></li>
+        <li style="width:175px;"><label>喇叭报警：</label><select style="width:80px;" id="loudsspeakerWaring" class="form-control">
+            <option value="8">开</option>
+            <option value="0" selected="selected">关</option>
+        </select></li>
+        <li style="width:175px;"><label>空调：</label><select style="width:80px;" id="airConditionerWaring" class="form-control">
+            <option value="16">开</option>
+            <option value="0" selected="selected">关</option>
+        </select></li>
+        <li style="width:175px;"><label>后视镜状态：</label><select style="width:80px;" id="backMirrorWaring" class="form-control">
+            <option value="32">开</option>
+            <option value="0" selected="selected">关</option>
+        </select></li>
+    </ul>
+    <h4>开关状态B:</h4>
+    <ul class="protocol_content" style="padding:0px;">
+        <li style="width:175px;"><label>档位：</label><select style="width:80px;" id="gears" class="form-control">
+            <option value="0">P</option>
+            <option value="16">R</option>
+            <option value="32">N</option>
+            <option value="48">D</option>
+            <option value="64">1挡</option>
+            <option value="80">2挡</option>
+            <option value="96">3挡</option>
+            <option value="112" selected="selected">4挡</option>
+            <option value="128">5挡</option>
+            <option value="144">6挡</option>
+            <option value="160">M挡</option>
+            <option value="176">S挡</option>
+        </select></li>
+    </ul>
+    <h4>数据字节:</h4>
+    <ul class="protocol_content" style="padding:0px;">
+        <li style="width:175px;"><label>V1N1：</label><select style="width:80px;" id="V1N1" class="form-control">
+            <option value="1">存在</option>
+            <option value="0">不存在</option>n>
+        </select></li>
+        <li style="width:175px;"><label>总线总里程：</label><select style="width:80px;" id="busTotalMileage" class="form-control">
+            <option value="8">存在</option>
+            <option value="0">不存在</option>n>
+        </select></li>
+        <li style="width:175px;"><label>仪表数据：</label><select style="width:80px;" id="meterData" class="form-control">
+            <option value="16">存在</option>
+            <option value="0">不存在</option>n>
+        </select></li>
+        <li style="width:175px;"><label>发送机转速：</label><select style="width:80px;" id="engineSpeed" class="form-control">
+            <option value="32">存在</option>
+            <option value="0">不存在</option>n>
+        </select></li>
+        <li style="width:175px;"><label>车辆速度：</label><select style="width:80px;" id="speed" class="form-control">
+            <option value="64">存在</option>
+            <option value="0">不存在</option>n>
+        </select></li>
+        <li style="width:175px;"><label>剩余油量：</label><select style="width:80px;" id="surplusOil" class="form-control">
+            <option value="128">存在</option>
+            <option value="0">不存在</option>n>
+        </select></li>
+    </ul>
+    <H3 style="border-bottom: 1px solid #eee;">控制：</H3>
+    <div style="width:100%;padding:5px;margin-top:10px;">
+        <button type="button" class="btn btn-primary" id="sendMsgBtn">发送消息</button>
+    </div>
+    <H3 style="border-bottom: 1px solid #eee;">返回信息：</H3>
+    <div style="width:100%;padding:5px;margin-top:10px;">
+        <textarea id="showFeedback" style="width:100%;padding:5px;" rows="8"></textarea>
+    </div>
+</div>
+
+
+<script>
+//发送心跳数据包
+$("#sendMsgBtn").click(function(){
+    var WATER_CODE = $("#WATER_CODE").val();
+    var DEV_ID = $("#DEV_ID").val();
+    var msgCount = $("#msgCount").val();
+
+    var statusCode = $("#statusCode").val();
+    var locationType = $("#locationType").val();
+
+    var accStatus = parseInt($("#accStatus").val());
+    var defenseStatus = parseInt($("#defenseStatus").val());
+    var brakeStatus = parseInt($("#brakeStatus").val());
+    var acceleratorStatus = parseInt($("#acceleratorStatus").val());
+    var handBrakeStatus = parseInt($("#handBrakeStatus").val());
+    var mainSafetyBelt = parseInt($("#mainSafetyBelt").val());
+    var subSafetyBelt = parseInt($("#subSafetyBelt").val());
+    var securityStatus = accStatus + defenseStatus + brakeStatus + acceleratorStatus + handBrakeStatus + mainSafetyBelt + subSafetyBelt
+
+    var lfDoorStatus = parseInt($("#lfDoorStatus").val());
+    var rfDoorStatus = parseInt($("#rfDoorStatus").val());
+    var lbDoorStatus = parseInt($("#lbDoorStatus").val());
+    var rbDoorStatus = parseInt($("#rbDoorStatus").val());
+    var trunk = parseInt($("#trunk").val());
+    var enginCover = parseInt($("#enginCover").val());
+    var doorStatus = lfDoorStatus + rfDoorStatus + lbDoorStatus + rbDoorStatus + trunk + enginCover
+
+    var lfDoorLockStatus = parseInt($("#lfDoorLockStatus").val());
+    var rfDoorLockStatus = parseInt($("#rfDoorLockStatus").val());
+    var lbDoorLockStatus = parseInt($("#lbDoorLockStatus").val());
+    var rbDoorLockStatus = parseInt($("#rbDoorLockStatus").val());
+    var lockStatus = lfDoorLockStatus + rfDoorLockStatus + lbDoorLockStatus + rbDoorLockStatus
+
+    var lfWindowStatus = parseInt($("#lfWindowStatus").val());
+    var rfWindowStatus = parseInt($("#rfWindowStatus").val());
+    var lbWindowStatus = parseInt($("#lbWindowStatus").val());
+    var rbWindowStatus = parseInt($("#rbWindowStatus").val());
+    var topWindowStatus = parseInt($("#topWindowStatus").val());
+    var lTurnLight = parseInt($("#lTurnLight").val());
+    var rTurnLight = parseInt($("#rTurnLight").val());
+    var readLight = parseInt($("#readLight").val());
+    var windowStatus = lfWindowStatus + rfWindowStatus + lbWindowStatus + rbWindowStatus + topWindowStatus + lTurnLight + rTurnLight + readLight
+
+    var lowHeadlight = parseInt($("#lowHeadlight").val());
+    var highHeadlight = parseInt($("#highHeadlight").val());
+    var ffogLight = parseInt($("#ffogLight").val());
+    var bfogLight = parseInt($("#bfogLight").val());
+    var dangerLight = parseInt($("#dangerLight").val());
+    var backCarLight = parseInt($("#backCarLight").val());
+    var autoLight = parseInt($("#autoLight").val());
+    var widthLight = parseInt($("#widthLight").val());
+    var lightStatus = lowHeadlight + highHeadlight + ffogLight + bfogLight + dangerLight + backCarLight + autoLight + widthLight
+
+    var machineOilWarning = parseInt($("#machineOilWarning").val());
+    var oilWarning = parseInt($("#oilWarning").val());
+    var wiperWarning = parseInt($("#wiperWarning").val());
+    var loudsspeakerWaring = parseInt($("#loudsspeakerWaring").val());
+    var airConditionerWaring = parseInt($("#airConditionerWaring").val());
+    var backMirrorWaring = parseInt($("#backMirrorWaring").val());
+    var onoffStatusA = machineOilWarning + oilWarning + wiperWarning + loudsspeakerWaring + airConditionerWaring + backMirrorWaring + backMirrorWaring
+
+    var gears = parseInt($("#gears").val());
+    var onoffStatusB = gears
+
+    var V1N1 = parseInt($("#V1N1").val());
+    var busTotalMileage = parseInt($("#busTotalMileage").val());
+    var meterData = parseInt($("#meterData").val());
+    var engineSpeed = parseInt($("#engineSpeed").val());
+    var speed = parseInt($("#speed").val());
+    var surplusOil = parseInt($("#surplusOil").val());
+    var dataByte = V1N1 + busTotalMileage + meterData + engineSpeed + speed + surplusOil
+
+    var data = {};
+    data["WATER_CODE"] = WATER_CODE;
+    data["DEV_ID"] = DEV_ID;
+    data["msgCount"] = msgCount;
+    data["statusCode"] = statusCode
+    data["locationType"] = locationType
+    data["securityStatus"] = securityStatus
+    data["doorStatus"] = doorStatus
+    data["lockStatus"] = lockStatus
+    data["windowStatus"] = windowStatus
+    data["lightStatus"] = lightStatus
+    data["onoffStatusA"] = onoffStatusA
+    data["onoffStatusB"] = onoffStatusB
+    data["dataByte"] = dataByte
+
+    var host = window.location.host;
+    $("#showFeedback").val("")
+    $.ajax({
+        url:"http://" + host + "/protocolTools/protocolReport_process/porcessSecurityStatusMsg",
+        type:"post",
+        data:data,
+        dataType:"json",
+        success:function(data){
+            if(data.status == 200){
+                //window.location.reload()
+                msg = "发送消息：" + data.msgSend + "\n"
+                msg = msg + "收到消息：" + data.result + "\n"
+                msg = msg + "收到消息16进制：" + data.rev + "\n"
+                msg = msg + "收到消息解析结果：" + JSON.stringify(data.orgRev) + "\n"
+                $("#showFeedback").val(msg)
+            }else{
+                $("#showFeedback").val(data.message)
+                alert(data.message);
+            }
+        }
+    });
+});
+
+</script>
+{% endblock %}

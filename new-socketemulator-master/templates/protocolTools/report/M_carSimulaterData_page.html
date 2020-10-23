@@ -1,0 +1,49 @@
+{% extends "protocolTools/report/M_carSimulater_page.html" %}
+{% block title %}GPS_protocol{% endblock %}
+{% block content_1 %}
+<div id="container3" style="width:100%;min-height:750px;float:left;_background:green;margin-top:10px;_border-top: 1px solid #eee;">
+    <div style="width:100%;padding-bottom:10px;border-bottom: 1px solid #eee;">
+        <h4>查询今日车机行驶数据</h4>
+        <span>
+            <label>输入车机号：</label><input style="width:200px;" id="carId" type="text" class="form-control" value="M202003060520">
+            <button id="searchCarData" type="button" class="btn btn-primary" id="saveSetting">查询</button>
+        </span>
+    </div>
+    <H3 style="border-bottom: 1px solid #eee;">返回信息：</H3>
+    <div style="width:100%;padding:5px;margin-top:10px;">
+        <textarea id="showFeedback" style="width:100%;padding:5px;" rows="15"></textarea>
+    </div>
+
+
+
+</div>
+
+<script>
+//查询车机今日行驶数据
+$("#searchCarData").click(function(){
+    var carId = $("#carId").val();
+    var data = {};
+    data["carId"] = carId;
+
+    var host = window.location.host;
+    $("#showFeedback").val("")
+    $.ajax({
+        url:"http://" + host + "/protocolTools/M_carSimulater_process/searchCarsimulaterData",
+        type:"post",
+        data:data,
+        dataType:"json",
+        success:function(data){
+            if(data.status == 200){
+                //window.location.reload()
+                msg = data.message
+                $("#showFeedback").val(msg)
+            }else{
+                $("#showFeedback").val(data.message)
+                alert(data.message);
+            }
+        }
+    });
+});
+</script>
+
+{% endblock %}

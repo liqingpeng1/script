@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}协议工具{% endblock %}
+
+{% block content %}
+    <style type="text/css">
+        .link-tab {
+            background-color:#e4e2dd;
+        }
+        .active_left_tab {
+            background-color:#428BCA;
+            color:white;
+        }
+
+        .table>thead>tr>th,.table>tbody>tr>td{
+           _background-color:red;
+        }
+    </style>
+    <!--   切换左边的tab  -->
+    <script type="text/javascript">
+        function swichLeftTab(e){
+            var id = $(e).attr("id")
+            if(id == "setting"){
+                $(location).attr('href', "http://" + window.location.host + "/protocolTools/setting_view/socketSetting_page");
+            }else if(id == "protocols_report"){
+                $(location).attr('href', "http://" + window.location.host + "/protocolTools/protocolReport_view/GPS_protocol_page");
+            }else if(id == "car_simulater"){
+                $(location).attr('href', "http://" + window.location.host + "/protocolTools/M_carSimulater_view/M_carSimulater_page");
+            }else if(id == "test"){
+                $(location).attr('href', "http://" + window.location.host + "/protocolTools/test_view/test_page");
+            }else if(id == "icon"){
+                $(location).attr('href', "http://" + window.location.host + "/tab1/icon");
+            }
+        }
+    </script>
+    <!-- 左侧导航添加为可继承模块 -->
+    {% block leftNav %}
+    <div id="container1" class="col-sm-3 col-md-2 sidebar" style="margin-top:50px;width:15%;padding:0px;margin-right:15px;">
+          <ul class="nav nav-sidebar">
+              <li id="setting" onclick="swichLeftTab(this)"><a {% if arg.path[1]=="setting_view" %} class="active_left_tab" {% endif %}><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> 系统设置</a></li>
+              <li id="protocols_report" onclick="swichLeftTab(this)"><a {% if arg.path[1]=="protocolReport_view" %} class="active_left_tab" {% endif %}><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> 终端上报报文<span class="sr-only"></span></a></li>
+<!--              <li id="protocols_query" onclick="swichLeftTab(this)"><a {% if arg.path[1]=="protocolQuery_view" %} class="active_left_tab" {% endif %}><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> 远程查询报文<span class="sr-only"></span></a></li>-->
+          </ul>
+          <ul class="nav nav-sidebar" style="margin-top:20px;">
+              <li id="car_simulater" onclick="swichLeftTab(this)"><a {% if arg.path[1]=="M_carSimulater_view" %} class="active_left_tab" {% endif %}><span class="glyphicon glyphicon-hand-right" aria-hidden="true"></span> 车机模拟器</a></li>
+          </ul>
+<!--          <ul class="nav nav-sidebar" style="margin-top:20px;">-->
+<!--              <li id="test" onclick="swichLeftTab(this)"><a {% if arg.path[1]=="test_view" %} class="active_left_tab" {% endif %}><span class="glyphicon glyphicon-text-size" aria-hidden="true"></span> 测试页面</a></li>-->
+<!--              <li><a><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> 其他页面</a></li>-->
+<!--          </ul>-->
+    </div>
+    {% endblock %}
+
+    {% block content_01 %}
+    <!--  右边内容区域  -->
+    {% endblock %}
+{% endblock %}
+</div>

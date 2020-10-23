@@ -1,0 +1,1144 @@
+{% extends "messageTools/index.html" %}
+{% block title %}heartBeat_msg{% endblock %}
+{% block content_01 %}
+<script src="../../static/js/messageTools/simulater.js"></script>
+<style>
+    .nav-pills li {
+        margin-bottom:5px;
+    }
+    .form-control {
+        display:inline;
+        width:160px;
+    }
+    .protocol_content:after{
+        clear:both;
+        display:block;
+        content:" ";
+    }
+    .protocol_content li {
+        width:250px;
+        _background:yellow;
+        list-style:none;
+        margin-top:5px;
+        float:left;
+    }
+    .protocol_content label{
+    width:90px;
+    text-align:right;
+    }
+    h1,h2,h3,h4,h5 {
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+    button.btn.btn-primary {
+        margin-bottom: 2px;
+    }
+</style>
+<div id="container2" style="width:83%;min-height:750px;float:left;_background:grey;margin-top:50px;">
+    {% block content_02 %}
+    <ul class="nav nav-pills" style="font-size:14px;">
+        <li role="presentation"><a id="car_simulaterSetting_tab" {% if arg.path[2]=="M_simulaterSetting_page" %} class="link-tab" {% endif %} onclick="simulaterManTab(this)">设置</b></a></li>
+        <li role="presentation"><a id="car_simulater_tab" {% if arg.path[2]=="M_simulater_page" %} class="link-tab" {% endif %} onclick="simulaterManTab(this)">模拟器</b></a></li>
+    </ul>
+    {% endblock %}
+    {% block content_1 %}
+    <div id="container3" style="width:100%;min-height:750px;float:left;_background:green;margin-top:10px;_border-top: 1px solid #eee;">
+        <div style="width:100%;padding-bottom:10px;border-bottom: 1px solid #eee;">
+            <label>车机号：</label><input id="phoneNum" type="text" class="form-control" value="012201500010" style="width:150px;">
+            <label>上报间隔：</label><input id="durTime" type="text" class="form-control" value="5" style="width:80px;" />
+            <label>设置超时时间：</label><input id="timeout" type="text" class="form-control" value="3600" style="width:80px;" />
+        </div>
+        <div style="display: block; width: 100%; border-width: 1px; border-style: solid; border-color: darkgray; border-radius: 10px; padding: 2px; margin-top: 5px;">
+            <h5><b>多人在线状态面板：</b></h5>
+            <span><label>我的id：</label><input disabled=disabled type="text" id="curSession" class="form-control" style="display:inline;width:200px;" value=""/></span>
+            <span><label>在线人数：</label><input disabled=disabled type="text" id="totalSessionNums" class="form-control" style="display:inline;width:80px;" value="1"/></span>
+            <button id="sessionRefresh" type="button" class="btn btn-primary" onclick="getAllUsers(this)">刷新</button><label style="font-size:10px;width:100px;">刷新后，可在控制台查看在线用户详细信息</label>
+        </div>
+        <div style="width:100%;_padding-bottom:10px;border-bottom: 1px solid #eee;">
+<!--            <h4>点击登录按钮发送报文：</h4>-->
+            <div style="display: block; width: 100%; border-width: 1px; border-style: solid; border-color: darkgray; border-radius: 10px; padding: 2px; margin-top: 5px;">
+                <h5><b>登录报文数据：</b>
+                    <span style="border-width:1px;border-style:solid;border-color:darkgray;border-radius:10px;padding:1px 10px;">
+                        <label><input name="login" type="radio" value="0" checked="checked" onclick="isShowLoginArea(this)"/>隐藏</label>
+                        <label style="margin-left:10px;"><input name="login" type="radio" value="1" onclick="isShowLoginArea(this)"/>显示</label>
+                    </span>
+                </h5>
+                <div id="login_area" style="display:none;">
+                    <h5><b>登录报文：</b></h5>
+                    <ul class="protocol_content" style="padding:0px;">
+                        <li><label>省域ID：</label><input id="provinceId" type="text" class="form-control" value="50"></li>
+                        <li><label>市县域ID：</label><input id="countyId" type="text" class="form-control" value="103"></li>
+                        <li><label>制造商ID：</label><input id="manufacturerId" type="text" class="form-control" value="11010"></li>
+                        <li style="width:500px;"><label>终端型号：</label><input style="width:320px;" id="terminalType" type="text" class="form-control" value="a865h643gfdj64fd7432"></li>
+                        <li><label>终端ID：</label><input id="terminalId" type="text" class="form-control" value="H6uyt08"></li>
+                        <li><label>车牌颜色：</label><input id="licencePlateColor" type="text" class="form-control" value="1"></li>
+                        <li><label>车辆标识：</label><input id="carSign" type="text" class="form-control" value="渝B23CX"></li>
+                    </ul>
+                    <h5><b>版本报文：</b></h5>
+                    <ul class="protocol_content" style="padding:0px;">
+                        <li><label style="word-break:break-all;font-size:12px;">软件版本号：</label><input id="softwareVersion" type="text" class="form-control" value="L200AB01020002"></li>
+                        <li><label style="word-break:break-all;font-size:12px;">终端版本日期：</label><input id="softwareVersionDate" type="text" class="form-control" value="2020-02-10"></li>
+                        <li><label>cpuId：</label><input id="CPUId" type="text" class="form-control" value="CPU-12345678"></li>
+                        <li><label>GMS型号：</label><input id="GMSType" type="text" class="form-control" value="GMS-TYPE-123456"></li>
+                        <li><label style="word-break:break-all;font-size:12px;">GSM IMEI号：</label><input id="GMS_IMEI" type="text" class="form-control" value="GMS_IMEI_123456"></li>
+                        <li><label style="word-break:break-all;font-size:12px;">终端 SIM卡IMSI 号：</label><input id="SIM_IMSI" type="text" class="form-control" value="SIM_13146201119"></li>
+                        <li><label style="word-break:break-all;font-size:12px;">终端 SIM卡ICCID号：</label><input id="SIM_ICCID" type="text" class="form-control" value="SIM_ICCID13146201119"></li>
+                        <li><label style="word-break:break-all;font-size:12px;">车系车型ID：</label><input id="carType" type="text" class="form-control" value="22"></li>
+                        <li><label style="word-break:break-all;font-size:12px;">汽车VIN码：</label><input id="VIN" type="text" class="form-control" value="VIN_1234567891234"></li>
+                        <li><label style="word-break:break-all;font-size:12px;">装上终端后车辆累计总里程：</label><input id="totalMileage" type="text" class="form-control" value="389000"></li>
+                        <li><label style="word-break:break-all;font-size:12px;">装上终端后车辆累计总耗油：</label><input id="totalOilExpend" type="text" class="form-control" value="420000"></li>
+                        <li><label style="word-break:break-all;font-size:12px;">排量：</label><input id="displacement" type="text" class="form-control" value="1500"></li>
+                        <li><label style="word-break:break-all;font-size:12px;">油密度：</label><input id="oilDensity" type="text" class="form-control" value="92"></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div style="display: block; width: 100%; border-width: 1px; border-style: solid; border-color: darkgray; border-radius: 10px; padding: 2px; margin-top: 5px;">
+            <h5><b>GPS行驶轨迹设置：</b></h5>
+            <div class="input-group" style="width:380px;padding-bottom:10px;margin-left:10px;display:inline;">
+                <form id="form" enctype="multipart/form-data">
+                    <input type="file" id="fileAttach" name="file" class="form-control" style="display:inline;width:250px;"/>
+                    <input type="button" onclick="uploadFile()" value="上传" class="form-control" style="display:inline;width:80px;font-weight: bolder;"/>
+                </form>
+            </div>
+            <span style="margin-left:10px;"><label>选择轨迹：</label><select id="selectGPSLine" class="form-control" style="width:250px;">
+                {% for key,value in arg["gpsLines"].items() %}
+                <option value="{{ key }}">{{ value }}</option>
+                {% endfor %}
+            </select></span>
+            <a style="margin-left:10px;font-weight:bold;" onclick="download_sample()">下载示例轨迹</a>
+            <button id="del_gps_but" type="button" class="btn btn-primary" onclick="del_gpsLine()" style="margin-left:10px;">删除选中轨迹</button>
+        </div>
+        <div style="display: block; width: 100%; border-width: 1px; border-style: solid; border-color: darkgray; border-radius: 10px; padding: 2px; margin-top: 5px;">
+            <h5><b>行驶参数设置：</b></h5>
+            <span><label>速度(Km/h)：</label><input type="text" id="carSpeed" class="form-control" style="display:inline;width:80px;" value="60"/></span>
+            <span><label>油耗(Km/L)：</label><input type="text" id="oilExpend" class="form-control" style="display:inline;width:80px;" value="10"/></span>
+            <span><label>是否循环行驶：</label><select style="width:80px;" id="travelLoop" class="form-control">
+                <option value="0">否</option>
+                <option value="1">是</option></select><label style="font-size:9px;width: 100px;">开启后会在所选择的轨迹上来回行驶</label></span>
+        </div>
+        <div style="width:100%;padding-bottom:10px;border-bottom: 1px solid #eee;">
+            <h3>操作：</h3>
+            <button id="connect_B" type="button" class="btn btn-primary" onclick="connect()">1、连网</button>
+            <button id="fire_B" type="button" class="btn btn-primary" onclick="carLogin()">2、登录</button>
+            <button id="login_B" type="button" class="btn btn-primary" onclick="fireOn()">3、点火</button>
+            <button id="run_B" type="button" class="btn btn-primary" onclick="startTravel()">4、行驶</button>
+            <button id="stopRun_B" type="button" class="btn btn-primary" onclick="stopTravel()">5、停止行驶</button>
+            <button id="unFire_B" type="button" class="btn btn-primary" onclick="fireOff()">6、熄火</button>
+            <button id="unConnect_B" type="button" class="btn btn-primary" onclick="disConnect()">7、断网</button>
+            <button id="unConnectAll_B" type="button" class="btn btn-danger" onclick="reset()">复位</button>
+            <button id="clear_B" type="button" class="btn btn-warning" onclick="clearlog()">清空日志</button>
+            <span style="margin-left:20px;"><label>当前状态：</label><input id="curStatus" value="断网" disabled="disabled" class="form-control" style="font-weight: bold;width:85px;color:red;border-width: 1px; border-style: solid; border-color: darkgray; border-radius: 10px;"></span>
+            <span style="width:80px;padding-left:10px;"><label style="width:70px"><input type="checkbox" id="ignition" onclick="isLogShow(this)"/>隐藏日志</label> </span>
+            <span style="border-width:1px;border-style:solid;border-color:darkgray;border-radius:10px;padding:1px 10px;">
+                <label><input name="travelDirection" type="radio" value="0" checked="checked"/>正向</label>
+                <label style="margin-left:10px;"><input name="travelDirection" type="radio" value="1"/>反向</label>
+            </span>
+        </div>
+        <div style="display: block; width: 100%; border-width: 1px; border-style: solid; border-color: darkgray; border-radius: 10px; padding: 2px; margin-top: 5px;">
+            <h5><b>事件发送：</b>
+                <span style="border-width:1px;border-style:solid;border-color:darkgray;border-radius:10px;padding:1px 10px;">
+                    <label><input name="eventshow" type="radio" value="0" checked="checked" onclick="isShowEventArea(this)"/>隐藏</label>
+                    <label style="margin-left:10px;"><input name="eventshow" type="radio" value="1" onclick="isShowEventArea(this)"/>显示</label>
+                </span>
+            </h5>
+            <div id="event_area" style="display:none;">
+                <div style="margin-top:10px;width:100%;border-width:1px;border-style:solid;border-color:darkgray;border-radius:10px;padding:2px;background:skyblue;">
+                    <label style="padding: 0px 10px;"><input type="checkbox" id="insertAlarm_check" onclick="eventSelect(this)" checked />终端插入报警 </label>
+                    <label style="padding: 0px 10px;"><input type="checkbox" id="pullOutAlarm_check" onclick="eventSelect(this)" checked />终端拔出报警 </label>
+                    <label style="padding: 0px 10px;"><input type="checkbox" id="lowVoltage_check" onclick="eventSelect(this)" checked />低电压报警 </label>
+                    <label style="padding: 0px 10px;"><input type="checkbox" id="rapidlyAccelerateEvent_check" onclick="eventSelect(this)" checked />急加速 </label>
+                    <label style="padding: 0px 10px;"><input type="checkbox" id="sharpSlowdownEvent_check" onclick="eventSelect(this)" checked />急减速 </label>
+                    <label style="padding: 0px 10px;"><input type="checkbox" id="sharpTurnEvent_check" onclick="eventSelect(this)" checked />急左转弯 </label>
+                    <label style="padding: 0px 10px;"><input type="checkbox" id="sharpRightTurnEvent_check" onclick="eventSelect(this)" checked />急右转弯 </label>
+                    <label style="padding: 0px 10px;"><input type="checkbox" id="idlingSpeedOver_check" onclick="eventSelect(this)" checked />怠速过长 </label>
+                    <label style="padding: 0px 10px;"><input type="checkbox" id="UnIdlingSpeedOver_check" onclick="eventSelect(this)" checked />怠速过长（解除） </label>
+                    <label style="padding: 0px 10px;"><input type="checkbox" id="overspeed_check" onclick="eventSelect(this)" checked />超速报警 </label>
+                    <label style="padding: 0px 10px;"><input type="checkbox" id="fatigueDriving_check" onclick="eventSelect(this)" checked />疲劳驾驶 </label>
+                    <label style="padding: 0px 10px;"><input type="checkbox" id="waterTemperatureAlarm_check" onclick="eventSelect(this)" checked />水温报警 </label>
+                    <label style="padding: 0px 10px;"><input type="checkbox" id="highSpeedNeutralGear_check" onclick="eventSelect(this)" checked />高速空挡滑行 </label>
+                    <label style="padding: 0px 10px;"><input type="checkbox" id="crashAlarm_check" onclick="eventSelect(this)" checked />碰撞告警 </label>
+                    <label style="padding: 0px 10px;"><input type="checkbox" id="rapidChangeLeftLines_check" onclick="eventSelect(this)" checked />急左变道 </label>
+                    <label style="padding: 0px 10px;"><input type="checkbox" id="rapidChangeRightLines_check" onclick="eventSelect(this)" checked />急右变道 </label>
+                </div>
+                <div style="padding:10px;">
+                    <span id="insertAlarm_button" style="display:inline;"><button type="button" class="btn btn-primary" onclick="sendInsertAlarmEvent(this)">终端插入报警</button></label></span>
+                    <span id="pullOutAlarm_button" style="display:inline;"><button type="button" class="btn btn-primary" onclick="sendpullOutAlarmEvent(this)">终端拔出报警</button></label></span>
+                    <span id="lowVoltage_button" style="display:inline;"><button type="button" class="btn btn-primary" onclick="sendLowVoltageEvent(this)">低电压报警</button></label></span>
+                    <span id="rapidlyAccelerateEvent_button" style="display:inline;"><button type="button" class="btn btn-primary" onclick="sendRapidlyAccelerateEvent(this)">急加速</button></label></span>
+                    <span id="sharpSlowdownEvent_button" style="display:inline;"><button type="button" class="btn btn-primary" onclick="sendSharpSlowdownEvent(this)">急减速</button></label></span>
+                    <span id="sharpTurnEvent_button" style="display:inline;"><button type="button" class="btn btn-primary" onclick="sendSharpTurnEvent(this)">急左转弯</button></label></span>
+                    <span id="sharpRightTurnEvent_button" style="display:inline;"><button type="button" class="btn btn-primary" onclick="sendRightSharpTurnEvent(this)">急右转弯</button></label></span>
+                    <span id="idlingSpeedOver_button" style="display:inline;"><button type="button" class="btn btn-primary" onclick="sendIdlingSpeedOverEvent(this)">怠速过长</button></label></span>
+                    <span id="UnIdlingSpeedOver_button" style="display:inline;"><button type="button" class="btn btn-primary" onclick="sendUnIdlingSpeedOverEvent(this)">怠速过长（解除）</button></label></span>
+                    <span id="overspeed_button" style="display:inline;"><button type="button" class="btn btn-primary" onclick="sendOverspeedEvent(this)">超速报警</button></label></span>
+                    <span id="fatigueDriving_button" style="display:inline;"><button type="button" class="btn btn-primary" onclick="sendFatigueDrivingEvent(this)">疲劳驾驶</button></label></span>
+                    <span id="waterTemperatureAlarm_button" style="display:inline;"><button type="button" class="btn btn-primary" onclick="sendWaterTemperatureAlarmEvent(this)">水温报警</button></label></span>
+                    <span id="highSpeedNeutralGear_button" style="display:inline;"><button type="button" class="btn btn-primary" onclick="sendHighSpeedNeutralGearEvent(this)">高速空挡滑行</button></label></span>
+                    <span id="crashAlarm_button" style="display:inline;"><button type="button" class="btn btn-primary" onclick="sendCrashAlarmEvent(this)">碰撞告警</button></label></span>
+                    <span id="rapidChangeLeftLines_button" style="display:inline;"><button type="button" class="btn btn-primary" onclick="sendRapidChangeLeftLinesEvent(this)">急左变道</button></label></span>
+                    <span id="rapidChangeRightLines_button" style="display:inline;"><button type="button" class="btn btn-primary" onclick="sendRapidChangeRightLinesEvent(this)">急右变道</button></label></span>
+                </div>
+            </div>
+        </div>
+        <div style="display: block; width: 100%; border-width: 1px; border-style: solid; border-color: darkgray; border-radius: 10px; padding: 2px; margin-top: 5px;">
+            <h5><b>实时控制：</b>
+                <span style="border-width:1px;border-style:solid;border-color:darkgray;border-radius:10px;padding:1px 10px;">
+                    <label><input name="realtime" type="radio" value="0" checked="checked" onclick="isShowRealTimeCtrArea(this)"/>隐藏</label>
+                    <label style="margin-left:10px;"><input name="realtime" type="radio" value="1" onclick="isShowRealTimeCtrArea(this)"/>显示</label>
+                </span>
+            </h5>
+            <div id="realTimeCtl_area" style="display:none;">
+                <div style="padding:10px;">
+                    <span style="margin-left:10px"><label>车速度（Km/h）：</label><input style="width:80px;margin-right:5px;" id="change_speed" type="text" class="form-control" value="60"><button type="button" class="btn btn-primary" onclick="changeSpeed()">改变车速</button></span>
+                    <span style="margin-left:10px"><label>油耗（Km/L）：</label><input style="width:80px;margin-right:5px;" id="change_oilExpend" type="text" class="form-control" value="10"><button type="button" class="btn btn-primary" onclick="changeOilExpend()">改变油耗</button></span>
+                    <span style="margin-left:10px"><label>上报间隔（秒）：</label><input style="width:80px;margin-right:5px;" id="change_durTime" type="text" class="form-control" value="5"><button type="button" class="btn btn-primary" onclick="changeDurTime()">改变上报间隔</button></span>
+                    <span style="margin-left:10px;display: inline-block;"><button type="button" class="btn btn-primary" onclick="changeTravelDirection()">反向行驶</button></span>
+                    <span style="margin-left:10px;display: inline-block;"><button type="button" class="btn btn-primary" onclick="fixCurPosition(this)">固定在当前位置</button></span>
+                     <span style="margin-left:10px;display: inline-block;"><label>剩余油量（%）：</label><input style="width:80px;margin-right:5px;" id="change_surplusOil" type="text" class="form-control" value="50.5"><button type="button" class="btn btn-primary" onclick="changeSurplusOil()">改变剩余油量</button></span>
+                    <span style="margin-left:10px;display: inline-block;"><label>发动机转速：</label><input style="width:80px;margin-right:5px;" id="change_engineSpeed" type="text" class="form-control" value="3000"><button type="button" class="btn btn-primary" onclick="changeEngineSpeed()">改变发动机转速</button></span>
+                    <span style="margin-left:10px;display: inline-block;"><label>电瓶电压（v） ：</label><input style="width:80px;margin-right:5px;" id="change_voltage" type="text" class="form-control" value="12"><button type="button" class="btn btn-primary" onclick="changeVoltage()">改变电瓶电压</button></span>
+                </div>
+            </div>
+        </div>
+        <div style="display: block; width: 100%; border-width: 1px; border-style: solid; border-color: darkgray; border-radius: 10px; padding: 2px; margin-top: 5px;">
+            <h5><b>其他操作：</b>
+                <span style="border-width:1px;border-style:solid;border-color:darkgray;border-radius:10px;padding:1px 10px;">
+                    <label><input name="other" type="radio" value="0" checked="checked" onclick="isShowOtherCtrArea(this)"/>隐藏</label>
+                    <label style="margin-left:10px;"><input name="other" type="radio" value="1" onclick="isShowOtherCtrArea(this)"/>显示</label>
+                </span>
+            </h5>
+            <div id="otherCtl_area" style="display:none;">
+                <div style="border-width:1px;border-style:solid;border-color:darkgray;border-radius:10px;padding:1px 10px;margin:0px 10px;">
+                    <h5><i><b>故障码上报：</b></i></h5>
+                    <ul class="protocol_content" style="padding:0px;">
+                        <li style="width:210px;"><label>故障码个数：</label><input id="troubleCodeNums" type="text" class="form-control" value="0" style="width:100px;" ></li>
+                        <li><label>故障码类型：</label><select id="systemId" class="form-control">
+                            <option value="00">发动机故障码</option>
+                            <option value="01">变速箱故障码</option>
+                            <option value="02">ABS 故障码</option>
+                            <option value="03">安全气囊故障码</option>
+                        </select></li>
+                        <li><button type="button" class="btn btn-primary" style="margin-left:10px;" onclick="sendTroubleCode()">发送故障码</button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div style="width:100%;padding-bottom:60px;border-bottom: 1px solid #eee;">
+            <h3>日志：</h3>
+            <textarea id="showFeedback" style="width:100%;padding:5px;padding-bottom:60px;" rows="10"></textarea>
+        </div>
+        <div style="width:100%;padding-bottom:10px;border-bottom: 1px solid #eee;">
+            <h4>数据查询</h4>
+            <span>
+                <button id="searchCarData" type="button" class="btn btn-primary" id="saveSetting">查询今日行驶数据</button>
+                <button id="searchCarGPS" type="button" class="btn btn-primary">查询车辆当前GPS点</button>
+            </span>
+        </div>
+        <H3 style="border-bottom: 1px solid #eee;">返回信息：</H3>
+        <div style="width:100%;padding:5px;margin-top:10px;">
+            <textarea id="searchCardataShow" style="width:100%;padding:5px;" rows="8"></textarea>
+        </div>
+    </div>
+    {% endblock %}
+</div>
+<script>
+//连网
+function connect(){
+    var data = getPageData();
+    var host = window.location.host;
+    var url = "http://" + host + "/messageTools/M_simulater_process/porcessConnect";
+    $.ajax({
+        url:url,
+        type:"post",
+        data:JSON.stringify(data),
+        contentType:"application/json",
+        dataType:"json",
+        success:function(data){
+            if(data.status == 200){
+                //window.location.reload()
+                var curTime = getCurTime();
+                var txt = $("#showFeedback").val()
+                txt = txt + "[" + curTime + "] " + data.message + "\n"
+                $("#showFeedback").val(txt)
+
+                startWebSocket();
+                $("#curStatus").val("连网");
+                var userNums = parseInt($("#totalSessionNums").val()) + 1
+                $("#totalSessionNums").val(userNums)
+            }else{
+                var curTime = getCurTime();
+                var txt = $("#showFeedback").val()
+                txt = txt + "[" + curTime + "] " + data.message + "\n"
+                $("#showFeedback").val(txt)
+                alert(data.message);
+            }
+        }
+    });
+}
+//登录
+function carLogin(){
+    var data = getPageData();
+    var host = window.location.host;
+    var url = "http://" + host + "/messageTools/M_simulater_process/porcessLogin";
+    sendHttpMsg(data,url);
+    $("#curStatus").val("登录");
+}
+//点火
+function fireOn(){
+    var data = getPageData();
+    var host = window.location.host;
+    var url = "http://" + host + "/messageTools/M_simulater_process/porcessFireOn";
+    sendHttpMsg(data,url);
+    $("#curStatus").val("点火");
+}
+//行驶
+function startTravel(){
+    var data = getPageData();
+    var host = window.location.host;
+    var url = "http://" + host + "/messageTools/M_simulater_process/porcessStartTravel";
+    sendHttpMsg(data,url);
+    $("#curStatus").val("行驶");
+}
+//停止行驶
+function stopTravel(){
+    var data = getPageData();
+    var host = window.location.host;
+    var url = "http://" + host + "/messageTools/M_simulater_process/porcessStopTravel";
+    sendHttpMsg(data,url);
+    $("#curStatus").val("停止行驶");
+}
+//熄火
+function fireOff(){
+    var data = getPageData();
+    var host = window.location.host;
+    var url = "http://" + host + "/messageTools/M_simulater_process/porcessFireOff";
+    sendHttpMsg(data,url);
+    $("#curStatus").val("熄火");
+}
+//断网
+function disConnect(){
+    var data = getPageData();
+    var host = window.location.host;
+    var url = "http://" + host + "/messageTools/M_simulater_process/porcessDisconnect";
+    $.ajax({
+        url:url,
+        type:"post",
+        data:JSON.stringify(data),
+        contentType:"application/json",
+        dataType:"json",
+        success:function(data){
+            if(data.status == 200){
+                //window.location.reload()
+                var curTime = getCurTime();
+                var txt = $("#showFeedback").val()
+                txt = txt + "[" + curTime + "] " + data.message + "\n"
+                $("#showFeedback").val(txt)
+
+                $("#curStatus").val("断网");
+                //endService()
+                var userNums = parseInt($("#totalSessionNums").val()) - 1
+                $("#totalSessionNums").val(userNums)
+                ws.close();
+            }else{
+                var curTime = getCurTime();
+                var txt = $("#showFeedback").val()
+                txt = txt + "[" + curTime + "] " + data.message + "\n"
+                $("#showFeedback").val(txt)
+                alert(data.message);
+            }
+        }
+    });
+}
+//复位
+function reset(){
+    var res;
+	res=confirm("复位后会影响其他在线用户的使用，你确定复位吗?");
+	if(res == true){
+        var data = getPageData();
+        var host = window.location.host;
+        var url = "http://" + host + "/messageTools/M_simulater_process/reset";
+        sendHttpMsg(data,url);
+        $("#curStatus").val("断网");
+        $("#showFeedback").val("")
+        $("#totalSessionNums").val(0)
+        //endService()
+        ws.close();
+    }
+}
+//清空日志
+function clearlog(){
+    $("#showFeedback").val("")
+}
+
+//发送控制信息
+function sendHttpMsg(data,url){
+    var data = data;
+    var url = url;
+    var host = window.location.host;
+    //console.log(data);
+
+    $.ajax({
+        url:url,
+        type:"post",
+        data:JSON.stringify(data),
+        contentType:"application/json",
+        dataType:"json",
+        success:function(data){
+            if(data.status == 200){
+                //window.location.reload()
+                var curTime = getCurTime();
+                var txt = $("#showFeedback").val()
+                txt = txt + "[" + curTime + "] " + data.message + "\n"
+                $("#showFeedback").val(txt)
+            }else{
+                var curTime = getCurTime();
+                var txt = $("#showFeedback").val()
+                txt = txt + "[" + curTime + "] " + data.message + "\n"
+                $("#showFeedback").val(txt)
+                alert(data.message);
+            }
+        }
+    });
+}
+
+function hasSubPkg(){
+    value = $("#subPkg").val()
+    if(value == "8192"){
+        $("#subPkg_label").css("color","black")
+        $("#pkgCounts").removeAttr("disabled")
+    }else{
+        $("#subPkg_label").css("color","grey")
+        $("#pkgCounts").attr("disabled","disabled")
+    }
+}
+//获取页面数据
+function getPageData(){
+    var phoneNum = $("#phoneNum").val();
+    var durTime = $("#durTime").val();
+    var timeout = $("#timeout").val();
+
+    var data = {};
+    data["phoneNum"] = phoneNum;
+    data["durTime"] = durTime;
+    data["timeout"] = timeout;
+    //GPS轨迹数据
+    var gpsLine = $("#selectGPSLine").val()
+    data["gpsLine"] = gpsLine
+    //会话session数据
+    data["session"] = {}
+    var sessionId = $("#curSession").val()
+    data["session"]["sessionId"] = sessionId
+    //登录数据
+    var provinceId = $("#provinceId").val();
+    var countyId = $("#countyId").val();
+    var manufacturerId = $("#manufacturerId").val();
+    var terminalType = $("#terminalType").val();
+    var terminalId = $("#terminalId").val();
+    var licencePlateColor = $("#licencePlateColor").val();
+    var carSign = $("#carSign").val();
+    data["login"] = {};
+    data["login"]["provinceId"] = provinceId;
+    data["login"]["countyId"] = countyId;
+    data["login"]["manufacturerId"] = manufacturerId;
+    data["login"]["terminalType"] = terminalType;
+    data["login"]["terminalId"] = terminalId;
+    data["login"]["licencePlateColor"] = licencePlateColor;
+    data["login"]["carSign"] = carSign;
+    //版本数据
+    var softwareVersion = $("#softwareVersion").val();
+    var softwareVersionDate = $("#softwareVersionDate").val();
+    var CPUId = $("#CPUId").val();
+    var GMSType = $("#GMSType").val();
+    var GMS_IMEI = $("#GMS_IMEI").val();
+    var SIM_IMSI = $("#SIM_IMSI").val();
+    var SIM_ICCID = $("#SIM_ICCID").val();
+    var carType = $("#carType").val();
+    var VIN = $("#VIN").val();
+    var totalMileage = $("#totalMileage").val();
+    var totalOilExpend = $("#totalOilExpend").val();
+    var displacement = $("#displacement").val();
+    var oilDensity = $("#oilDensity").val();
+    data["version"] = {}
+    data["version"]["softwareVersion"] = softwareVersion;
+    data["version"]["softwareVersionDate"] = softwareVersionDate;
+    data["version"]["CPUId"] = CPUId;
+    data["version"]["GMSType"] = GMSType;
+    data["version"]["GMS_IMEI"] = GMS_IMEI;
+    data["version"]["SIM_IMSI"] = SIM_IMSI;
+    data["version"]["SIM_ICCID"] = SIM_ICCID;
+    data["version"]["carType"] = carType;
+    data["version"]["VIN"] = VIN;
+    data["version"]["totalMileage"] = totalMileage;
+    data["version"]["totalOilExpend"] = totalOilExpend;
+    data["version"]["displacement"] = displacement;
+    data["version"]["oilDensity"] = oilDensity;
+    //行驶参数数据
+    data["travelData"] = {}
+    var carSpeed = $("#carSpeed").val()
+    var oilExpend = $("#oilExpend").val()
+    var travelLoop = $("#travelLoop").val()
+    var votage = 120
+    var surplusOil = 505
+    var engineSpeed = 3000
+    var travelDirection = $("input[name='travelDirection']:checked").val()
+    data["travelData"]["carSpeed"] = carSpeed
+    data["travelData"]["oilExpend"] = oilExpend
+    data["travelData"]["travelLoop"] = travelLoop
+    data["travelData"]["votage"] = votage
+    data["travelData"]["surplusOil"] = surplusOil
+    data["travelData"]["engineSpeed"] = engineSpeed
+    data["travelData"]["travelDirection"] = travelDirection     //控制正向还是反向行驶
+    return data;
+}
+//控制登录数据区域的显示与隐藏
+function isShowLoginArea(e){
+    var value = $(e).val()
+    if(value == "0"){
+        $("#login_area").css("display","none")
+    }else{
+        $("#login_area").css("display","block")
+    }
+}
+
+///////////////////////////////// websocket 代码开始 /////////////////////////////////
+client = "0"
+ws = null;
+i = 1;
+showLog = true;   //设置日志是否显示
+(function(){
+     ws = null;
+     i = 1;
+})()
+
+function startWebSocket(){
+      if ("WebSocket" in window){
+          console.log("您的浏览器支持 WebSocket!");
+          var domain = document.domain;
+          ws = new WebSocket("ws://" + domain + ":5007");
+          ws.onopen = function(){
+                console.log("socket 已经连接上！")
+          };
+          ws.onmessage = function (evt) {
+                var received_msg = JSON.parse(evt.data)
+                var curTime = getCurTime();
+                if(received_msg["code"] == "0001"){           //0001代表连接消息通信
+                    client = received_msg["client"]
+                }
+                var text = $("#showFeedback").val()
+                if(text == ""){
+                    text = text + "[" + curTime + "] " + received_msg["msg"] + "\n";
+                }else{
+                    text = text + "[" + curTime + "] " + received_msg["msg"] + "\n";
+                    $('#showFeedback').scrollTop($('#showFeedback')[0].scrollHeight);
+                }
+                if(showLog){
+                    $("#showFeedback").val(text);
+                }
+          };
+          ws.onclose = function(){
+                alert("连接已关闭...");      // 关闭 websocket
+          };
+      }else{
+                alert("您的浏览器不支持 WebSocket!");      // 浏览器不支持 WebSocket
+      }
+}
+
+function sendMsg(){
+    var msg = $("#sendMsg").val()
+    var data = {};
+    data["code"] = "0002";                        //0002代表普通消息通信
+    data["client"] = client;
+    data["msg"] = msg;
+    data = JSON.stringify(data)
+    ws.send(data);
+}
+
+function endService(){
+    var msg = ""
+    var data = {};
+    data["code"] = "0003";                        //0002代表普通消息通信
+    data["client"] = client;
+    data["msg"] = msg;
+    data = JSON.stringify(data)
+    ws.send(data);
+}
+
+function myclose(){
+    var data = {};
+    data["code"] = "0000";                      //0000代表关闭服务器套接字程序
+    data["client"] = client;
+    data["msg"] = "";
+    data = JSON.stringify(data);
+    ws.send(data);
+    ws.close();
+    console.log("执行了socket服务的关闭操作...");
+}
+///////////////////////////////// websocket 代码结束 /////////////////////////////////
+function uploadFile(){
+    var form = new FormData(document.getElementById("form"));
+    var host = window.location.host;
+    $.ajax({
+        url:"http://" + host + "/messageTools/M_simulater_process/fileUplad",
+        type:"post",
+        data:form,
+        cache: false,
+        processData: false,
+        contentType: false,
+        success:function(data){
+            //提交成功
+            if (data.status == "200") {
+                $("#fileAttach").val("")
+                $("#selectGPSLine").prepend("<option value=" + data.file.filenameOri + ">" + data.file.filename + "</option>")
+                alert("sucess")
+            }else{
+                alert("fail")
+            }
+        },
+        error:function(data){
+            var result=document.getElementById("Result");
+            result.innerHTML="服务器错误";
+        }
+    });
+}
+
+//删除选中的轨迹
+function del_gpsLine(){
+    var res;
+    var gpsLineTxt = $("#selectGPSLine").find("option:selected").text();
+    var gpsLine = $("#selectGPSLine").val()
+	res=confirm("是否删除当前轨迹:" + gpsLineTxt + "?");
+
+	data = {};
+	data["fileName"] = gpsLine;
+	if(res == true){
+        var host = window.location.host;
+        $.ajax({
+            url:"http://" + host + "/messageTools/M_simulater_process/delGpsLine",
+            type:"post",
+            data:data,
+            dataType:"json",
+            success:function(data){
+                if(data.status == 200){
+                    alert(data.message);
+                    $("#selectGPSLine").find("option:selected").remove();
+                }else{
+                    alert(data.message);
+                }
+            }
+        });
+	}
+}
+
+function download_sample(){
+    var host = window.location.host;
+    window.location.href = "http://" + host + "/messageTools/M_simulater_process/sampleDowload"
+}
+
+//查询车机今日行驶数据
+$("#searchCarData").click(function(){
+    var carId = $("#phoneNum").val();
+    var data = {};
+    data["carId"] = carId;
+
+    var host = window.location.host;
+    $.ajax({
+        url:"http://" + host + "/messageTools/M_simulater_process/searchCarsimulaterData",
+        type:"post",
+        data:data,
+        dataType:"json",
+        success:function(data){
+            if(data.status == 200){
+                //window.location.reload()
+                msg = data.message
+                $("#searchCardataShow").val(msg)
+            }else{
+                $("#searchCardataShow").val(data.message)
+                alert(data.message);
+            }
+        }
+    });
+});
+
+//查询当前车辆GPS
+$("#searchCarGPS").click(function(){
+    var carId = $("#carId").val();
+    var sessionId = $("#curSession").val()
+    var data = {};
+    data["carId"] = carId;
+    data["sessionId"] = sessionId;
+
+    var host = window.location.host;
+    $.ajax({
+        url:"http://" + host + "/messageTools/M_simulater_process/searchCurCarGPS",
+        type:"post",
+        data:data,
+        dataType:"json",
+        success:function(data){
+            if(data.status == 200){
+                msg = data.message
+                $("#searchCardataShow").val(msg)
+            }else{
+                $("#searchCardataShow").val(data.message)
+                alert(data.message);
+            }
+        }
+    });
+});
+
+//设置隐藏或显示日志
+function isLogShow(e){
+    if($(e).is(':checked')){
+        showLog = false;
+    }else{
+        showLog = true;
+    }
+}
+//获取随机session id
+function getSessionId(){
+    var sessionNum = parseInt(Math.random() * 100000);
+    if(sessionNum < 100000){
+        sessionNum = sessionNum + 100000;
+    }
+    var sessionStr = ""
+    var strAll = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRETUVWXYZ";
+    var strAllLen = strAll.length;
+    for(var i = 0;i < 8;i++){
+        var wh = parseInt(Math.random() * 100);
+        if(wh >= strAllLen){
+            wh = wh - strAllLen
+        }
+        sessionStr = sessionStr + strAll.charAt(wh)
+    }
+    session = sessionStr + "_" + sessionNum
+    return session
+}
+//设置车机session Id
+(function setSessionId(){
+    var sessionId = getSessionId()
+    $("#curSession").val(sessionId)
+})()
+
+//获取所有的使用用户
+function getAllUsers(){
+    var data = {};
+    var host = window.location.host;
+    $.ajax({
+        url:"http://" + host + "/messageTools/M_simulater_process/getConnects",
+        type:"post",
+        data:data,
+        dataType:"json",
+        success:function(data){
+            if(data.status == 200){
+                //window.location.reload()
+                obj = data.result.replace(/'service'(.*?)>,/g,"").replace(/'/g,"\"")
+                obj = JSON.parse(obj)
+                console.log(obj)
+                $("#totalSessionNums").val(data.userCounts)
+            }else{
+                $("#searchCardataShow").val(data.message)
+                alert(data.message);
+            }
+        }
+    });
+}
+//获取所有的使用用户
+(function(){
+    var data = {};
+    var host = window.location.host;
+    $.ajax({
+        url:"http://" + host + "/messageTools/M_simulater_process/getConnects",
+        type:"post",
+        data:data,
+        dataType:"json",
+        success:function(data){
+            if(data.status == 200){
+                //window.location.reload()
+                obj = data.result
+                $("#totalSessionNums").val(data.userCounts)
+            }else{
+
+            }
+        }
+    });
+})()
+
+// -------------------------------- 事件控制js代码-------------------------------------------
+//设置隐藏或显示事件控制区域
+function isShowEventArea(e){
+    var value = $(e).val()
+    if(value == "0"){
+        $("#event_area").css("display","none")
+    }else{
+        $("#event_area").css("display","block")
+    }
+}
+//事件的选择与取消选择
+function eventSelect(e){
+    if($(e).is(':checked')){
+        if($(e).attr("id") == "insertAlarm_check"){
+            $("#insertAlarm_button").css("display","inline")
+        }else if($(e).attr("id") == "pullOutAlarm_check"){
+            $("#pullOutAlarm_button").css("display","inline")
+        }else if($(e).attr("id") == "lowVoltage_check"){
+            $("#lowVoltage_button").css("display","inline")
+        }else if($(e).attr("id") == "rapidlyAccelerateEvent_check"){
+            $("#rapidlyAccelerateEvent_button").css("display","inline")
+        }else if($(e).attr("id") == "sharpSlowdownEvent_check"){
+            $("#sharpSlowdownEvent_button").css("display","inline")
+        }else if($(e).attr("id") == "sharpTurnEvent_check"){
+            $("#sharpTurnEvent_button").css("display","inline")
+        }else if($(e).attr("id") == "collisionAlarmEvent_check"){
+            $("#collisionAlarmEvent_button").css("display","inline")
+        }else if($(e).attr("id") == "setUpDefencesEvent_check"){
+            $("#setUpDefencesEvent_button").css("display","inline")
+        }else if($(e).attr("id") == "setDownDefencesEvent_check"){
+            $("#setDownDefencesEvent_button").css("display","inline")
+        }else if($(e).attr("id") == "idlingSpeedOver_check"){
+            $("#idlingSpeedOver_button").css("display","inline")
+        }else if($(e).attr("id") == "UnIdlingSpeedOver_check"){
+            $("#UnIdlingSpeedOver_button").css("display","inline")
+        }else if($(e).attr("id") == "overspeed_check"){
+            $("#overspeed_button").css("display","inline")
+        }else if($(e).attr("id") == "fatigueDriving_check"){
+            $("#fatigueDriving_button").css("display","inline")
+        }else if($(e).attr("id") == "waterTemperatureAlarm_check"){
+            $("#waterTemperatureAlarm_button").css("display","inline")
+        }else if($(e).attr("id") == "highSpeedNeutralGear_check"){
+            $("#highSpeedNeutralGear_button").css("display","inline")
+        }else if($(e).attr("id") == "crashAlarm_check"){
+            $("#crashAlarm_button").css("display","inline")
+        }else if($(e).attr("id") == "rapidChangeLeftLines_check"){
+            $("#rapidChangeLeftLines_button").css("display","inline")
+        }else if($(e).attr("id") == "rapidChangeRightLines_check"){
+            $("#rapidChangeRightLines_button").css("display","inline")
+        }
+    }else{
+        if($(e).attr("id") == "insertAlarm_check"){
+            $("#insertAlarm_button").css("display","none")
+        }else if($(e).attr("id") == "pullOutAlarm_check"){
+            $("#pullOutAlarm_button").css("display","none")
+        }else if($(e).attr("id") == "lowVoltage_check"){
+            $("#lowVoltage_button").css("display","none")
+        }else if($(e).attr("id") == "rapidlyAccelerateEvent_check"){
+            $("#rapidlyAccelerateEvent_button").css("display","none")
+        }else if($(e).attr("id") == "sharpSlowdownEvent_check"){
+            $("#sharpSlowdownEvent_button").css("display","none")
+        }else if($(e).attr("id") == "sharpTurnEvent_check"){
+            $("#sharpTurnEvent_button").css("display","none")
+        }else if($(e).attr("id") == "collisionAlarmEvent_check"){
+            $("#collisionAlarmEvent_button").css("display","none")
+        }else if($(e).attr("id") == "setUpDefencesEvent_check"){
+            $("#setUpDefencesEvent_button").css("display","none")
+        }else if($(e).attr("id") == "setDownDefencesEvent_check"){
+            $("#setDownDefencesEvent_button").css("display","none")
+        }else if($(e).attr("id") == "idlingSpeedOver_check"){
+            $("#idlingSpeedOver_button").css("display","none")
+        }else if($(e).attr("id") == "UnIdlingSpeedOver_check"){
+            $("#UnIdlingSpeedOver_button").css("display","none")
+        }else if($(e).attr("id") == "overspeed_check"){
+            $("#overspeed_button").css("display","none")
+        }else if($(e).attr("id") == "fatigueDriving_check"){
+            $("#fatigueDriving_button").css("display","none")
+        }else if($(e).attr("id") == "waterTemperatureAlarm_check"){
+            $("#waterTemperatureAlarm_button").css("display","none")
+        }else if($(e).attr("id") == "highSpeedNeutralGear_check"){
+            $("#highSpeedNeutralGear_button").css("display","none")
+        }else if($(e).attr("id") == "crashAlarm_check"){
+            $("#crashAlarm_button").css("display","none")
+        }else if($(e).attr("id") == "rapidChangeLeftLines_check"){
+            $("#rapidChangeLeftLines_button").css("display","none")
+        }else if($(e).attr("id") == "rapidChangeRightLines_check"){
+            $("#rapidChangeRightLines_button").css("display","none")
+        }
+    }
+}
+
+//发送终端插入报警
+function sendInsertAlarmEvent(){
+    var data = getPageData();
+    var host = window.location.host;
+    var url = "http://" + host + "/messageTools/M_simulater_process/sendTerminalInsertAlarm";
+    sendHttpMsg(data,url);
+}
+//发送终端拔出报警
+function sendpullOutAlarmEvent(){
+    var data = getPageData();
+    var host = window.location.host;
+    var url = "http://" + host + "/messageTools/M_simulater_process/sendTerminalPullOutAlarm";
+    sendHttpMsg(data,url);
+}
+//发送低电压报警
+function sendLowVoltageEvent(){
+    var data = getPageData();
+    var host = window.location.host;
+    var url = "http://" + host + "/messageTools/M_simulater_process/sendLowVoltageAlarm";
+    sendHttpMsg(data,url);
+}
+//发送急加速事件消息
+function sendRapidlyAccelerateEvent(){
+    var data = getPageData();
+    var host = window.location.host;
+    var url = "http://" + host + "/messageTools/M_simulater_process/sendRapidAccelerateAlarm";
+    sendHttpMsg(data,url);
+}
+//发送急减速事件消息
+function sendSharpSlowdownEvent(){
+    var data = getPageData();
+    var host = window.location.host;
+    var url = "http://" + host + "/messageTools/M_simulater_process/sendSharpSlowdownAlarm";
+    sendHttpMsg(data,url);
+}
+//发送急左转弯事件消息
+function sendSharpTurnEvent(){
+    var data = getPageData();
+    var host = window.location.host;
+    var url = "http://" + host + "/messageTools/M_simulater_process/sendSharpTurnEvent";
+    sendHttpMsg(data,url);
+}
+
+//发送急右转弯事件消息
+function sendRightSharpTurnEvent(){
+    var data = getPageData();
+    var host = window.location.host;
+    var url = "http://" + host + "/messageTools/M_simulater_process/sendRightSharpTurnEvent";
+    sendHttpMsg(data,url);
+}
+//发送怠速过长事件消息
+function sendIdlingSpeedOverEvent(){
+    var data = getPageData();
+    var host = window.location.host;
+    var url = "http://" + host + "/messageTools/M_simulater_process/sendIdlingSpeedOverEvent";
+    sendHttpMsg(data,url);
+}
+//发送怠速过长（解除）事件消息
+function sendUnIdlingSpeedOverEvent(){
+    var data = getPageData();
+    var host = window.location.host;
+    var url = "http://" + host + "/messageTools/M_simulater_process/sendUnIdlingSpeedOverEvent";
+    sendHttpMsg(data,url);
+}
+//发送超速报警消息
+function sendOverspeedEvent(){
+    var data = getPageData();
+    var host = window.location.host;
+    var url = "http://" + host + "/messageTools/M_simulater_process/sendOverspeedEvent";
+    sendHttpMsg(data,url);
+}
+//发送疲劳驾驶消息
+function sendFatigueDrivingEvent(){
+    var data = getPageData();
+    var host = window.location.host;
+    var url = "http://" + host + "/messageTools/M_simulater_process/sendFatigueDrivingEvent";
+    sendHttpMsg(data,url);
+}
+//发送水温报警消息
+function sendWaterTemperatureAlarmEvent(){
+    var data = getPageData();
+    var host = window.location.host;
+    var url = "http://" + host + "/messageTools/M_simulater_process/sendWaterTemperatureEvent";
+    sendHttpMsg(data,url);
+}
+//发送高速空挡滑行消息
+function sendHighSpeedNeutralGearEvent(){
+    var data = getPageData();
+    var host = window.location.host;
+    var url = "http://" + host + "/messageTools/M_simulater_process/sendHighSpeedNeutralGearEvent";
+    sendHttpMsg(data,url);
+}
+//发送碰撞告警消息
+function sendCrashAlarmEvent(){
+    var data = getPageData();
+    var host = window.location.host;
+    var url = "http://" + host + "/messageTools/M_simulater_process/sendCrashAlarmEvent";
+    sendHttpMsg(data,url);
+}
+//发送急左变道告警消息
+function sendRapidChangeLeftLinesEvent(){
+    var data = getPageData();
+    var host = window.location.host;
+    var url = "http://" + host + "/messageTools/M_simulater_process/sendapidChangeLeftLines";
+    sendHttpMsg(data,url);
+}
+//发送急右变道告警消息
+function sendRapidChangeRightLinesEvent(){
+    var data = getPageData();
+    var host = window.location.host;
+    var url = "http://" + host + "/messageTools/M_simulater_process/sendapidChangeRightLines";
+    sendHttpMsg(data,url);
+}
+// -------------------------------- 实时控制js代码-------------------------------------------
+//设置隐藏或显示实时控制区域
+function isShowRealTimeCtrArea(e){
+    var value = $(e).val()
+    if(value == "0"){
+        $("#realTimeCtl_area").css("display","none")
+    }else{
+        $("#realTimeCtl_area").css("display","block")
+    }
+}
+//改变车速
+function changeSpeed(){
+    var data = {}
+    var carId = $("#phoneNum").val()
+    var speed = $("#change_speed").val()
+    data["carId"] = carId
+    data["speed"] = speed
+    //会话session数据
+    data["session"] = {}
+    var sessionId = $("#curSession").val()
+    data["session"]["sessionId"] = sessionId
+    $("#carSpeed").val(speed)
+    var host = window.location.host;
+    var url = "http://" + host + "/messageTools/M_simulater_process/changeCarSpeed";
+    sendHttpMsg(data,url);
+}
+//改变油耗
+function changeOilExpend(){
+    var data = {}
+    var carId = $("#phoneNum").val()
+    var oilExpend = $("#change_oilExpend").val()
+    data["carId"] = carId
+    data["oilExpend"] = oilExpend
+    //会话session数据
+    data["session"] = {}
+    var sessionId = $("#curSession").val()
+    data["session"]["sessionId"] = sessionId
+    $("#oilExpend").val(oilExpend)
+    var host = window.location.host;
+    var url = "http://" + host + "/messageTools/M_simulater_process/changeOilExpend";
+    sendHttpMsg(data,url);
+}
+//改变发送间隔
+function changeDurTime(){
+    var data = {}
+    var carId = $("#phoneNum").val()
+    var durTime = $("#change_durTime").val()
+    data["carId"] = carId
+    data["durTime"] = durTime
+    //会话session数据
+    data["session"] = {}
+    var sessionId = $("#curSession").val()
+    data["session"]["sessionId"] = sessionId
+    $("#durTime").val(durTime)
+    var host = window.location.host;
+    var url = "http://" + host + "/messageTools/M_simulater_process/changeDurTime";
+    sendHttpMsg(data,url);
+}
+//反向行驶
+function changeTravelDirection(){
+    var data = {}
+    var carId = $("#phoneNum").val()
+    data["carId"] = carId
+    //会话session数据
+    data["session"] = {}
+    var sessionId = $("#curSession").val()
+    data["session"]["sessionId"] = sessionId
+    var host = window.location.host;
+    var url = "http://" + host + "/messageTools/M_simulater_process/changeTravelDirection";
+    sendHttpMsg(data,url);
+}
+//固定于取消固定gps发送点
+function fixCurPosition(e){
+    var butTxt = $(e).text()
+    if(butTxt == "固定在当前位置"){
+        var data = {}
+        var carId = $("#carId").val()
+        data["carId"] = carId
+        data["fixPosition"] = 1
+        //会话session数据
+        data["session"] = {}
+        var sessionId = $("#curSession").val()
+        data["session"]["sessionId"] = sessionId
+        var host = window.location.host;
+        var url = "http://" + host + "/messageTools/M_simulater_process/fixCurPosition";
+        sendHttpMsg(data,url);
+        $(e).text("取消固定在当前位置")
+    }else{
+        var data = {}
+        var carId = $("#carId").val()
+        data["carId"] = carId
+        data["fixPosition"] = 0
+        //会话session数据
+        data["session"] = {}
+        var sessionId = $("#curSession").val()
+        data["session"]["sessionId"] = sessionId
+        var host = window.location.host;
+        var url = "http://" + host + "/messageTools/M_simulater_process/fixCurPosition";
+        sendHttpMsg(data,url);
+        $(e).text("固定在当前位置")
+    }
+}
+//改变电瓶电压
+function changeVoltage(){
+    var data = {}
+    var carId = $("#phoneNum").val()
+    var votage = parseFloat($("#change_voltage").val()) * 10
+    data["carId"] = carId
+    data["votage"] = votage
+    //会话session数据
+    data["session"] = {}
+    var sessionId = $("#curSession").val()
+    data["session"]["sessionId"] = sessionId
+    var host = window.location.host;
+    var url = "http://" + host + "/messageTools/M_simulater_process/changeVotage";
+    sendHttpMsg(data,url);
+}
+//改变发动机转速
+function changeEngineSpeed(){
+    var data = {}
+    var carId = $("#phoneNum").val()
+    var engineSpeed = $("#change_engineSpeed").val()
+    data["carId"] = carId
+    data["engineSpeed"] = engineSpeed
+    //会话session数据
+    data["session"] = {}
+    var sessionId = $("#curSession").val()
+    data["session"]["sessionId"] = sessionId
+    var host = window.location.host;
+    var url = "http://" + host + "/messageTools/M_simulater_process/changeEngineSpeed";
+    sendHttpMsg(data,url);
+}
+//改变剩余油量
+function changeSurplusOil(){
+    var data = {}
+    var carId = $("#phoneNum").val()
+    var surplusOil = parseFloat($("#change_surplusOil").val()) * 10
+    data["carId"] = carId
+    data["surplusOil"] = surplusOil
+    //会话session数据
+    data["session"] = {}
+    var sessionId = $("#curSession").val()
+    data["session"]["sessionId"] = sessionId
+    var host = window.location.host;
+    var url = "http://" + host + "/messageTools/M_simulater_process/changeSurplusOil";
+    sendHttpMsg(data,url);
+}
+// -------------------------------- 其他操作js代码-------------------------------------------
+function isShowOtherCtrArea(e){
+    var value = $(e).val()
+    if(value == "0"){
+        $("#otherCtl_area").css("display","none")
+    }else{
+        $("#otherCtl_area").css("display","block")
+    }
+}
+//发送故障码
+function sendTroubleCode(){
+    var data = {}
+    var carId = $("#phoneNum").val()
+    var troubleCodeNums = $("#troubleCodeNums").val();
+    var systemId = $("#systemId").val();
+    data["carId"] = carId;
+    data["troubleCodeNums"] = troubleCodeNums;
+    data["systemId"] = systemId;
+    data["session"] = {}
+    var sessionId = $("#curSession").val()
+    data["session"]["sessionId"] = sessionId
+    var host = window.location.host;
+    var url = "http://" + host + "/messageTools/M_simulater_process/porcessTroubleCodeMsg";
+    sendHttpMsg(data,url);
+}
+
+</script>
+{% endblock %}

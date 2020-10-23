@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}m300消息工具{% endblock %}
+
+{% block content %}
+    <style type="text/css">
+        .link-tab {
+            background-color:#e4e2dd;
+        }
+        .active_left_tab {
+            background-color:#428BCA;
+            color:white;
+        }
+
+        .table>thead>tr>th,.table>tbody>tr>td{
+           _background-color:red;
+        }
+    </style>
+    <!--   切换左边的tab  -->
+    <script type="text/javascript">
+        function swichLeftTab(e){
+            var id = $(e).attr("id")
+            if(id == "m300_msg_send"){
+                $(location).attr('href', "http://" + window.location.host + "/m300Tools/P_m300Protocol_view/P_heartBeat_m300_page");
+            }else if(id == "m300_simulater"){
+                $(location).attr('href', "http://" + window.location.host + "/m300Tools/M_m300Simulater_view/M_m300Simulater_page");
+            }
+        }
+    </script>
+    <!-- 左侧导航添加为可继承模块 -->
+    {% block leftNav %}
+    <div id="container1" class="col-sm-3 col-md-2 sidebar" style="margin-top:50px;width:15%;padding:0px;margin-right:15px;">
+          <ul class="nav nav-sidebar">
+              <li id="m300_msg_send" onclick="swichLeftTab(this)"><a {% if arg.path[1]=="P_m300Protocol_view" %} class="active_left_tab" {% endif %}><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> m300单消息发送<span class="sr-only"></span></a></li>
+          </ul>
+          <ul class="nav nav-sidebar" style="margin-top:20px;">
+              <li id="m300_simulater" onclick="swichLeftTab(this)"><a {% if arg.path[1]=="M_m300Simulater_view" %} class="active_left_tab" {% endif %}><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> m300模拟器</a></li>
+          </ul>
+    </div>
+    {% endblock %}
+
+    {% block content_01 %}
+    <!--  右边内容区域  -->
+    {% endblock %}
+{% endblock %}
+</div>

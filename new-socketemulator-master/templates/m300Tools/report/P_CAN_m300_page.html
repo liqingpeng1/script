@@ -1,0 +1,437 @@
+{% extends "m300Tools/report/P_heartBeat_m300_page.html" %}
+{% block title %}CAN_msg{% endblock %}
+
+{% block content_1 %}
+<div id="container3" style="width:100%;min-height:750px;float:left;_background:green;margin-top:10px;_border-top: 1px solid #eee;">
+    <div style="width:100%;_background:green;padding:5px;padding-top:0px;">
+        <h3 style="border-bottom: 1px solid #eee;">设置消息头：</h3>
+        <label>功能ID：</label><input id="FUNID" type="text" class="form-control" disabled="disabled" value="0003" style="width:80px;">
+        <label>消息序列号：</label><input id="waterCode" type="text" class="form-control" value="1" style="width:60px;">
+        <label>设备ID：</label><input id="DEV_ID" type="text" class="form-control" value="M202004070000" style="width:150px;">
+        <label>是否加密：</label><select style="width:100px;" id="encryptionType" class="form-control">
+            <option value="0">不加密</option>
+            <option value="1024">加密</option>
+        </select>
+    </div>
+    <H3 style="border-bottom: 1px solid #eee;">设置OBD消息内容：</H3>
+    <ul class="protocol_content" style="padding:0px;">
+        <li><label>时间：</label><input id="timeInfo" type="text" class="form-control" value=""></li>
+        <li><label>协议类别：</label>
+            <select id="prototolType" class="form-control" style="width:155px;">
+                <option value="11">CAN 11_500</option>
+                <option value="12">CAN 11_250</option>
+                <option value="13">CAN 29_500_EX</option>
+                <option value="14">CAN 29_250_EX</option>
+                <option value="20">KWP2000</option>
+                <option value="30">KWP2000M</option>
+                <option value="40">ISO9141</option>
+                <option value="50">VPW </option>
+                <option value="60">PWM</option>
+                <option value="70">PRIVATE</option>
+            </select>
+        </li>
+        <li style="width:350px;"><label>状态掩码：</label><input style="width:250px;" id="statusMask" type="text" class="form-control" value="ffffffffffffffffffff"></li>
+        <li style="width:100%;border-width:1px;border-style:solid;border-color:darkgray;border-radius:10px;padding:2px;"><h4>安全状态：</h4>
+            <div style="width:100%" id="safeStatus">
+                <span><label>ACC状态：</label><select style="width:65px;" id="accStatus" class="form-control">
+                <option value="0">否</option>
+                <option value="1">是</option></select></span>
+                <span><label style="word-break:break-all;font-size:10px;">设防撤防状态：</label><select style="width:65px;" id="defenseStatus" class="form-control">
+                <option value="0">否</option>
+                <option value="2">是</option></select></span>
+                <span><label>脚刹状态：</label><select style="width:65px;" id="brakeStatus" class="form-control">
+                <option value="0">否</option>
+                <option value="4">是</option></select></span>
+                <span><label>是否踩油门：</label><select style="width:65px;" id="acceleratorStatus" class="form-control">
+                <option value="0">否</option>
+                <option value="8">是</option></select></span>
+                <span><label>手刹状态：</label><select style="width:65px;" id="handBrakeStatus" class="form-control">
+                <option value="0">否</option>
+                <option value="16">是</option></select></span>
+                <span><label style="word-break:break-all;font-size:10px;">主驾驶安全带：</label><select style="width:65px;" id="mainSafetyBelt" class="form-control">
+                <option value="0">否</option>
+                <option value="32">是</option></select></span>
+                <span><label style="word-break:break-all;font-size:10px;">副驾驶安全带：</label><select style="width:65px;" id="subSafetyBelt" class="form-control">
+                <option value="0">否</option>
+                <option value="64">是</option></select></span>
+            </div>
+        <li style="width:100%;border-width:1px;border-style:solid;border-color:darkgray;border-radius:10px;padding:2px;"><h4>门状态：</h4>
+            <div style="width:100%" id="doorStatus">
+                <span><label>左前门：</label><select style="width:65px;" id="lfDoorStatus" class="form-control">
+                <option value="0">否</option>
+                <option value="1">是</option></select></span>
+                <span><label>右前门：</label><select style="width:65px;" id="rfDoorStatus" class="form-control">
+                <option value="0">否</option>
+                <option value="2">是</option></select></span>
+                <span><label>左后门：</label><select style="width:65px;" id="lbDoorStatus" class="form-control">
+                <option value="0">否</option>
+                <option value="4">是</option></select></span>
+                <span><label>右后门：</label><select style="width:65px;" id="rbDoorStatus" class="form-control">
+                <option value="0">否</option>
+                <option value="8">是</option></select></span>
+                <span><label>后备箱：</label><select style="width:65px;" id="trunk" class="form-control">
+                <option value="0">否</option>
+                <option value="16">是</option></select></span>
+                <span><label>发动机盖：</label><select style="width:65px;" id="enginCover" class="form-control">
+                <option value="0">否</option>
+                <option value="32">是</option></select></span>
+            </div>
+        </li>
+        <li style="width:100%;border-width:1px;border-style:solid;border-color:darkgray;border-radius:10px;padding:2px;"><h4>锁状态：</h4>
+            <div style="width:100%" id="lockStatus">
+                <span><label style="word-break:break-all;font-size:10px;">左前门锁状态：</label><select style="width:65px;" id="lfDoorLockStatus" class="form-control">
+                <option value="0">否</option>
+                <option value="1">是</option></select></span>
+                <span><label style="word-break:break-all;font-size:10px;">右前门锁状态：</label><select style="width:65px;" id="rfDoorLockStatus" class="form-control">
+                <option value="0">否</option>
+                <option value="2">是</option></select></span>
+                <span><label style="word-break:break-all;font-size:10px;">左后门锁状态：</label><select style="width:65px;" id="lbDoorLockStatus" class="form-control">
+                <option value="0">否</option>
+                <option value="4">是</option></select></span>
+                <span><label style="word-break:break-all;font-size:10px;">右后门锁状态：</label><select style="width:65px;" id="rbDoorLockStatus" class="form-control">
+                <option value="0">否</option>
+                <option value="8">是</option></select></span>
+            </div>
+        </li>
+        <li style="width:100%;border-width:1px;border-style:solid;border-color:darkgray;border-radius:10px;padding:2px;"><h4>窗户状态：</h4>
+            <div style="width:100%" id="windowStatus">
+                <span><label style="width:80px;">左前窗：</label><select style="width:65px;" id="lfWindowStatus" class="form-control">
+                <option value="0">否</option>
+                <option value="1">是</option></select></span>
+                <span><label style="width:80px;">右前窗：</label><select style="width:65px;" id="rfWindowStatus" class="form-control">
+                <option value="0">否</option>
+                <option value="2">是</option></select></span>
+                <span><label style="width:80px;">左后窗：</label><select style="width:65px;" id="lbWindowStatus" class="form-control">
+                <option value="0">否</option>
+                <option value="4">是</option></select></span>
+                <span><label style="width:80px;">右后窗：</label><select style="width:65px;" id="rbWindowStatus" class="form-control">
+                <option value="0">否</option>
+                <option value="8">是</option></select></span>
+                <span><label style="width:80px;">天窗开关：</label><select style="width:65px;" id="topWindowStatus" class="form-control">
+                <option value="0">否</option>
+                <option value="16">是</option></select></span>
+                <span><label style="width:80px;">左转向灯：</label><select style="width:65px;" id="lTurnLight" class="form-control">
+                <option value="0">否</option>
+                <option value="32">是</option></select></span>
+                <span><label style="width:80px;">右转向灯：</label><select style="width:65px;" id="rTurnLight" class="form-control">
+                <option value="0">否</option>
+                <option value="64">是</option></select></span>
+                <span><label style="width:80px;">阅读灯：</label><select style="width:65px;" id="readLight" class="form-control">
+                <option value="0">否</option>
+                <option value="128">是</option></select></span>
+            </div>
+        </li>
+        <li style="width:100%;border-width:1px;border-style:solid;border-color:darkgray;border-radius:10px;padding:2px;"><h4>灯状态：</h4>
+            <div style="width:100%" id="lightStatus">
+                <span><label style="width:80px;">近光灯：</label><select style="width:65px;" id="lowHeadlight" class="form-control">
+                <option value="0">否</option>
+                <option value="1">是</option></select></span>
+                <span><label style="width:80px;">远光灯：</label><select style="width:65px;" id="highHeadlight" class="form-control">
+                <option value="0">否</option>
+                <option value="2">是</option></select></span>
+                <span><label style="width:80px;">前雾灯：</label><select style="width:65px;" id="ffogLight" class="form-control">
+                <option value="0">否</option>
+                <option value="4">是</option></select></span>
+                <span><label style="width:80px;">后雾灯：</label><select style="width:65px;" id="bfogLight" class="form-control">
+                <option value="0">否</option>
+                <option value="8">是</option></select></span>
+                <span><label style="width:80px;">危险灯：</label><select style="width:65px;" id="dangerLight" class="form-control">
+                <option value="0">否</option>
+                <option value="16">是</option></select></span>
+                <span><label style="width:80px;">倒车灯：</label><select style="width:65px;" id="backCarLight" class="form-control">
+                <option value="0">否</option>
+                <option value="32">是</option></select></span>
+                <span><label style="width:80px;">auto灯：</label><select style="width:65px;" id="autoLight" class="form-control">
+                <option value="0">否</option>
+                <option value="64">是</option></select></span>
+                <span><label style="width:80px;">示宽灯：</label><select style="width:65px;" id="widthLight" class="form-control">
+                <option value="0">否</option>
+                <option value="128">是</option></select></span>
+            </div>
+        </li>
+        <li style="width:100%;border-width:1px;border-style:solid;border-color:darkgray;border-radius:10px;padding:2px;"><h4>开关状态A：</h4>
+            <div style="width:100%" id="swichStatusA">
+                <span><label>机油报警：</label><select style="width:65px;" id="machineOilWarning" class="form-control">
+                <option value="0">否</option>
+                <option value="1">是</option></select></span>
+                <span><label>燃油报警：</label><select style="width:65px;" id="oilWarning" class="form-control">
+                <option value="0">否</option>
+                <option value="2">是</option></select></span>
+                <span><label>雨刷报警：</label><select style="width:65px;" id="wiperWarning" class="form-control">
+                <option value="0">否</option>
+                <option value="4">是</option></select></span>
+                <span><label>喇叭报警：</label><select style="width:65px;" id="loudsspeakerWaring" class="form-control">
+                <option value="0">否</option>
+                <option value="8">是</option></select></span>
+                <span><label>空调：</label><select style="width:65px;" id="airConditionerWaring" class="form-control">
+                <option value="0">否</option>
+                <option value="16">是</option></select></span>
+                <span><label>后视镜状态：</label><select style="width:65px;" id="backMirrorWaring" class="form-control">
+                <option value="0">否</option>
+                <option value="32">是</option></select></span>
+            </div>
+        </li>
+        <li style="width:100%;border-width:1px;border-style:solid;border-color:darkgray;border-radius:10px;padding:2px;"><h4>开关状态B：</h4>
+            <div style="width:100%" id="swichStatusB">
+                <span><label>档位：</label><select style="width:100px;" id="gears" class="form-control">
+                    <option value="0">P档</option>
+                    <option value="16">R档</option>
+                    <option value="32">N档</option>
+                    <option value="48">D档</option>
+                    <option value="64">1档</option>
+                    <option value="80">2档</option>
+                    <option value="96">3档</option>
+                    <option value="112">4档</option>
+                    <option value="128">5档</option>
+                    <option value="144">6档</option>
+                    <option value="160">M档</option>
+                    <option value="176">S档</option></select></span>
+            </div>
+        </li>
+        <li style="width:100%;border-width:1px;border-style:solid;border-color:darkgray;border-radius:10px;padding:2px;"><h4>数据字节：</h4>
+            <div style="width:100%" id="dataBit">
+                <span><label>V1N1：</label><select style="width:90px;" id="V1N1" class="form-control">
+                <option value="1">存在</option>
+                <option value="0">不存在</option></select></span>
+                <span><label>总线总里程：</label><select style="width:90px;" id="busMileage" class="form-control">
+                <option value="8">存在</option>
+                <option value="0">不存在</option></select></span>
+                <span><label>仪表数据：</label><select style="width:90px;" id="dashboardData" class="form-control">
+                <option value="16">存在</option>
+                <option value="0">不存在</option></select></span>
+                <span><label>发动机转速：</label><select style="width:90px;" id="engineSpeed_dataBit" class="form-control">
+                <option value="32">存在</option>
+                <option value="0">不存在</option></select></span>
+                <span><label>车辆速度：</label><select style="width:90px;" id="carSpeed" class="form-control">
+                <option value="64">存在</option>
+                <option value="0">不存在</option></select></span>
+                <span><label>剩余油量：</label><select style="width:90px;" id="surplueOil" class="form-control">
+                <option value="128">存在</option>
+                <option value="0">不存在</option></select></span>
+            </div>
+        </li>
+
+        <li><label>数据流掩码：</label><input id="dataFlowMask" type="text" class="form-control" value="fffffffd"></li>
+        <li><label>电瓶电压：</label><input id="votage" type="text" class="form-control" value="360"></li>
+        <li><label>总里程类别：</label>
+            <select id="totalMilleageType" class="form-control" style="width:155px;">
+                <option value="1">汽车里程</option>
+                <option value="2" selected="selected">OBD里程</option>
+                <option value="3">GPS里程</option>
+            </select>
+        </li>
+        <li><label style="word-break:break-all;font-size:10px;">行驶里程,上传值单位为m：</label><input id="totalMilleage" type="text" class="form-control" value="3000"></li>
+        <li><label style="word-break:break-all;font-size:10px;">总的燃油消耗量(毫升ml)：</label><input id="totalOil" type="text" class="form-control" value="300"></li>
+        <li><label>故障灯状态：</label><select style="width:155px;" id="troubleLightStatus" class="form-control">
+                <option value="0">关</option>
+                <option value="1">开</option></select></li>
+        <li><label>故障码个数：</label><input id="troubleCodeNum" type="text" class="form-control" value="2"></li>
+        <li><label>发动机转速：</label><input id="engineSpeed" type="text" class="form-control" value="3000"></li>
+        <li><label>车辆速度：</label><input id="speed" type="text" class="form-control" value="60"></li>
+        <li><label>进气口温度：</label><input id="airInletTemperature" type="text" class="form-control" value="88"></li>
+        <li><label>冷却液温度：</label><input id="coolingLiquidTemperature" type="text" class="form-control" value="76"></li>
+        <li><label style="word-break:break-all;font-size:10px;">车辆环境温度：</label><input id="envTemperature" type="text" class="form-control" value="65"></li>
+        <li><label>进气歧管压力：</label><input id="intakeManifoldPressure" type="text" class="form-control" value="20"></li>
+        <li><label>燃油压力：</label><input id="oilPressure" type="text" class="form-control" value="276"></li>
+        <li><label>大气压力：</label><input id="atmosphericPressure" type="text" class="form-control" value="28"></li>
+        <li><label>空气流量：</label><input id="airFlow" type="text" class="form-control" value="550"></li>
+        <li><label style="word-break:break-all;font-size:10px;">气门位置传感器：</label><input id="valveLocation" type="text" class="form-control" value="51"></li>
+        <li><label style="word-break:break-all;font-size:10px;">油门踏板位置：</label><input id="acceleratorLocation" type="text" class="form-control" value="32"></li>
+        <li><label style="word-break:break-all;font-size:10px;">发动机运行时间：</label><input id="engineRunTime" type="text" class="form-control" value="370"></li>
+        <li><label style="word-break:break-all;font-size:10px;">故障行驶里程：</label><input id="troubleMileage" type="text" class="form-control" value="4508"></li>
+        <li><label>剩余油量：</label><input id="surplusOil" type="text" class="form-control" value="801"></li>
+        <li><label>发动机负荷：</label><input id="engineLoad" type="text" class="form-control" value="52"></li>
+        <li><label style="word-break:break-all;font-size:10px;">长期燃油修正：</label><input id="fuelTrim" type="text" class="form-control" value="89"></li>
+        <li><label>点火提前角：</label><input id="fireAngle" type="text" class="form-control" value="154"></li>
+        <li><label>仪表总里程：</label><input id="dashboardTotailMilleage" type="text" class="form-control" value="3000"></li>
+        <li><label style="word-break:break-all;font-size:10px;">车辆总运行时间：</label><input id="carTotalRunTime" type="text" class="form-control" value="360"></li>
+        <li><label style="word-break:break-all;font-size:10px;">驾驶循环标签：</label><input id="tripMark" type="text" class="form-control" value="0000"></li>
+    </ul>
+    <H3 style="border-bottom: 1px solid #eee;">控制：</H3>
+    <div style="width:100%;padding:5px;margin-top:10px;">
+        <button type="button" class="btn btn-primary" id="sendMsgBtn">发送消息</button>
+    </div>
+    <H3 style="border-bottom: 1px solid #eee;">返回信息：</H3>
+    <div style="width:100%;padding:5px;margin-top:10px;">
+        <textarea id="showFeedback" style="width:100%;padding:5px;" rows="8"></textarea>
+    </div>
+</div>
+
+
+
+<script>
+//发送CAN数据
+$("#sendMsgBtn").click(function(){
+    var FUNID = $("#FUNID").val();
+    var waterCode = $("#waterCode").val();
+    var DEV_ID = $("#DEV_ID").val();
+    var encryptionType = $("#encryptionType").val();
+
+    var timeInfo = $("#timeInfo").val();
+    var prototolType = $("#prototolType").val();
+    var statusMask = $("#statusMask").val();
+    var accStatus = parseInt($("#accStatus").val());
+    var defenseStatus = parseInt($("#defenseStatus").val());
+    var brakeStatus = parseInt($("#brakeStatus").val());
+    var acceleratorStatus = parseInt($("#acceleratorStatus").val());
+    var handBrakeStatus = parseInt($("#handBrakeStatus").val());
+    var mainSafetyBelt = parseInt($("#mainSafetyBelt").val());
+    var subSafetyBelt = parseInt($("#subSafetyBelt").val());
+
+    var safeStatus = accStatus + defenseStatus + brakeStatus + acceleratorStatus + handBrakeStatus + mainSafetyBelt + subSafetyBelt
+    var lfDoorStatus = parseInt($("#lfDoorStatus").val());
+    var rfDoorStatus = parseInt($("#rfDoorStatus").val());
+    var lbDoorStatus = parseInt($("#lbDoorStatus").val());
+    var rbDoorStatus = parseInt($("#rbDoorStatus").val());
+    var trunk = parseInt($("#trunk").val());
+    var enginCover = parseInt($("#enginCover").val());
+    var doorStatus = lfDoorStatus + rfDoorStatus + lbDoorStatus + rbDoorStatus + trunk + enginCover
+
+    var lfDoorLockStatus = parseInt($("#lfDoorLockStatus").val());
+    var rfDoorLockStatus = parseInt($("#rfDoorLockStatus").val());
+    var lbDoorLockStatus = parseInt($("#lbDoorLockStatus").val());
+    var rbDoorLockStatus = parseInt($("#rbDoorLockStatus").val());
+    var lockStatus = lfDoorLockStatus + rfDoorLockStatus + lbDoorLockStatus + rbDoorLockStatus
+
+    var lfWindowStatus = parseInt($("#lfWindowStatus").val());
+    var rfWindowStatus = parseInt($("#rfWindowStatus").val());
+    var lbWindowStatus = parseInt($("#lbWindowStatus").val());
+    var rbWindowStatus = parseInt($("#rbWindowStatus").val());
+    var topWindowStatus = parseInt($("#topWindowStatus").val());
+    var lTurnLight = parseInt($("#lTurnLight").val());
+    var rTurnLight = parseInt($("#rTurnLight").val());
+    var readLight = parseInt($("#readLight").val());
+    var windowStatus = lfWindowStatus + rfWindowStatus + lbWindowStatus + rbWindowStatus + topWindowStatus + lTurnLight + rTurnLight + readLight
+
+    var lowHeadlight = parseInt($("#lowHeadlight").val());
+    var highHeadlight = parseInt($("#highHeadlight").val());
+    var ffogLight = parseInt($("#ffogLight").val());
+    var bfogLight = parseInt($("#bfogLight").val());
+    var dangerLight = parseInt($("#dangerLight").val());
+    var backCarLight = parseInt($("#backCarLight").val());
+    var autoLight = parseInt($("#autoLight").val());
+    var widthLight = parseInt($("#widthLight").val());
+    var lightStatus = lowHeadlight + highHeadlight + ffogLight + bfogLight + dangerLight + backCarLight + autoLight + widthLight
+
+    var machineOilWarning = parseInt($("#machineOilWarning").val());
+    var oilWarning = parseInt($("#oilWarning").val());
+    var wiperWarning = parseInt($("#wiperWarning").val());
+    var loudsspeakerWaring = parseInt($("#loudsspeakerWaring").val());
+    var airConditionerWaring = parseInt($("#airConditionerWaring").val());
+    var backMirrorWaring = parseInt($("#backMirrorWaring").val());
+    var swichStatusA = machineOilWarning + oilWarning + wiperWarning + loudsspeakerWaring + airConditionerWaring + backMirrorWaring
+
+    var swichStatusB = parseInt($("#gears").val());
+
+    var V1N1 = parseInt($("#V1N1").val());
+    var busMileage = parseInt($("#busMileage").val());
+    var dashboardData = parseInt($("#dashboardData").val());
+    var engineSpeed = parseInt($("#engineSpeed_dataBit").val());
+    var carSpeed = parseInt($("#carSpeed").val());
+    var surplueOil = parseInt($("#surplueOil").val());
+    var dataBit = V1N1 + busMileage + dashboardData + engineSpeed + carSpeed + surplueOil
+
+    var dataFlowMask = $("#dataFlowMask").val();
+    var votage = $("#votage").val();
+    var totalMilleageType = $("#totalMilleageType").val();
+    var totalMilleage = $("#totalMilleage").val();
+    var totalOil = $("#totalOil").val();
+    var troubleLightStatus = $("#troubleLightStatus").val();
+    var troubleCodeNum = $("#troubleCodeNum").val();
+    var engineSpeed = $("#engineSpeed").val();
+    var speed = $("#speed").val();
+    var airInletTemperature = $("#airInletTemperature").val();
+    var coolingLiquidTemperature = $("#coolingLiquidTemperature").val();
+    var envTemperature = $("#envTemperature").val();
+    var intakeManifoldPressure = $("#intakeManifoldPressure").val();
+    var oilPressure = $("#oilPressure").val();
+    var atmosphericPressure = $("#atmosphericPressure").val();
+    var airFlow = $("#airFlow").val();
+    var valveLocation = $("#valveLocation").val();
+    var acceleratorLocation = $("#acceleratorLocation").val();
+    var engineRunTime = $("#engineRunTime").val();
+    var troubleMileage = $("#troubleMileage").val();
+    var surplusOil = $("#surplusOil").val();
+    var engineLoad = $("#engineLoad").val();
+    var fuelTrim = $("#fuelTrim").val();
+    var fireAngle = $("#fireAngle").val();
+    var dashboardTotailMilleage = $("#dashboardTotailMilleage").val();
+    var carTotalRunTime = $("#carTotalRunTime").val();
+    var tripMark = $("#tripMark").val();
+
+
+    var data = {};
+    data["FUNID"] = FUNID;
+    data["waterCode"] = waterCode;
+    data["DEV_ID"] = DEV_ID;
+    data["encryptionType"] = encryptionType;
+
+    data["timeInfo"] = timeInfo;
+    data["prototolType"] = prototolType;
+    data["statusMask"] = statusMask;
+    data["safeStatus"] = safeStatus;
+    data["doorStatus"] = doorStatus;
+    data["lockStatus"] = lockStatus;
+    data["windowStatus"] = windowStatus;
+    data["lightStatus"] = lightStatus;
+    data["swichStatusA"] = swichStatusA;
+    data["swichStatusB"] = swichStatusB;
+    data["dataBit"] = dataBit;
+    data["dataFlowMask"] = dataFlowMask;
+    data["votage"] = votage;
+    data["totalMilleageType"] = totalMilleageType;
+    data["totalMilleage"] = totalMilleage;
+    data["totalOil"] = totalOil;
+    data["troubleLightStatus"] = troubleLightStatus;
+    data["troubleCodeNum"] = troubleCodeNum;
+    data["engineSpeed"] = engineSpeed;
+    data["speed"] = speed;
+    data["airInletTemperature"] = airInletTemperature;
+    data["coolingLiquidTemperature"] = coolingLiquidTemperature;
+    data["envTemperature"] = envTemperature;
+    data["intakeManifoldPressure"] = intakeManifoldPressure;
+    data["oilPressure"] = oilPressure;
+    data["atmosphericPressure"] = atmosphericPressure;
+    data["airFlow"] = airFlow;
+    data["valveLocation"] = valveLocation;
+    data["acceleratorLocation"] = acceleratorLocation;
+    data["engineRunTime"] = engineRunTime;
+    data["troubleMileage"] = troubleMileage;
+    data["surplusOil"] = surplusOil;
+    data["engineLoad"] = engineLoad;
+    data["fuelTrim"] = fuelTrim;
+    data["fireAngle"] = fireAngle;
+    data["dashboardTotailMilleage"] = dashboardTotailMilleage;
+    data["carTotalRunTime"] = carTotalRunTime;
+    data["tripMark"] = tripMark;
+
+    var host = window.location.host;
+    $("#showFeedback").val("")
+    $.ajax({
+        url:"http://" + host + "/m300Tools/P_m300Protocol_process/porcessCANMsg",
+        type:"post",
+        data:data,
+        dataType:"json",
+        success:function(data){
+            if(data.status == 200){
+                //window.location.reload()
+                var theShow = "原始数据：　"　+ data.msgSend + "\n";
+                theShow = theShow + "收到数据：　" + data.result + "\n";
+                theShow = theShow + "收到数据16进制：　" + data.rev + "\n";
+                theShow = theShow + "解析数据：　"　+ JSON.stringify(data.orgRev) + "\n";
+                $("#showFeedback").val(theShow)
+            }else{
+                $("#showFeedback").val(data.message)
+                alert(data.message);
+            }
+        }
+    });
+});
+
+//设置当前时间到UTC时间输入框
+(function(){
+    var curTime = getCurTime();
+    $("#timeInfo").val(curTime);
+})();
+</script>
+{% endblock %}

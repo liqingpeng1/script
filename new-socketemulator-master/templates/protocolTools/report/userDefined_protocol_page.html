@@ -1,0 +1,59 @@
+{% extends "protocolTools/report/GPS_protocol_page.html" %}
+{% block title %}heartBeat_protocol{% endblock %}
+{% block content_1 %}
+<div id="container3" style="width:100%;min-height:750px;float:left;_background:green;margin-top:10px;_border-top: 1px solid #eee;">
+    <div>
+        <span>
+            <label>超时时间(秒)：</label><input id="timeout" type="text" class="form-control" style="width:100px;" value="1">
+        </span>
+    </div>
+    <H3 style="border-bottom: 1px solid #eee;">输入消息内容：</H3>
+    <div style="width:100%;padding:5px;margin-top:10px;">
+        <textarea id="msg" style="width:100%;padding:5px;" rows="4"></textarea>
+    </div>
+    <H3 style="border-bottom: 1px solid #eee;">控制：</H3>
+    <div style="width:100%;padding:5px;margin-top:10px;">
+        <button type="button" class="btn btn-primary" id="sendMsgBtn">发送消息</button>
+    </div>
+    <H3 style="border-bottom: 1px solid #eee;">返回结果：</H3>
+    <div style="width:100%;padding:5px;margin-top:10px;">
+        <textarea id="showFeedback" style="width:100%;padding:5px;" rows="6"></textarea>
+    </div>
+</div>
+
+
+<script>
+//发送心跳数据包
+$("#sendMsgBtn").click(function(){
+    var msg = $("#msg").val();
+    var timeout = $("#timeout").val();
+
+    var data = {};
+    data["msg"] = msg;
+    data["timeout"] = timeout
+
+    var host = window.location.host;
+    $("#showFeedback").val("")
+    $.ajax({
+        url:"http://" + host + "/protocolTools/protocolReport_process/porcessUserdefinedMsg",
+        type:"post",
+        data:data,
+        dataType:"json",
+        success:function(data){
+            if(data.status == 200){
+                //window.location.reload()
+                msg = "发送消息：" + data.msgSend + "\n"
+                msg = msg + "收到消息：" + data.result + "\n"
+                msg = msg + "收到消息16进制：" + data.rev + "\n"
+                msg = msg + "收到消息解析结果：" + JSON.stringify(data.orgRev) + "\n"
+                $("#showFeedback").val(msg)
+            }else{
+                $("#showFeedback").val(data.message)
+                alert(data.message);
+            }
+        }
+    });
+});
+
+</script>
+{% endblock %}

@@ -1,0 +1,145 @@
+{% extends "messageTools/message/heartBeat_msg_page.html" %}
+{% block title %}terminalVersionInfoUpload_msg{% endblock %}
+{% block content_1 %}
+<div id="container3" style="width:100%;min-height:750px;float:left;_background:green;margin-top:10px;_border-top: 1px solid #eee;">
+    <div style="width:100%;_background:green;padding:5px;padding-top:0px;">
+        <h3 style="border-bottom: 1px solid #eee;">设置消息头：</h3>
+        <label>消息ID：</label><input id="msgID" type="text" class="form-control" disabled="disabled" value="0205" style="width:80px;">
+        <label>车机号：</label><input id="phoneNum" type="text" class="form-control" value="13146201119" style="width:150px;">
+        <label>消息流水号：</label><input id="msgWaterCode" type="text" class="form-control" value="1" style="width:60px;">
+        <label>是否加密：</label><select style="width:100px;" id="encryptionType" class="form-control">
+            <option value="0">不加密</option>
+            <option value="1024">加密</option>
+        </select>
+        <label>有无分包：</label><select style="width:80px;" id="subPkg" class="form-control" onchange="hasSubPkg()">
+            <option value="0">无</option>
+            <option value="8192">有</option>
+        </select>
+        <label id="subPkg_label" style="color:grey;">分包个数：</label><input disabled="disabled" id="pkgCounts" type="text" class="form-control" value="0" style="width:60px;">
+    </div>
+    <H3 style="border-bottom: 1px solid #eee;">设置终端注册消息内容：</H3>
+    <ul class="protocol_content" style="padding:0px;">
+        <li><label style="word-break:break-all;font-size:12px;">软件版本号：</label><input id="softwareVersion" type="text" class="form-control" value="L200AB01020002"></li>
+        <li><label style="word-break:break-all;font-size:12px;">终端版本日期：</label><input id="softwareVersionDate" type="text" class="form-control" value="2020-02-10"></li>
+        <li><label>cpuId：</label><input id="CPUId" type="text" class="form-control" value="CPU-12345678"></li>
+        <li><label>GMS型号：</label><input id="GMSType" type="text" class="form-control" value="GMS-TYPE-123456"></li>
+        <li><label style="word-break:break-all;font-size:12px;">GSM IMEI号：</label><input id="GMS_IMEI" type="text" class="form-control" value="GMS_IMEI_123456"></li>
+        <li><label style="word-break:break-all;font-size:12px;">终端 SIM卡IMSI 号：</label><input id="SIM_IMSI" type="text" class="form-control" value="SIM_13146201119"></li>
+        <li><label style="word-break:break-all;font-size:12px;">终端 SIM卡ICCID号：</label><input id="SIM_ICCID" type="text" class="form-control" value="SIM_ICCID13146201119"></li>
+        <li><label style="word-break:break-all;font-size:12px;">车系车型ID：</label><input id="carType" type="text" class="form-control" value="22"></li>
+        <li><label style="word-break:break-all;font-size:12px;">汽车VIN码：</label><input id="VIN" type="text" class="form-control" value="VIN_1234567891234"></li>
+        <li><label style="word-break:break-all;font-size:12px;">装上终端后车辆累计总里程：</label><input id="totalMileage" type="text" class="form-control" value="389000"></li>
+        <li><label style="word-break:break-all;font-size:12px;">装上终端后车辆累计总耗油：</label><input id="totalOilExpend" type="text" class="form-control" value="420000"></li>
+        <li><label style="word-break:break-all;font-size:12px;">排量：</label><input id="displacement" type="text" class="form-control" value="1500"></li>
+        <li><label style="word-break:break-all;font-size:12px;">油密度：</label><input id="oilDensity" type="text" class="form-control" value="92"></li>
+        <li><label style="word-break:break-all;font-size:10px;">OBD协议编号：</label><input id="OBDSerial" type="text" class="form-control" value="257"></li>
+        <li><label style="word-break:break-all;font-size:10px;">油耗计算方式：</label><select id="oilCalculateType" class="form-control">
+            <option value="01">J1939 油耗算法 1</option>
+            <option value="02">J1939 油耗算法 2</option>
+            <option value="03">J1939 油耗算法 3</option>
+            <option value="04">J1939 油耗算法 4</option>
+            <option value="05">J1939 油耗算法 5</option>
+            <option value="0B">OBD 油耗算法 1</option>
+            <option value="0C">OBD 油耗算法 2</option>
+        </select></li>
+    </ul>
+    <H3 style="border-bottom: 1px solid #eee;">控制：</H3>
+    <div style="width:100%;padding:5px;margin-top:10px;">
+        <button type="button" class="btn btn-primary" id="sendMsgBtn">发送消息</button>
+    </div>
+    <H3 style="border-bottom: 1px solid #eee;">返回信息：</H3>
+    <div style="width:100%;padding:5px;margin-top:10px;">
+        <textarea id="showFeedback" style="width:100%;padding:5px;" rows="8"></textarea>
+    </div>
+</div>
+
+<script>
+//发送GPS数据
+$("#sendMsgBtn").click(function(){
+    var msgID = $("#msgID").val();
+    var phoneNum = $("#phoneNum").val();
+    var msgWaterCode = $("#msgWaterCode").val();
+    var encryptionType = $("#encryptionType").val();
+    var subPkg = $("#subPkg").val();
+    var pkgCounts = ""
+    if (subPkg != "8192"){
+        pkgCounts = "0"
+    }else{
+        pkgCounts = $("#pkgCounts").val();
+    }
+
+    var softwareVersion = $("#softwareVersion").val();
+    var softwareVersionDate = $("#softwareVersionDate").val();
+    var CPUId = $("#CPUId").val();
+    var GMSType = $("#GMSType").val();
+    var GMS_IMEI = $("#GMS_IMEI").val();
+    var SIM_IMSI = $("#SIM_IMSI").val();
+    var SIM_ICCID = $("#SIM_ICCID").val();
+    var carType = $("#carType").val();
+    var VIN = $("#VIN").val();
+    var totalMileage = $("#totalMileage").val();
+    var totalOilExpend = $("#totalOilExpend").val();
+    var displacement = $("#displacement").val();
+    var oilDensity = $("#oilDensity").val();
+    var OBDSerial = $("#OBDSerial").val();
+    var oilCalculateType = $("#oilCalculateType").val();
+
+    var data = {};
+    data["msgID"] = msgID;
+    data["phoneNum"] = phoneNum;
+    data["msgWaterCode"] = msgWaterCode;
+    data["encryptionType"] = encryptionType;
+    data["subPkg"] = subPkg;
+    data["pkgCounts"] = pkgCounts;
+
+    data["softwareVersion"] = softwareVersion;
+    data["softwareVersionDate"] = softwareVersionDate;
+    data["CPUId"] = CPUId;
+    data["GMSType"] = GMSType;
+    data["GMS_IMEI"] = GMS_IMEI;
+    data["SIM_IMSI"] = SIM_IMSI;
+    data["SIM_ICCID"] = SIM_ICCID;
+    data["carType"] = carType;
+    data["VIN"] = VIN;
+    data["totalMileage"] = totalMileage;
+    data["totalOilExpend"] = totalOilExpend;
+    data["displacement"] = displacement;
+    data["oilDensity"] = oilDensity;
+    data["OBDSerial"] = OBDSerial;
+    data["oilCalculateType"] = oilCalculateType;
+
+    var host = window.location.host;
+    $("#showFeedback").val("")
+    $.ajax({
+        url:"http://" + host + "/messageTools/message_process/porcessTerminalVersionInfoUploadMsg",
+        type:"post",
+        data:data,
+        dataType:"json",
+        success:function(data){
+            if(data.status == 200){
+                //window.location.reload()
+                    var theShow = "原始数据：　"　+ data.original + "\n";
+                    theShow = theShow + "收到数据：　" + data.result + "\n";
+                    theShow = theShow + "收到数据16进制：　" + data.resultH + "\n";
+                    theShow = theShow + "解析数据：　"　+ JSON.stringify(data.parse) + "\n";
+                    $("#showFeedback").val(theShow)
+            }else{
+                $("#showFeedback").val(data.message)
+                alert(data.message);
+            }
+        }
+    });
+});
+
+function hasSubPkg(){
+    value = $("#subPkg").val()
+    if(value == "8192"){
+        $("#subPkg_label").css("color","black")
+        $("#pkgCounts").removeAttr("disabled")
+    }else{
+        $("#subPkg_label").css("color","grey")
+        $("#pkgCounts").attr("disabled","disabled")
+    }
+}
+</script>
+{% endblock %}

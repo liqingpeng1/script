@@ -1,0 +1,207 @@
+{% extends "protocolTools/index.html" %}
+{% block title %}GPS_protocol{% endblock %}
+{% block content_01 %}
+<script src="../../static/js/protocolTools/protocols.js"></script>
+<style>
+    .nav-pills li {
+        margin-bottom:5px;
+    }
+    .form-control {
+        display:inline;
+        width:160px;
+    }
+    .protocol_content:after{
+        clear:both;
+        display:block;
+        content:" ";
+    }
+
+    .protocol_content li {
+        width:250px;
+        _background:yellow;
+        list-style:none;
+        margin-top:5px;
+        float:left;
+    }
+    .protocol_content label{
+        width:90px;
+        text-align:right;
+    }
+</style>
+<div id="container2" style="width:83%;min-height:750px;float:left;_background:grey;margin-top:50px;">
+    {% block content_02 %}
+    <ul class="nav nav-pills" style="font-size:14px;">
+        <li role="presentation"><a id="userDefined_protocol" {% if arg.path[2]=="userDefined_protocol_page" %} class="link-tab" {% endif %} onclick="protocolManTab(this)">自定义报文</b></a></li>
+        <li role="presentation"><a id="heartBeat_protocol" {% if arg.path[2]=="heartBeat_protocol_page" %} class="link-tab" {% endif %} onclick="protocolManTab(this)">心跳报文</b></a></li>
+        <li role="presentation"><a id="login_protocol" {% if arg.path[2]=="login_protocol_page" %} class="link-tab" {% endif %} onclick="protocolManTab(this)">终端登录报文</b></a></li>
+        <li role="presentation"><a id="GPS_protocol" {% if arg.path[2]=="GPS_protocol_page" %} class="link-tab" {% endif %} onclick="protocolManTab(this)">GPS报文</b></a></li>
+        <li role="presentation"><a id="OBD_CAN_protocol" {% if arg.path[2]=="OBD_CAN_protocol_page" %} class="link-tab" {% endif %} onclick="protocolManTab(this)">OBD-CAN报文</b></a></li>
+        <li role="presentation"><a id="securityStatus_protocol" {% if arg.path[2]=="securityStatus_protocol_page" %} class="link-tab" {% endif %} onclick="protocolManTab(this)">安防状态报文</b></a></li>
+        <li role="presentation"><a id="voltageData_protocol" {% if arg.path[2]=="voltageData_protocol_page" %} class="link-tab" {% endif %} onclick="protocolManTab(this)">电瓶电压采样报文</b></a></li>
+        <li role="presentation"><a id="event_protocol" {% if arg.path[2]=="event_protocol_page" %} class="link-tab" {% endif %} onclick="protocolManTab(this)">事件报文</b></a></li>
+        <li role="presentation"><a id="troubleCode_protocol" {% if arg.path[2]=="troubleCode_protocol_page" %} class="link-tab" {% endif %} onclick="protocolManTab(this)">故障码报文</b></a></li>
+    </ul>
+    {% endblock %}
+    {% block content_1 %}
+    <div id="container3" style="width:100%;min-height:750px;float:left;_background:green;margin-top:10px;_border-top: 1px solid #eee;">
+        <div style="width:100%;_background:green;padding:5px;padding-top:0px;">
+            <h3 style="border-bottom: 1px solid #eee;">设置协议头：</h3>
+            <label>消息流水号：</label><input id="WATER_CODE" type="text" class="form-control" value="0010" style="width:100px;">
+            <label style="margin-left:10px;">车机号：</label><input id="DEV_ID" type="text" class="form-control" value="M121501010001">
+            <label style="margin-left:10px;">GPS消息数量：</label><input id="msgCount" type="text" class="form-control" value="1" style="width:100px;">
+        </div>
+        <H3 style="border-bottom: 1px solid #eee;">设置GPS消息内容：</H3>
+        <ul class="protocol_content" style="padding:0px;">
+            <li><label>UTC时间：</label><input id="UTCTime" type="text" class="form-control" value="2020-1-20 16:24:36"></li>
+            <li><label>纬度：</label><input id="latitude" type="text" class="form-control" value="40.22077"></li>
+            <li><label>经度：</label><input id="longitude" type="text" class="form-control" value="116.23128"></li>
+<!--            <li style="width:480px;height:40px;"><label>速度：</label>0&nbsp;&nbsp;<input type="range" min="0" max="100" value="70" style="width:280px;display:inline;"/> 100 &nbsp;&nbsp;值：<span id="speedValShow">33</span></li>-->
+            <li style="width:500px;"><label>速度：</label><input id="speed" type="text" class="form-control" value="80.8">&nbsp;&nbsp;<p style="display:inline;font-size:12px;">单位 0.1 km/h，取值范围10.0~240.0</p></li>
+            <li><label>方向角：</label><input id="directionAngle" type="text" class="form-control" value="80.8"></li>
+            <li><label>海拔：</label><input id="elevation" type="text" class="form-control" value="2999.9"></li>
+            <li><label>定位星数：</label><input id="positionStar" type="text" class="form-control" value="3"></li>
+            <li><label>PDOP精度：</label><input id="Pdop" type="text" class="form-control" value="0.3"></li>
+            <li><label>HDOP精度：</label><input id="Hdop" type="text" class="form-control" value="0.4"></li>
+            <li><label>VDOP精度：</label><input id="Vdop" type="text" class="form-control" value="0.5"></li>
+            <li style="width:100%;">
+                <h5><b>状态位：</b></h5>
+                <label style="font-size:12px;">当前定位是否有效：</label><select id="isLocationValid" class="form-control" style="width:100px;">
+                    <option value="128">有效</option>
+                    <option value="0">无效</option>
+                </select>
+                <label style="font-size:12px;">当前定位模式：</label><select id="locationMode" class="form-control" style="width:170px;">
+                    <option value="0">自动模式</option>
+                    <option value="16">单GPS模式</option>
+                    <option value="32">单BDS模式</option>
+                    <option value="48">GPS+BDS双模式</option>
+                </select>
+                <label style="font-size:12px;">定位类型：</label><select id="locationType" class="form-control" style="width:100px;">
+                    <option value="8">2D定位</option>
+                    <option value="12">3D定位</option>
+                </select>
+                <label style="font-size:12px;">统计里程模式：</label><select id="staticMileageMode" class="form-control" style="width:150px;">
+                    <option value="0">GPS统计里程</option>
+                    <option value="2">OBD统计里程</option>
+                </select>
+                <label style="font-size:12px;">车辆点熄火状态：</label><select id="fireStatus" class="form-control" style="width:100px;">
+                    <option value="0">熄火</option>
+                    <option value="1" selected="selected">点火</option>
+                </select>
+            </li>
+            <li><label>电瓶电压：</label><input id="valtage" type="text" class="form-control" value="36.9"></li>
+            <li><label>OBD车速速：</label><input id="OBDSpeed" type="text" class="form-control" value="60.9"></li>
+            <li><label>发动机转速：</label><input id="engineSpeed" type="text" class="form-control" value="3000"></li>
+            <li><label>累计里程：</label><input id="GPSTotalMileage" type="text" class="form-control" value="12800"></li>
+            <li><label>累计油耗：</label><input id="totalOil" type="text" class="form-control" value="100000"></li>
+            <li><label style="font-size:10px;">累计行驶时间：</label><input id="totalTime" type="text" class="form-control" value="2020002"></li>
+            <li><label style="font-size:10px;">GPS信息时间戳：</label><input id="GPSTimestamp" type="text" class="form-control"></li>
+        </ul>
+        <H3 style="border-bottom: 1px solid #eee;">控制：</H3>
+        <div style="width:100%;padding:5px;margin-top:10px;">
+            <button type="button" class="btn btn-primary" id="sendMsgBtn">发送消息</button>
+        </div>
+        <H3 style="border-bottom: 1px solid #eee;">返回信息：</H3>
+        <div style="width:100%;padding:5px;margin-top:10px;">
+            <textarea id="showFeedback" style="width:100%;padding:5px;" rows="8"></textarea>
+        </div>
+    </div>
+
+
+
+    <script>
+    //发送GPS数据
+    $("#sendMsgBtn").click(function(){
+        var WATER_CODE = $("#WATER_CODE").val();
+        var DEV_ID = $("#DEV_ID").val();
+        var msgCount = $("#msgCount").val();
+
+        var UTCTime = $("#UTCTime").val();
+        var timestampTemp = DateToTimestamp(UTCTime)
+        UTCTime = formatDate(parseInt(timestampTemp) - 8 * 3600 * 1000)
+
+        var latitude = $("#latitude").val();
+        var longitude = $("#longitude").val();
+        var speed = $("#speed").val();
+        var directionAngle = $("#directionAngle").val();
+        var elevation = $("#elevation").val();
+        var positionStar = $("#positionStar").val();
+        var Pdop = $("#Pdop").val();
+        var Hdop = $("#Hdop").val();
+        var Vdop = $("#Vdop").val();
+
+        var isLocationValid = parseInt($("#isLocationValid").val());
+        var locationMode = parseInt($("#locationMode").val());
+        var locationType = parseInt($("#locationType").val());
+        var staticMileageMode = parseInt($("#staticMileageMode").val());
+        var fireStatus = parseInt($("#fireStatus").val());
+        var statusBit = isLocationValid + locationMode + locationType + staticMileageMode + fireStatus
+        var valtage = $("#valtage").val();
+        var OBDSpeed = $("#OBDSpeed").val();
+        var engineSpeed = $("#engineSpeed").val();
+        var GPSTotalMileage = $("#GPSTotalMileage").val();
+        var totalOil = $("#totalOil").val();
+        var totalTime = $("#totalTime").val();
+        var GPSTimestamp = parseInt($("#GPSTimestamp").val()) - 8 * 3600 * 1000;
+
+        var data = {};
+        data["WATER_CODE"] = WATER_CODE;
+        data["DEV_ID"] = DEV_ID;
+        data["msgCount"] = msgCount;
+
+        data["UTCTime"] = UTCTime;
+        data["latitude"] = latitude;
+        data["longitude"] = longitude;
+        data["speed"] = speed;
+        data["directionAngle"] = directionAngle;
+        data["elevation"] = elevation;
+        data["positionStar"] = positionStar;
+        data["Pdop"] = Pdop;
+        data["Hdop"] = Hdop;
+        data["Vdop"] = Vdop;
+        data["statusBit"] = statusBit;
+        data["valtage"] = valtage;
+        data["OBDSpeed"] = OBDSpeed;
+        data["engineSpeed"] = engineSpeed;
+        data["GPSTotalMileage"] = GPSTotalMileage;
+        data["totalOil"] = totalOil;
+        data["totalTime"] = totalTime;
+        data["GPSTimestamp"] = GPSTimestamp;
+
+        var host = window.location.host;
+        $("#showFeedback").val("")
+        $.ajax({
+            url:"http://" + host + "/protocolTools/protocolReport_process/porcessGPSMsg",
+            type:"post",
+            data:data,
+            dataType:"json",
+            success:function(data){
+                if(data.status == 200){
+                    //window.location.reload()
+                    msg = "发送消息：" + data.msgSend + "\n"
+                    msg = msg + "收到消息：" + data.result + "\n"
+                    msg = msg + "收到消息16进制：" + data.rev + "\n"
+                    msg = msg + "收到消息解析结果：" + JSON.stringify(data.orgRev) + "\n"
+                    $("#showFeedback").val(msg)
+                }else{
+                    $("#showFeedback").val(data.message)
+                    alert(data.message);
+                }
+            }
+        });
+    });
+
+    //设置当前时间到UTC时间输入框
+    (function(){
+        var curTime = getCurTime();
+        $("#UTCTime").val(curTime);
+    })();
+
+    //设置当前时间戳到GPS信息时间戳输入框
+    (function(){
+        var curTimestamp = getCutTimestamp();
+        $("#GPSTimestamp").val(curTimestamp);
+    })();
+    </script>
+    {% endblock %}
+</div>
+{% endblock %}

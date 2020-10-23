@@ -1,0 +1,136 @@
+{% extends "messageTools/index.html" %}
+{% block title %}heartBeat_msg{% endblock %}
+{% block content_01 %}
+<script src="../../static/js/messageTools/messages.js"></script>
+<style>
+    .nav-pills li {
+        margin-bottom:5px;
+    }
+    .form-control {
+        display:inline;
+        width:160px;
+    }
+    .protocol_content:after{
+        clear:both;
+        display:block;
+        content:" ";
+    }
+
+    .protocol_content li {
+        width:250px;
+        _background:yellow;
+        list-style:none;
+        margin-top:5px;
+        float:left;
+    }
+
+    .protocol_content label{
+    width:90px;
+    text-align:right;
+    }
+</style>
+<div id="container2" style="width:83%;min-height:750px;float:left;_background:grey;margin-top:50px;">
+    {% block content_02 %}
+    <ul class="nav nav-pills" style="font-size:14px;">
+        <li role="presentation"><a id="userDefined_msg" {% if arg.path[2]=="userDefined_msg_page" %} class="link-tab" {% endif %} onclick="messageManTab(this)">自定义消息</b></a></li>
+        <li role="presentation"><a id="terminalHeartBeat_msg" {% if arg.path[2]=="heartBeat_msg_page" %} class="link-tab" {% endif %} onclick="messageManTab(this)">心跳消息</b></a></li>
+        <li role="presentation"><a id="terminalRegister_msg" {% if arg.path[2]=="terminalRegister_msg_page" %} class="link-tab" {% endif %} onclick="messageManTab(this)">终端注册</b></a></li>
+        <li role="presentation"><a id="terminalVersionInfoUpload_msg" {% if arg.path[2]=="terminalVersionInfoUpload_msg_page" %} class="link-tab" {% endif %} onclick="messageManTab(this)">终端版本信息上报</b></a></li>
+        <li role="presentation"><a id="dataUpstreamTransport_msg" {% if arg.path[2]=="dataUpstreamTransport_msg_page" or arg.path[2]=="dataUpstreamTransport_msg_f2_page" or arg.path[2]=="dataUpstreamTransport_msg_f3_page" or arg.path[2]=="dataUpstreamTransport_msg_f4_page" %} class="link-tab" {% endif %} onclick="messageManTab(this)">数据上行透传</b></a></li>
+        <li role="presentation"><a id="location_msg" {% if arg.path[2]=="location_msg_page" %} class="link-tab" {% endif %} onclick="messageManTab(this)">位置信息汇报</b></a></li>
+<!--        <li role="presentation"><a id="style_index2" {% if arg.path[2]=="2" %} class="link-tab" {% endif %} onclick="messageManTab(this)">其他报文</b></a></li>-->
+    </ul>
+    {% endblock %}
+    {% block content_1 %}
+    <div id="container3" style="width:100%;min-height:750px;float:left;_background:green;margin-top:10px;_border-top: 1px solid #eee;">
+        <div style="width:100%;_background:green;padding:5px;padding-top:0px;">
+            <h3 style="border-bottom: 1px solid #eee;">设置消息头：</h3>
+            <label>消息ID：</label><input id="msgID" type="text" class="form-control" disabled="disabled" value="0002" style="width:80px;">
+            <label>车机号：</label><input id="phoneNum" type="text" class="form-control" value="13146201119" style="width:150px;">
+            <label>消息流水号：</label><input id="msgWaterCode" type="text" class="form-control" value="1" style="width:60px;">
+            <label>是否加密：</label><select style="width:100px;" id="encryptionType" class="form-control">
+                <option value="0">不加密</option>
+                <option value="1024">加密</option>
+            </select>
+            <label>有无分包：</label><select style="width:80px;" id="subPkg" class="form-control" onchange="hasSubPkg()">
+                <option value="0">无</option>
+                <option value="8192">有</option>
+            </select>
+            <label id="subPkg_label" style="color:grey;">分包个数：</label><input disabled="disabled" id="pkgCounts" type="text" class="form-control" value="0" style="width:60px;">
+        </div>
+        <H3 style="border-bottom: 1px solid #eee;">设置心跳消息内容：</H3>
+        <ul class="protocol_content" style="padding:0px;">
+            <label style="color:red;width:130px;">心跳消息无消息体...</label>
+        </ul>
+        <H3 style="border-bottom: 1px solid #eee;">控制：</H3>
+        <div style="width:100%;padding:5px;margin-top:10px;">
+            <button type="button" class="btn btn-primary" id="sendMsgBtn">发送消息</button>
+        </div>
+        <H3 style="border-bottom: 1px solid #eee;">返回信息：</H3>
+        <div style="width:100%;padding:5px;margin-top:10px;">
+            <textarea id="showFeedback" style="width:100%;padding:5px;" rows="8"></textarea>
+        </div>
+    </div>
+
+
+
+    <script>
+    //发送GPS数据
+    $("#sendMsgBtn").click(function(){
+        var msgID = $("#msgID").val();
+        var phoneNum = $("#phoneNum").val();
+        var msgWaterCode = $("#msgWaterCode").val();
+        var encryptionType = $("#encryptionType").val();
+        var subPkg = $("#subPkg").val();
+        var pkgCounts = ""
+        if (subPkg != "8192"){
+            pkgCounts = "0"
+        }else{
+            pkgCounts = $("#pkgCounts").val();
+        }
+
+        var data = {};
+        data["msgID"] = msgID;
+        data["phoneNum"] = phoneNum;
+        data["msgWaterCode"] = msgWaterCode;
+        data["encryptionType"] = encryptionType;
+        data["subPkg"] = subPkg;
+        data["pkgCounts"] = pkgCounts;
+
+        var host = window.location.host;
+        $("#showFeedback").val("")
+        $.ajax({
+            url:"http://" + host + "/messageTools/message_process/porcessHeartBeatMsg",
+            type:"post",
+            data:data,
+            dataType:"json",
+            success:function(data){
+                if(data.status == 200){
+                    //window.location.reload()
+                    var theShow = "原始数据：　"　+ data.original + "\n";
+                    theShow = theShow + "收到数据：　" + data.result + "\n";
+                    theShow = theShow + "收到数据16进制：　" + data.resultH + "\n";
+                    theShow = theShow + "解析数据：　"　+ JSON.stringify(data.parse) + "\n";
+                    $("#showFeedback").val(theShow)
+                }else{
+                    $("#showFeedback").val(data.message)
+                    alert(data.message);
+                }
+            }
+        });
+    });
+
+    function hasSubPkg(){
+        value = $("#subPkg").val()
+        if(value == "8192"){
+            $("#subPkg_label").css("color","black")
+            $("#pkgCounts").removeAttr("disabled")
+        }else{
+            $("#subPkg_label").css("color","grey")
+            $("#pkgCounts").attr("disabled","disabled")
+        }
+    }
+    </script>
+    {% endblock %}
+</div>
+{% endblock %}

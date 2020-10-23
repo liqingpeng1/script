@@ -1,0 +1,45 @@
+{% extends "m300Tools/report/P_heartBeat_m300_page.html" %}
+{% block title %}setting_page{% endblock %}
+{% block content_1 %}
+<div id="container3" style="width:100%;min-height:750px;float:left;_background:green;margin-top:10px;_border-top: 1px solid #eee;">
+    <div style="width:100%;_background:green;padding:5px;padding-top:0px;">
+        <h3 style="border-bottom: 1px solid #eee;">连接设置：</h3>
+        <label>主机地址：</label><input id="host" type="text" class="form-control" value="{{ arg['socket']['host']}}">
+        <label style="margin-left:10px;">端口：</label><input id="port" type="text" class="form-control" value="{{ arg['socket']['port']}}" style="width:100px;">
+    </div>
+    <H3 style="border-bottom: 1px solid #eee;">控制：</H3>
+    <div style="width:100%;padding:5px;margin-top:10px;">
+        <button type="button" class="btn btn-primary" id="saveSetting">保存设置</button>
+    </div>
+</div>
+
+
+
+<script>
+//保存设置数据
+$("#saveSetting").click(function(){
+    var host = $("#host").val();
+    var port = $("#port").val();
+
+    var data = {};
+    data["host"] = host;
+    data["port"] = port;
+
+    var host = window.location.host;
+    $.ajax({
+        url:"http://" + host + "/m300Tools/P_m300Protocol_process/porcessSocketSetting",
+        type:"post",
+        data:data,
+        dataType:"json",
+        success:function(data){
+            if(data.status == 200){
+                window.location.reload()
+            }else{
+                $("#showFeedback").val(data.message)
+                alert(data.message);
+            }
+        }
+    });
+});
+</script>
+{% endblock %}

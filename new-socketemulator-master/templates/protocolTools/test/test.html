@@ -1,0 +1,122 @@
+{% extends "protocolTools/index.html" %}
+{% block title %}test{% endblock %}
+{% block content_01 %}
+<script src="../../static/js/protocolTools/test.js"></script>
+<style>
+    .nav-pills li {
+        margin-bottom:5px;
+    }
+    .form-control {
+        display:inline;
+        width:160px;
+    }
+    .protocol_content:after{
+        clear:both;
+        display:block;
+        content:" ";
+    }
+    .protocol_content label{
+        width:90px;
+        text-align:right;
+    }
+</style>
+<div id="container2" style="width:83%;min-height:750px;float:left;_background:grey;margin-top:50px;">
+    {% block content_02 %}
+    <ul class="nav nav-pills" style="font-size:14px;">
+        <li role="presentation"><a id="test" {% if arg.path[2]=="test_page" %} class="link-tab" {% endif %} onclick="testManTab(this)">测试页面</b></a></li>
+    </ul>
+    {% endblock %}
+    {% block content_1 %}
+    <div id="container3" style="width:100%;min-height:750px;float:left;_background:green;margin-top:10px;_border-top: 1px solid #eee;">
+        <div style="width:100%;_background:green;padding:5px;padding-top:0px;">
+            <h3 style="border-bottom: 1px solid #eee;">socket连接测试：</h3>
+<!--            <label>主机地址：</label><input id="host" type="text" class="form-control" value="" style="width:100px;">-->
+<!--            <label style="margin-left:10px;">端口：</label><input id="port" type="text" class="form-control" value="">-->
+            <button type="button" class="btn btn-sm btn-primary" id="connect">连接服务器</button>
+            <label style="margin-left:20px;">消息：</label><input id="sendMsg" type="text" class="form-control">
+            <button id="send" type="button" style="margin-left:10px;" class="btn btn-sm btn-primary">发送</button>
+            <button id="close" type="button" style="margin-left:10px;" class="btn btn-sm btn-primary">断开</button>
+            <button id="end" type="button" style="margin-left:10px;" class="btn btn-sm btn-primary">关闭服务</button>
+            <H3>接收消息：</H3><textarea id="revMsg" style="width:500px;padding:5px;display:block;" rows="8"></textarea>
+        </div>
+    </div>
+
+
+
+    <script>
+    client = "0"
+    ws = null;
+    i = 1;
+    (function(){
+         ws = null;
+         i = 1;
+    })()
+
+    function WebSocketTest(){
+          if ("WebSocket" in window){
+              console.log("您的浏览器支持 WebSocket!");
+              ws = new WebSocket("ws://127.0.0.1:5005");
+              ws.onopen = function(){
+                    console.log("socket 已经连接上！")
+              };
+              ws.onmessage = function (evt) {
+                    var received_msg = JSON.parse(evt.data)
+                    var curTime = getCurTime();
+                    if(received_msg["code"] == "0001"){           //0001代表连接消息通信
+                        client = received_msg["client"]
+                    }
+                    var text = $("#revMsg").val()
+                    if(text == ""){
+                        text = text + "[" + curTime + "] " + received_msg["msg"];
+                    }else{
+                        text = text + "\n" + "[" + curTime + "] " + received_msg["msg"];
+                    }
+                    $("#revMsg").val(text)
+              };
+              ws.onclose = function(){
+                    alert("连接已关闭...");      // 关闭 websocket
+              };
+          }else{
+                    alert("您的浏览器不支持 WebSocket!");      // 浏览器不支持 WebSocket
+          }
+    }
+
+    function sendMsg(){
+        var msg = $("#sendMsg").val()
+        var data = {};
+        data["code"] = "0002";                        //0002代表普通消息通信
+        data["client"] = client;
+        data["msg"] = msg;
+        data = JSON.stringify(data)
+        ws.send(data);
+    }
+
+    function sendClose(){
+        var msg = ""
+        var data = {};
+        data["code"] = "0003";                        //0002代表普通消息通信
+        data["client"] = client;
+        data["msg"] = msg;
+        data = JSON.stringify(data)
+        ws.send(data);
+    }
+
+    function myclose(){
+        var data = {};
+        data["code"] = "0000";                      //0000代表关闭服务器套接字程序
+        data["client"] = client;
+        data["msg"] = "";
+        data = JSON.stringify(data);
+        ws.send(data);
+        ws.close();
+        console.log("执行了socket服务的关闭操作...");
+    }
+
+    $("#connect").click(WebSocketTest);
+    $("#send").click(sendMsg);
+    $("#close").click(sendClose);
+    $("#end").click(myclose);
+    </script>
+    {% endblock %}
+</div>
+{% endblock %}
